@@ -69,12 +69,10 @@ export default function NatureComponent(props) {
                 console.error("Erreur lors du chargement des natures de mission :", error);
             }
         };
-        if (contextUser?.user?.id && (contextUser?.user?.idRole === 2||contextUser?.user?.idRole === 3)) {
+        if (contextUser?.user?.id && (contextUser?.user?.role.id === 2||contextUser?.user?.role.id  === 3)) {
             fetchData();
             let dateDuJour = new Date().toISOString().split("T")[0];
             setDateDebut(dateDuJour);
-        } else{
-            console.log(`niiiiiiiiik`)
         }
         
     }, [contextUser.user, refreshDisplay]);
@@ -85,11 +83,11 @@ export default function NatureComponent(props) {
         return <Loading />;
     }
 
-    /*     // Gérer l'état d'erreur
+      // Gérer l'état d'erreur
         if (error) {
             return <Error />;
         }
-     */
+     
 
     const handleResetModal = (isRefresh) => {
         setModalShow(false);

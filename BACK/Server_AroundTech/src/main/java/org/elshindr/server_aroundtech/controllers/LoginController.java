@@ -43,7 +43,7 @@ public class LoginController {
 
     @GetMapping("/user-info")
     public ResponseEntity<?> getUserInfo(Authentication authentication) {
-
+        System.out.println("====================================login user-info");
 
         try{
 
@@ -65,11 +65,14 @@ public class LoginController {
                     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
                 }
             }
+            System.out.println("auth null");
 
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }catch(Exception ex){
-            System.out.println(ex.getMessage());
 
+            System.out.println("====================== erreur");
+            System.out.println(ex.getMessage());
+            System.out.println(ex);
             return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
         }
 
@@ -116,12 +119,15 @@ public class LoginController {
     ///
     /// SE DECO
     ///
-
     @PostMapping("/logout")
     public ResponseEntity<?>  logout(){
         System.out.println("===================== DECONNEXION ");
 
-        return ResponseEntity.ok().body(new Response("Déconnecté"));
+      /*  if (newUser == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur à la connexion");
+        }*/
+
+        return ResponseEntity.ok().body("OK");
     }
 
 }

@@ -6,11 +6,14 @@ import org.elshindr.server_aroundtech.models.Mission;
 import org.elshindr.server_aroundtech.repositories.UserRepository;
 import org.elshindr.server_aroundtech.services.MissionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * MissionController
@@ -20,8 +23,7 @@ import java.util.Map;
 @RequestMapping("/missions")
 public class MissionController {
 
-    @Autowired
-    private UserRepository userRepo;
+
     @Autowired
     private MissionService misSvc;
 
@@ -40,6 +42,7 @@ public class MissionController {
     public List<MissionDto> getLstMissionsInWaitByManager(@PathVariable Integer idUser){
         return this.misSvc.getLstMissionsInWaitByManager(idUser);
     }
+
     @PutMapping("status/{idMission}")
     public ResponseEntity<?> updateMissionStatus(@PathVariable Integer idMission, @RequestBody Map<String, Object> jsonMap){
         if (this.misSvc.updateMissionStatus(idMission, jsonMap)){
@@ -47,4 +50,15 @@ public class MissionController {
         }
         return ResponseEntity.badRequest().body("");
     }
+
+    @GetMapping("byUser/{idUser}/byDate/{date}")
+    public ResponseEntity<?> checkIfMissionExistByUserAndDate(@PathVariable Integer idUser, @PathVariable(name = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date ){
+        if (this.misSvc.checkIfMissionExistByUserAndDate(idUser, date)){
+            return ResponseEntity.ok().body("");
+        }
+        return ResponseEntity.badRequest().body("");
+    }
+
+
+
 }

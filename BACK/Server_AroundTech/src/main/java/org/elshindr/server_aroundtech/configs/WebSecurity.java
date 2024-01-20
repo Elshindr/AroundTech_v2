@@ -75,22 +75,24 @@ public class WebSecurity implements WebMvcConfigurer {
                         // toutes les requêtes sont permises
                         // => aucune n'est soumise à authentification
                         auth -> auth
-                                .requestMatchers(HttpMethod.POST, "login/csrf").permitAll()
-                                .requestMatchers(HttpMethod.POST, "login").permitAll()
-                                .anyRequest().permitAll()
-                                //.anyRequest().authenticated()
+                                .requestMatchers(HttpMethod.POST, "/login/csrf").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                                //.anyRequest().permitAll()
+                                .anyRequest().authenticated()
                 )
-               /* .csrf(csrf -> csrf
+               .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new XorCsrfTokenRequestAttributeHandler()::handle)
-                )*/
+                )
                 .headers( headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
                         .logoutSuccessHandler((req, resp, auth) -> resp.setStatus(HttpStatus.OK.value()))
                         .deleteCookies(jwtConfig.getCookie())
-                )
-                .csrf(csrf -> csrf.disable());
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                );
+                //.csrf(csrf -> csrf.disable());
 
         return http.build();
     }

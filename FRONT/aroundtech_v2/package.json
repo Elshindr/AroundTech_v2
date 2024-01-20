@@ -34,7 +34,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "leaves": "json-server --watch src/Data-abs/db.json --port 8000"
+    "leaves": "json-server --watch Data-abs/db.json --port 8000"
   },
   "eslintConfig": {
     "extends": [

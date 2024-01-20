@@ -85,11 +85,11 @@ export default function ExpenseGestionComponent() {
         return <Loading />;
     }
 
-    /*     // Pour gérer l'état d'erreur
+         // Pour gérer l'état d'erreur
         if (error) {
             console.log(`error`, error)
             return <Error />;
-        } */
+        } 
 
     const NOT_SPECIFIED = "Non spécifié";
 

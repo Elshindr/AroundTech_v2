@@ -1,3 +1,5 @@
+import UserService from "./UserService";
+
 export default class ExpenseService {
 
     static url = `${process.env.REACT_APP_BACK_URL}expenses`;
@@ -5,14 +7,17 @@ export default class ExpenseService {
     static async loadExpensesFromOneUser(idUser) {
 
         let urlP = `${this.url}/${idUser}`;
-        console.log(`url`, urlP)
-        return fetch(urlP)
+        return fetch(urlP, {
+            method: 'GET',
+            credentials: 'include', // Inclure les cookies si nécessaire
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
             .then(res => {
-                console.log(`res`, res)
                 return res.json();
             })
             .then(exp => {
-                console.log(`exp`, exp)
                 return exp;
             })
             .catch(error => {
@@ -23,14 +28,18 @@ export default class ExpenseService {
     static async loadExpensesFromOneMission(idUser, idMission) {
 
         let urlP = `${this.url}/${idUser}/${idMission}`;
-        console.log(`url`, urlP)
-        return fetch(urlP)
+        //console.log(`url`, urlP)
+        return fetch(urlP, {
+            method: 'GET',
+            credentials: 'include', // Inclure les cookies si nécessaire
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
             .then(res => {
-                console.log(`res`, res)
                 return res.json();
             })
             .then(exp => {
-                console.log(`exp`, exp)
                 return exp;
             })
             .catch(error => {
@@ -40,13 +49,15 @@ export default class ExpenseService {
 
     static async addExpense(date, idMotif, amount, idMission) {
 
-        // console.log(`url`, `${this.url}`, date, idMotif, amount, idMission, idUser)
+        console.log("addExpense", UserService.getCookie("XSRF-TOKEN"))
         return fetch(`${this.url}`,
             {
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
                 },
+                credentials: 'include', // Inclure les cookies si nécessaire
                 method: "POST",
                 body: JSON.stringify({ "createdAt": date, "amount": parseFloat(amount), "idMission": idMission, "idMotif": idMotif })
             })
@@ -69,8 +80,10 @@ export default class ExpenseService {
             {
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
                 },
+                credentials: 'include',
                 method: "DELETE",
 
             })
@@ -89,13 +102,15 @@ export default class ExpenseService {
 
     static async updateOneExpense(createdAt, idMotif, amount, idExp, validAt) {
 
-        console.log(createdAt, idMotif, amount, idExp, validAt)
+        //console.log(createdAt, idMotif, amount, idExp, validAt)
         return fetch(`${this.url}/${idExp}`,
             {
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
                 },
+                credentials: 'include',
                 method: "PUT",
                 body: JSON.stringify({ "createdAt": createdAt, "valid_at": validAt, "amount": parseFloat(amount), "idMotif": idMotif })
             })
@@ -118,9 +133,11 @@ export default class ExpenseService {
             {
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
                 },
                 method: "PUT",
+                credentials: 'include',
                 body: JSON.stringify({ "idUser": idUser })
             })
             .then(res => {

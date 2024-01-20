@@ -24,7 +24,7 @@ const MissionComponent = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [reloadTable, setReloadTable] = useState(true);
 
-  const [idMission, setIdMission] = useState(null);
+  const [mission, setMission] = useState(null);
 
   const [modalState, setModalState] = useState(false);
   const [selectedLeave, setSelectedLeave] = useState(undefined);
@@ -103,7 +103,7 @@ const MissionComponent = () => {
             setShowUpdateModal={setShowUpdateModal}
             setSelectedLeave={setSelectedLeave}
             setModalState={setModalState}
-            setIdMission={setIdMission}
+            setMission={setMission}
           />
         </div>
 
@@ -123,38 +123,45 @@ const MissionComponent = () => {
       </div>
       <ModalDeleteMission
         show={showDeleteModal}
-        onReload={() => {
+        /*oreload={() => {
           setReloadTable(true);
-        }}
+        }}*/
+
         onHide={() => {
+          setReloadTable(!reloadTable);
           setShowDeleteModal(false);
         }}
-        id={idMission}
+        mission={mission}
         title="Attention"
       />
 
       <ModalEditMission
+        user ={contextUser.user}
         show={showAddModal}
-        onReload={() => {
+        /*onReload={() => {
           setReloadTable(true);
-        }}
+        }}*/
+     
         onHide={() => {
+          setReloadTable(!reloadTable);
           setShowAddModal(false);
         }}
-        id={null}
+        mission={null}
         title="Demander une mission"
       />
 
 
       <ModalEditMission
-        show={showUpdateModal}
-        onReload={() => {
+        user = {contextUser.user}
+        show = {showUpdateModal}
+       /* onReload={() => {
           setReloadTable(true);
-        }}
+        }}*/
         onHide={() => {
+          setReloadTable(!reloadTable);
           setShowUpdateModal(false);
         }}
-        id={idMission}
+        mission={mission}
         title="Modifier une mission"
       />
 

@@ -1,9 +1,17 @@
+import UserService from "./UserService";
 export default class NatureMisService {
+
   static url = `${process.env.REACT_APP_BACK_URL}natures`;
 
-  //
   static async loadNaturesMis() {
-    return fetch(this.url)
+    return fetch(this.url, {
+      method: 'GET',
+      credentials: 'include', // Inclure les cookies si nécessaire
+      headers: {
+        'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
+      },
+    })
       .then((res) => {
         return res.json();
       })
@@ -20,7 +28,14 @@ export default class NatureMisService {
     let urlNat = `${this.url}/${idNatureMis}`;
     //console.log(`urlNat`, urlNat);
 
-    return fetch(urlNat)
+    return fetch(urlNat, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
+      },
+    })
       .then((res) => {
         return res.json();
       })
@@ -35,23 +50,14 @@ export default class NatureMisService {
   }
 
   static async addNature(name, isCharge, isBonus, tjm, percentage, startDate, endDate) {
-    /*   console.log(
-        JSON.stringify({
-          name: name,
-          charge: isCharge,
-          bonus: isBonus,
-          tjm: tjm,
-          percentage: percentage,
-          startDate: startDate,
-          endDate: endDate,
-        })
-      ); */
 
     return fetch(`${this.url}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
       },
+      credentials: 'include',
       method: "POST",
       body: JSON.stringify({
         name: name,
@@ -81,7 +87,9 @@ export default class NatureMisService {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
       },
+      credentials: 'include', 
       method: "DELETE",
     })
       .then((res) => {
@@ -104,7 +112,9 @@ export default class NatureMisService {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
       },
+      credentials: 'include',
       method: "PUT",
       body: JSON.stringify({
         name: name,
@@ -135,9 +145,18 @@ export default class NatureMisService {
    * Return array of nature_mission
    */
   static async selectedNatureFilterByDate(date) {
-    const urlUpdated = `${this.url}/date/${date}`;
+    const urlUpdated = `${this.url}/byDate/${date}`;
+//console.log(`selectedNatureFilterByDate`)
 
-    return fetch(urlUpdated)
+//console.log(`url`, urlUpdated)
+    return fetch(urlUpdated, {
+      method: 'GET',
+      credentials: 'include', // Inclure les cookies si nécessaire
+      headers: {
+        'Content-Type': 'application/json',
+
+      },
+    })
       .then((res) => {
         return res.json();
       })

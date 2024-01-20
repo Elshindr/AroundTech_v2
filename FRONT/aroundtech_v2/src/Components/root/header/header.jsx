@@ -4,37 +4,42 @@ import { Nav, NavDropdown, Navbar, Image } from 'react-bootstrap';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 //import useUserData from '../../../Contexts/useUserData';
+import { useUser } from '../../../Contexts/UserContext';
 
 import logo from "../../../Assets/images/around-tech-logo.png";
 import { Error } from '../../loadingError/loadingErrorComponent';
 import { Loading } from './../../loadingError/loadingErrorComponent';
+import UserService from '../../../Services/UserService';
 
 function Header(props) {
 
-  const loading = props.contextUser.loading;
-  const error = props.contextUser.error;
-  const userData = props.contextUser.user;
+  // Utilisation du hook useUser
+  const contextUser = useUser();
+  const loading = contextUser.loading;
+  const error = contextUser.error;
 
 
-  const userName = userData ? `${userData.firstname}` : "Utilisateur";
+  const userName = contextUser.user !== null && contextUser?.user !== undefined ? `${contextUser.user.firstname}` : "Utilisateur";
   const router = useNavigate();
   const pathname = props.location;
 
   // Gère la déconnexion de l'utilisateur
   const handleLogout = async () => {
-    console.log(`user?`, userData)
+    console.log(`user?`, contextUser.user)
     // Requête à la route API /logout pour initier la déconnexion
-    const response = await fetch('/api/auth/logout', {
+
+
+    const response = await UserService.getLogout();/* await fetch('/login/logout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       // Inclue les cookies dans la requête pour la gestion de session
       credentials: 'include'
-    });
-
+    }); */
+console.log(`logoutrespo,nse`, response)
     // Si la déconnexion est réussie, redirige l'utilisateur vers la page de connexion
-    if (response.ok) {
+    if (true) {
       router('/login', { replace: true });
     } else {
       // Si la déconnexion échoue, affiche une erreur dans la console
@@ -42,11 +47,11 @@ function Header(props) {
     }
   };
 
-  /*   // Pour gérer l'état d'erreur
+     // Pour gérer l'état d'erreur
     
     if (error) {
       return <Error />;
-    } */
+    } 
 
   // Fonction qui détermine si le chemin actuel est l'un des chemins du NavDropdown
   const isDropdownActive = () => {
@@ -75,11 +80,11 @@ function Header(props) {
               <Nav className={`link ${pathname === '/primes' ? 'active' : ''}`}><NavLink className="nav-link" to="/primes">Primes</NavLink></Nav>
               <Nav className={`link ${pathname === '/expenses' ? 'active' : ''}`}><NavLink className="nav-link" to="/expenses">Note de frais</NavLink></Nav>
               {
-                (userData && (userData.idRole === 2 || userData.idRole === 3)) &&
+                (contextUser.user && (contextUser.user.role.id === 2 || contextUser.user.role.id === 3)) &&
                 <Nav className={`link ${pathname === '/mission/waiting' ? 'active' : ''}`}><NavLink className="nav-link" to="/mission/waiting">Validation des missions</NavLink></Nav>
               }
               {
-                userData && userData.idRole === 3 && (
+                contextUser.user && contextUser.user.role.id === 3 && (
                   <NavDropdown title="Natures" className={`link ${isDropdownActive() ? 'active' : ''}`}>
                     <NavLink className="nav-link" to="/natures">Nature de mission</NavLink>
                     <NavLink className="nav-link" to="/motifs">Nature de frais</NavLink>
@@ -87,7 +92,7 @@ function Header(props) {
                 )
               }
               {
-                userData && userData.idRole === 3 &&
+                contextUser.user && contextUser.user.role.id === 3 &&
                 <Nav className={`link ${pathname === '/users' ? 'active' : ''}`}><NavLink className="nav-link" to="/users">Gestions des utilisateurs</NavLink></Nav>
               }
             </div>

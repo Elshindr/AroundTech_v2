@@ -25,12 +25,13 @@ public class MissionService {
 
     @Autowired
     private MissionRepository misRepo;
+
     @Autowired
     private StatusRepository statusRepo;
 
+
     public List<MissionDto> getAllByUser(Integer idUser){
         List<Mission> lstMissions = this.misRepo.findMissionByUser(idUser).stream().toList();
-        System.out.println(lstMissions);
         return lstMissions.stream().map(mission -> MissionDto.parseMissionToMissionDto(mission)).toList();
     }
 
@@ -45,6 +46,7 @@ public class MissionService {
         return lstMissions.stream().map(mission -> MissionDto.parseMissionToMissionDto(mission)).toList();
     }
 
+
     public Boolean updateMissionStatus(Integer idMission, Map<String, Object> jsonMap){
         try {
             Mission updMission = this.misRepo.findDistinctById(idMission).get();
@@ -58,6 +60,23 @@ public class MissionService {
             misRepo.save(updMission);
 
             return true;
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            System.out.println(ex);
+            return false;
+        }
+    }
+
+
+    public Boolean checkIfMissionExistByUserAndDate(Integer idUser, LocalDate date){
+        try {
+            List<Mission> lstMissionByUser = this.misRepo.findMissionByUser(idUser, date);
+            if(lstMissionByUser.isEmpty()){
+                return true;
+            }
+
+            return false;
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

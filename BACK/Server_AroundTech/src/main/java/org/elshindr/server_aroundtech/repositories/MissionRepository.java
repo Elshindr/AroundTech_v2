@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,9 @@ public interface MissionRepository extends JpaRepository<Mission, Integer> {
 
     @Query("SELECT m FROM Mission m WHERE m.user.id = :idUser")
     List<Mission> findMissionByUser(@Param("idUser") Integer idUser);
+
+    @Query("SELECT m FROM Mission m WHERE m.user.id = :idUser AND m.startDate = :date")
+    List<Mission> findMissionByUser(@Param("idUser") Integer idUser, LocalDate date);
 
     @Query("SELECT m FROM Mission m WHERE m.user.idManager = :idManager AND m.status.id = 2")
     List<Mission> getLstMissionsInWaitByManager(@Param("idManager") Integer idManager);

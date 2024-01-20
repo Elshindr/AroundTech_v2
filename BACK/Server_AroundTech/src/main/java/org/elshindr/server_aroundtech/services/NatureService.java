@@ -1,5 +1,6 @@
 package org.elshindr.server_aroundtech.services;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.elshindr.server_aroundtech.models.Nature;
 import org.elshindr.server_aroundtech.repositories.NatureRepository;
@@ -26,6 +27,14 @@ public class NatureService {
 
     public Nature findOne(Integer idNature) {
         return natRepo.findDistinctById(idNature).get();
+    }
+
+    public List<Nature> findNatureByDate(LocalDate date){
+        if(date == null){
+            return this.natRepo.findAll().stream().toList();
+        }
+        System.out.println("date pas null");
+       return this.natRepo.findNatureByDate(date);
     }
 
     public Boolean createNature(Map<String, Object> jsonMap) {

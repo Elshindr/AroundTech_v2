@@ -9,6 +9,8 @@ import {
 
 import Root from './Components/root/root';
 import NotFound from "./Components/loadingError/unauthorizedComponent";
+
+import HomeComponent from "./Components/home/home";
 import LoginComponent from "./Components/login/loginComponent";
 
 import ExpenseGestionComponent from "./Components/expenses/expenseGestionComponent";
@@ -25,18 +27,18 @@ import UserFormUpd from "./Components/users/update/UserFormUpdate";
 import { CookiesProvider } from 'react-cookie';
 import { UserProvider } from './Contexts/UserContext';
 import './index.css';
+import Home from './Components/home/home';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
-
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/login" element={<LoginComponent />} />
       <Route path="/" element={<Root />}>
-        <Route path="/missions" element={<MissionComponent />} /> *
+        <Route path="/" element={<HomeComponent />} />
+        <Route path="/missions" element={<MissionComponent />} />
         <Route path="/mission/waiting" element={<MissionWaitingComponent />} />
         <Route path="/planning" element={<PlanningComponent />} />
         <Route path="/primes" element={<PrimesComponent />} />

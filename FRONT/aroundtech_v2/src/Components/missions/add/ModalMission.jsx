@@ -4,14 +4,15 @@ import { Button } from "react-bootstrap";
 import MissionService from "../../../Services/missionService";
 import MissionForm from "./MissionForm";
 
-import { useUser } from '../../../Contexts/UserContext';
-import { Error, Loading } from '../../loadingError/loadingErrorComponent';
+
 
 
 
 export default function ModalMission(props) {
+
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [idUser, setIdUser] = useState(null);
+  //const [idUser, setIdUser] = useState(null);
+
   const [formData, setFormData] = useState({
     missionId: "",
     nature_mission_id: "",
@@ -21,9 +22,10 @@ export default function ModalMission(props) {
     end_date: "",
     bonus: 0,
     status_id: "",
-    user_id: idUser,
+    user_id: props.mission?.userId,
     transport_id: "",
   });
+
   const [isAnError, setIsAnError] = useState({
     general: false,
     nature_mission_id: false,
@@ -32,62 +34,55 @@ export default function ModalMission(props) {
     transport_id: false,
   });
 
-  // Utilisation du hook useUser
-  const contextUser = useUser();
-  const loading = contextUser.loading;
-  const error = contextUser.error;
+
     
 
-  //Récupère l'id de l'utilisateur connecté
+  // Récupère l'id de l'utilisateur connecté
   // Charge les données utilisateur et appel fetchData
-  useEffect(() => {
-    if (contextUser.user) {
-      setIdUser(contextUser.user.id);
-      setFormData((prevState) => ({
-        ...prevState,
-        ["user_id"]: contextUser.user.id,
-      }));
-    }
-  }, [contextUser.user]);
+/*   useEffect(() => {
 
+      //setIdUser(props.user.id);
+
+    
+  }, []);
+ */
   const handleCloseModal = () => {
     props.onHide();
   };
 
-  useEffect(() => {
-    // Check if any of the properties in isAnError is false
-    const isDisabled = Object.values(isAnError).some((value) => value === true);
 
-    // If isDisabled is true, disable the button
-    // You can use setIsButtonDisabled to update the state of a button
+  // if form error btn submir = disabled
+  useEffect(() => {
+    const isDisabled = Object.values(isAnError).some((value) => value === true);
     setIsButtonDisabled(isDisabled);
   }, [isAnError]);
 
   //loading formData when it's an update
   useEffect(() => {
-    if (props.id !== null) {
-      (async () => {
-        const mission = await MissionService.loadOneMission(
-          formData.user_id,
-          props.id
-        );
+    if (props.mission !== null) {
 
+      (async () => {
+        //const mission = await MissionService.loadOneMission(formData.user_id,props.id);
+ /*        setFormData((prevState) => ({
+          ...prevState,
+          ["user_id"]: props.mission.userId,
+        })); */
         setFormData({
-          missionId: mission[0].id ? mission[0].id : "",
-          nature_mission_id: mission[0].nature_mission_id,
-          departure_city_id: mission[0].city_dep_name,
-          arrival_city_id: mission[0].city_arr_name,
-          start_date: new Date(mission[0].start_date)
-            .toISOString()
-            .split("T")[0],
-          end_date: new Date(mission[0].end_date).toISOString().split("T")[0],
+          missionId: props.mission .id ? props.mission .id : "",
+          nature_mission_id: props.mission .natureCur.id,
+          departure_city_id: props.mission .departCity.name,
+          arrival_city_id: props.mission .arrivalCity.name,
+          start_date: new Date(props.mission .startDate).toISOString().split("T")[0],
+          end_date: new Date(props.mission .endDate).toISOString().split("T")[0],
           bonus: 0,
-          status_id: mission[0].status_id,
-          user_id: mission[0].user_id,
-          transport_id: mission[0].transport_id,
+          status_id: props.mission .status.id,
+          user_id: props.mission .userId,
+          transport_id: props.mission .transport.id,
         });
       })();
+
     } else {
+
       setFormData({
         missionId: "",
         nature_mission_id: "",
@@ -97,19 +92,21 @@ export default function ModalMission(props) {
         end_date: "",
         bonus: 0,
         status_id: "",
-        user_id: idUser,
+        user_id: props.user.id,
         transport_id: "",
       });
     }
-  }, [props.id, idUser]);
+  }, [props.id, props.user.id]);
 
   const handleMission = async (e) => {
     e.preventDefault();
 
     //Ajout de la mission en BDD
     try {
+      console.log(`form data`, formData)
       const response = await MissionService.addMission(formData);
-      if (response === 200) {
+
+      if (response ) {
         props.onHide(); //ferme la modal
         props.onReload(); //recharge le tableau
 
@@ -123,11 +120,12 @@ export default function ModalMission(props) {
           end_date: "",
           bonus: 0,
           status_id: "",
-          user_id: idUser,
+          user_id: props.user.id,
           transport_id: "",
         });
       } else {
-        window.alert(`Error! Status code: ${response}`);
+        console.log(`Error! Status code: ${response}`)
+        //window.alert(`Error! Status code: ${response}`);
       }
     } catch (error) {
       console.log(error);
@@ -142,7 +140,8 @@ export default function ModalMission(props) {
       const response = await MissionService.updateMission(formData, props.id);
       if (response === 200) {
         props.onHide();
-        props.onReload();
+
+
         //clear le form
         setFormData({
           missionId: "",
@@ -153,7 +152,7 @@ export default function ModalMission(props) {
           end_date: "",
           bonus: 0,
           status_id: "",
-          user_id: idUser,
+          user_id: props.user.id,
           transport_id: "",
         });
       } else {
@@ -184,7 +183,7 @@ export default function ModalMission(props) {
       </Modal.Header>
 
       <Modal.Body className="text-center d-flex flex-column">
-        <MissionForm
+      <MissionForm
           formData={formData}
           setFormData={setFormData}
           isAnError={isAnError}

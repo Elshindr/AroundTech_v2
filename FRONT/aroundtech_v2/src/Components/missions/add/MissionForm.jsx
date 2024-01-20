@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import TransportService from "../../../Services/transportService";
 import NatureMisService from "../../../Services/NatureService";
@@ -22,42 +22,61 @@ const MissionForm = ({ formData, setFormData, isAnError, setIsAnError }) => {
     transport_id: "",
   });
 
-  let avionChoiceExist = transports.filter(
-    (transport) => transport.name.toLowerCase() === "avion"
-  );
+  const inputTransport = useRef(null);
+  const inputIsCapEdit = useRef(null);
+  const inputMaxCapEdit = useRef(null);
+
+  /*   let avionChoiceExist = transports.filter(
+      (transport) => transport.name.toLowerCase() === "avion"
+    ); */
+
+  /*   useEffect(() => {
+      (async () => {
+        const status = await StatusService.loadStatusByName("valid");
+        status.length === 0
+          ? console.log("erreur en BDD, status validée n'existe pas!")
+          : 
+      })();
+    }, []);
+   */
+  /*   useEffect(() => {
+      (async () => {
+  
+        setStatus({"id":3, "name":"validée"});
+  
+  
+        const status = await StatusService.loadStatusByName("init");
+        status.length === 0
+          ? console.log("erreur en BDD, status initiale n'existe pas!")
+          : setFormData((prevState) => ({
+              ...prevState,
+              ["status_id"]: status[0].id,
+            }));
+      })();
+    }, []);
+   */
 
   useEffect(() => {
     (async () => {
-      const status = await StatusService.loadStatusByName("valid");
-      status.length === 0
-        ? console.log("erreur en BDD, status validée n'existe pas!")
-        : setStatus(status[0].id);
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
+      //const datas_nature = await NatureMisService.selectedNatureFilterByDate(formData.startDate);
+      //setNatures(datas_nature);
       const datas_transport = await TransportService.loadTransports();
-      setTransports(datas_transport);
-
-      const status = await StatusService.loadStatusByName("init");
-      status.length === 0
-        ? console.log("erreur en BDD, status initiale n'existe pas!")
-        : setFormData((prevState) => ({
-            ...prevState,
-            ["status_id"]: status[0].id,
-          }));
+      console.log(`transoirt`, datas_transport);
+      if (datas_transport !== undefined) {
+        setTransports(datas_transport);
+      }
     })();
   }, []);
 
   useEffect(() => {
     (async () => {
-      const datas_nature = await NatureMisService.selectedNatureFilterByDate(
-        formData.startDate
-      );
+      console.log(`formData`, formData)
+      const datas_nature = await NatureMisService.selectedNatureFilterByDate(formData.start_date);
+      console.log(`natures`, datas_nature)
       setNatures(datas_nature);
     })();
-  }, [formData.startDate]);
+  }, [formData.start_date]);
+
 
   //Met à jour le formData après chaque saisie
   const handleForm = (e) => {
@@ -102,7 +121,8 @@ const MissionForm = ({ formData, setFormData, isAnError, setIsAnError }) => {
   // date de début de mission >= date jour + 7 jours calendaires
   useEffect(() => {
     // Vérifie que avion est sélectionné
-    if (avionChoiceExist.length > 0) {
+    //if (avionChoiceExist.length > 0) {
+    if (inputTransport?.current?.value.toLowerCase() === "avion") {
       // Couleur de l'input change
       setIsAnError((prevState) => ({
         ...prevState,
@@ -114,10 +134,9 @@ const MissionForm = ({ formData, setFormData, isAnError, setIsAnError }) => {
         ...prevState,
         ["transport_id"]: "",
       }));
-      if (
-        avionChoiceExist[0].id == formData.transport_id &&
-        formData.start_date !== ""
-      ) {
+
+
+      if (formData.transport_id == 2 && formData.start_date !== "") {
         // Vérifie l'anticipation de 7 jours
         const currentDate = new Date();
         const currentDatePlus7Days = new Date(currentDate);
@@ -139,6 +158,7 @@ const MissionForm = ({ formData, setFormData, isAnError, setIsAnError }) => {
         }
       }
     }
+
   }, [formData.start_date, formData.transport_id]);
 
   // la date de fin est supérieure ou égale à la date de début
@@ -180,7 +200,7 @@ const MissionForm = ({ formData, setFormData, isAnError, setIsAnError }) => {
               ["start_date"]: true,
               ["end_date"]: true,
             }));
-          } 
+          }
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -244,13 +264,9 @@ const MissionForm = ({ formData, setFormData, isAnError, setIsAnError }) => {
         if (formData.start_date !== "") {
           //return boolean
           const dateForMissionIsValid =
-            await MissionService.selectedDateIsValid(
-              formData.start_date,
-              formData.user_id,
-              formData.missionId
-            );
+            await MissionService.selectedDateIsValid(formData.start_date,formData.user_id, formData.missionId);
 
-            
+
           const dateForLeaveIsValid = await LeaveService.selectedDateIsValid(
             formData.start_date,
             formData.user_id,
@@ -394,6 +410,7 @@ const MissionForm = ({ formData, setFormData, isAnError, setIsAnError }) => {
           <label style={{ color: "red" }}>{formMessage.start_date}</label>
         </div>
       )}
+
       <Form>
         <Form.Group controlId="start_date" className="d-flex mb-3">
           <Form.Label className="col-4 d-flex">Date de début</Form.Label>
@@ -485,6 +502,7 @@ const MissionForm = ({ formData, setFormData, isAnError, setIsAnError }) => {
         >
           <Form.Label className="col-4 d-flex">Transport</Form.Label>
           <Form.Select
+            ref={inputTransport}
             aria-label="transport"
             name="transport_id"
             value={formData.transport_id || ""}

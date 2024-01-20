@@ -6,7 +6,13 @@ export default class CronService {
 
     static async launchCron() {
 
-        return fetch(this.url)
+        return fetch(this.url, {
+            method: 'GET',
+            credentials: 'include', // Inclure les cookies si nécessaire
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
             .then((res) => {
                 return res;
             })

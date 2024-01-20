@@ -14,7 +14,11 @@ const LoginComponent = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useNavigate();
+
+  // Utilisation du hook useUser
   const contextUser = useUser();
+  //const loading = contextUser.loading;
+  //const error = contextUser.error;
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -29,11 +33,9 @@ const LoginComponent = () => {
       console.log(`response login `, response)
 
       if (response.email !== "") {
-
         contextUser.updateUser(response);
         // Redirection vers la page d'accueil si la connexion est réussie
         //router.push('/');
-        console.log(` login is find redirection!!! `, response)
         router('/', { replace: true });
 
       } else {

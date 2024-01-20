@@ -1,16 +1,22 @@
+import UserService from "./UserService";
 export default class MotifService {
 
     static url = `${process.env.REACT_APP_BACK_URL}motifs`;
 
     static async loadNaturesExp() {
-        console.log(`url`, this.url)
-        return fetch(this.url)
+        //console.log(`url`, this.url)
+        return fetch(this.url, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
+            },
+        })
             .then(res => {
-                console.log(`res`, res)
                 return res.json();
             })
             .then(nat => {
-                console.log(`nat`, nat)
                 return nat;
             })
             .catch(error => {
@@ -18,18 +24,20 @@ export default class MotifService {
             });
     }
 
-    static async addNatExpense(natExpense){
+    static async addNatExpense(natExpense) {
         return fetch(`${this.url}`,
             {
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
                 },
+                credentials: 'include',
                 method: "POST",
-                body: JSON.stringify({ "name": natExpense.name, "capped": natExpense.capped, "valCap": natExpense.valCap})
+                body: JSON.stringify({ "name": natExpense.name, "capped": natExpense.capped, "valCap": natExpense.valCap })
             })
             .then((res) => {
-                if (res.status === 200){
+                if (res.status === 200) {
                     return true;
                 }
 
@@ -42,19 +50,21 @@ export default class MotifService {
     }
 
 
-    static async updateNatExpense(natExpense){
+    static async updateNatExpense(natExpense) {
 
         return fetch(`${this.url}/${natExpense.id}`,
             {
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
                 },
-                method:"PUT",
-                body: JSON.stringify({ "name": natExpense.name, "capped": natExpense.capped, "valCap": natExpense.valCap})
+                method: "PUT",
+                credentials: 'include', // Inclure les cookies si nécessaire
+                body: JSON.stringify({ "name": natExpense.name, "capped": natExpense.capped, "valCap": natExpense.valCap })
             })
             .then((res) => {
-                if (res.status === 200){
+                if (res.status === 200) {
                     return true;
                 }
 
@@ -72,14 +82,16 @@ export default class MotifService {
             {
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
                 },
+                credentials: 'include',
                 method: "DELETE",
 
             })
             .then(res => {
 
-                if (res.status === 200){
+                if (res.status === 200) {
                     return true;
                 }
 

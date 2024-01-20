@@ -1,5 +1,5 @@
 import CityService from "./cityService";
-
+import UserService from "./UserService";
 export default class MissionService {
 
 
@@ -9,13 +9,19 @@ export default class MissionService {
 
     //let urlUpdated = `${this.url}/${idUser}`;
     let urlUpdated = `${this.url}/byUser/${idUser}`;
-    console.log(`url`, urlUpdated)
-    return fetch(urlUpdated)
+    //console.log(`url`, urlUpdated)
+    return fetch(urlUpdated, {
+      method: 'GET',
+      credentials: 'include', // Inclure les cookies si nécessaire
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
       .then((res) => {
         return res.json();
       })
       .then((missions) => {
-        console.log(`lstmission`, missions)
+        //console.log(`lstmission`, missions)
         return missions;
       })
       .catch((error) => {
@@ -26,8 +32,14 @@ export default class MissionService {
   static async loadOneMission(idUser, idMission) {
     //let url = `${this.url}/${idUser}/${idMission}`;
     let url = `${this.url}/${idUser}/${idMission}`;
-    console.log(`loadOneMission url`, url)
-    return fetch(url)
+    //console.log(`loadOneMission url`, url)
+    return fetch(url, {
+      method: 'GET',
+      credentials: 'include', // Inclure les cookies si nécessaire
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
       .then((res) => {
         console.log(`res`, res)
         return res.json();
@@ -45,7 +57,13 @@ export default class MissionService {
   static async loadMissionsInWaitByManager(idUser) {
 
     let urlUpdated = `${this.url}/byManager/${idUser}`;
-    return fetch(urlUpdated)
+    return fetch(urlUpdated, {
+      method: 'GET',
+      credentials: 'include', // Inclure les cookies si nécessaire
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
       .then((res) => {
         return res.json();
       })
@@ -60,14 +78,16 @@ export default class MissionService {
 
   // Mise à jour du statut de la mission
   static async updateMissionStatus(idMission, idNewStatus) {
-    console.log(idMission, idNewStatus)
-    console.log(JSON.stringify({ "idStatus": idNewStatus }))
+   // console.log(idMission, idNewStatus)
+    //console.log(JSON.stringify({ "idStatus": idNewStatus }))
     return fetch(`${this.url}/status/${idMission}`,
       {
         headers: {
           "Accept": "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
         },
+        credentials: 'include',
         method: "PUT",
         body: JSON.stringify({ "idStatus": idNewStatus })
       })
@@ -120,6 +140,7 @@ export default class MissionService {
         "Content-Type": "application/json",
       },
       method: "PUT",
+      credentials: 'include',
       body: JSON.stringify(formData),
     })
       .then((response) => {
@@ -161,7 +182,9 @@ export default class MissionService {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
       },
+      credentials: 'include',
       method: "POST",
       body: JSON.stringify(formData),
     })
@@ -198,7 +221,9 @@ export default class MissionService {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
       },
+      credentials: 'include',
       method: "DELETE",
     })
       .then((res) => {
@@ -213,7 +238,13 @@ export default class MissionService {
   static async loadMissionsEnded() {
     let urlUpdated = `${this.url}`;
 
-    return fetch(urlUpdated)
+    return fetch(urlUpdated, {
+      method: 'GET',
+      credentials: 'include', // Inclure les cookies si nécessaire
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((res) => {
         return res.json();
       })
@@ -227,25 +258,33 @@ export default class MissionService {
 
   /**
    * Vérifie si une mission existe déjà pour la date en param
+   * Si existe deja et que idMission est fourni (update) vérifie si la mission trouvé est la meme
    * Format param : date type YYYY-MM-DD
    * Return boolean
    */
   static async selectedDateIsValid(date, idUser, idMission) {
-    const urlUpdated = `${this.url}/user/${idUser}/date/${date}`;
+    const urlUpdated = `${this.url}/byUser/${idUser}/byDate/${date}/byMission`;
 
-    return fetch(urlUpdated)
+    return fetch(urlUpdated, {
+      method: 'GET',
+      credentials: 'include', // Inclure les cookies si nécessaire
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((res) => {
         return res.json();
       })
-      .then((missions) => {
+      .then((res) => {
+        console.log(`selectedDateIsValid`, res)
         //la date est valide car elle n'existe pas dans la BDD
-        if (Object.keys(missions).length === 0) {
+        if (Object.keys(res).length === 0) {
           return true;
         } else {
           //une mission existe déjà pour cette date
 
           //Dans le cas d'un update, vérifier que l'idMission est celui returner dans la requete
-          if (idMission !== missions[0].id) {
+          if (idMission !== res[0].id) {
             return true;
           } else {
             return false;
@@ -259,6 +298,9 @@ export default class MissionService {
 
   }
 
+
+
+
   /**
 * Vérifie si une mission existe déjà pour la date en param
 * Format param : date type YYYY-MM-DD
@@ -267,7 +309,13 @@ export default class MissionService {
   static async coupleOfDatesIsValid(startedDate, arrivalDate, idUser, idMission) {
     const urlUpdated = `${this.url}/user/${idUser}/twoDates/${startedDate}/${arrivalDate}`;
 
-    return fetch(urlUpdated)
+    return fetch(urlUpdated, {
+      method: 'GET',
+      credentials: 'include', // Inclure les cookies si nécessaire
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((res) => {
         return res.json();
       })
