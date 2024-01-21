@@ -33,15 +33,18 @@ public class MissionController {
         return this.misSvc.getAllByUser(idUser);
     }
 
+
     @GetMapping("{idUser}/{idMission}")
     public MissionDto getOneMissionByUserAndId(@PathVariable Integer idUser, @PathVariable Integer idMission) {
         return this.misSvc.getOneMissionByUserAndId(idUser, idMission);
     }
 
+
     @GetMapping("byManager/{idUser}")
     public List<MissionDto> getLstMissionsInWaitByManager(@PathVariable Integer idUser){
         return this.misSvc.getLstMissionsInWaitByManager(idUser);
     }
+
 
     @PutMapping("status/{idMission}")
     public ResponseEntity<?> updateMissionStatus(@PathVariable Integer idMission, @RequestBody Map<String, Object> jsonMap){
@@ -51,18 +54,55 @@ public class MissionController {
         return ResponseEntity.badRequest().body("");
     }
 
+
     @GetMapping("byUser/{idUser}/byDate/{date}")
-    public ResponseEntity<?> checkIfMissionExistByUserAndDate(@PathVariable Integer idUser, @PathVariable(name = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date ){
+    //TODO : a fusionner avec isMissionExist
+    public ResponseEntity<?> isMissionExistByUserAndDate(@PathVariable Integer idUser, @PathVariable(name = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date ){
         if (this.misSvc.checkIfMissionExistByUserAndDate(idUser, date) == true){
             return ResponseEntity.ok().body("");
         }
         return ResponseEntity.badRequest().body("");
     }
 
-    @GetMapping("byUser/{idUser}/byDate/{date}/byMission/{idMission}")
-    public List<MissionDto> getListMissionsByUserDateAndMission(@PathVariable Integer idUser, @PathVariable(name = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @PathVariable(name="idMission", required = false) Integer idMission){
 
-        System.out.println("========================================================= idUser:"+ idUser + " date:"+date +" idMission:"+idMission);
-        return this.misSvc.getListMissionsByUserDateAndMission(idUser, date, idMission);
+    @PostMapping("isMissionExist")
+    public ResponseEntity<?> isMissionExist( @RequestBody Map<String, Object> jsonMap){
+     if (Boolean.TRUE.equals(this.misSvc.isMissionExist(jsonMap))){
+            return ResponseEntity.ok().body("true");
+        } else if(Boolean.FALSE.equals(this.misSvc.isMissionExist(jsonMap))){
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.badRequest().body("");
+    }
+
+
+    @PostMapping
+    public ResponseEntity<?> addMission(@RequestBody MissionDto  missionDto){
+
+       if (Boolean.TRUE.equals(this.misSvc.addMission(missionDto))){
+            return ResponseEntity.ok().body("true");
+        }
+
+        return ResponseEntity.badRequest().body("");
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateMission(@RequestBody MissionDto  missionDto){
+
+        if (Boolean.TRUE.equals(this.misSvc.updateMission(missionDto))){
+            return ResponseEntity.ok().body("true");
+        }
+
+        return ResponseEntity.badRequest().body("");
+    }
+
+    @DeleteMapping("{idMission}")
+    public ResponseEntity<?> deleteMission(@PathVariable(name="idMission") Integer idMission){
+        if (Boolean.TRUE.equals(this.misSvc.deleteMission(idMission))){
+            return ResponseEntity.ok().body("true");
+        }
+
+        return ResponseEntity.badRequest().body("");
     }
 }

@@ -1,17 +1,16 @@
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
-import MissionService from "../../../Services/missionService";
+import MissionService from "../../Services/missionService";
 
-export default function ModalDeleteMission({...props}) {
+export default function ModalDeleteMission({ ...props }) {
   const handleCloseModal = () => {
     props.onHide();
   };
 
   const handleDeleteMission = async () => {
-    const response = await MissionService.deleteMission(props.id);
-    props.onHide();
+    const response = await MissionService.deleteMission(props.mission.id)
     if (response === true) {
-      props.onReload();
+      props.onHide();
     } else {
       window.alert("Une erreur est survenue. Suppression impossible !");
     }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransportService {
@@ -16,5 +17,9 @@ public class TransportService {
 
     public List<Transport> getLstTransports(){
         return this.trspRepo.findAll().stream().toList();
+    }
+
+    public Optional<Transport> getDistinctTransportById(Integer idTransport){
+        return this.trspRepo.findDistinctById(idTransport);
     }
 }

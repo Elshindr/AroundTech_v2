@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
-import MissionService from "../../../Services/missionService";
-import MissionForm from "./MissionForm";
-
-
+import MissionService from "../../Services/missionService";
+import MissionForm from "../missions/MissionForm";
 
 
 
 export default function ModalMission(props) {
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  //const [idUser, setIdUser] = useState(null);
 
   const [formData, setFormData] = useState({
     missionId: "",
@@ -35,20 +32,23 @@ export default function ModalMission(props) {
   });
 
 
-    
-
-  // Récupère l'id de l'utilisateur connecté
-  // Charge les données utilisateur et appel fetchData
-/*   useEffect(() => {
-
-      //setIdUser(props.user.id);
-
-    
-  }, []);
- */
-  const handleCloseModal = () => {
-    props.onHide();
-  };
+  // auto-complete formDate
+  useEffect(() => {
+    (async () => {
+      setFormData({
+        missionId: props.mission !== null ? props.mission.id : "",
+        nature_mission_id: props.mission !== null ? props.mission.natureCur.id : "",
+        departure_city_id: props.mission !== null ? props.mission.departCity.name : "",
+        arrival_city_id: props.mission !== null ? props.mission.arrivalCity.name : "",
+        start_date: props.mission !== null ? new Date(props.mission.startDate).toISOString().split("T")[0] : "",
+        end_date: props.mission !== null ? new Date(props.mission.endDate).toISOString().split("T")[0] : "",
+        bonus: 0,
+        status_id: props.mission !== null ? props.mission.status.id : "",
+        user_id: props.mission !== null ? props.mission.userId : props.user.id,
+        transport_id: props.mission !== null ? props.mission.transport.id : "",
+      });
+    })();
+  }, [props?.mission]);
 
 
   // if form error btn submir = disabled
@@ -57,58 +57,17 @@ export default function ModalMission(props) {
     setIsButtonDisabled(isDisabled);
   }, [isAnError]);
 
-  //loading formData when it's an update
-  useEffect(() => {
-    if (props.mission !== null) {
-
-      (async () => {
-        //const mission = await MissionService.loadOneMission(formData.user_id,props.id);
- /*        setFormData((prevState) => ({
-          ...prevState,
-          ["user_id"]: props.mission.userId,
-        })); */
-        setFormData({
-          missionId: props.mission .id ? props.mission .id : "",
-          nature_mission_id: props.mission .natureCur.id,
-          departure_city_id: props.mission .departCity.name,
-          arrival_city_id: props.mission .arrivalCity.name,
-          start_date: new Date(props.mission .startDate).toISOString().split("T")[0],
-          end_date: new Date(props.mission .endDate).toISOString().split("T")[0],
-          bonus: 0,
-          status_id: props.mission .status.id,
-          user_id: props.mission .userId,
-          transport_id: props.mission .transport.id,
-        });
-      })();
-
-    } else {
-
-      setFormData({
-        missionId: "",
-        nature_mission_id: "",
-        departure_city_id: "",
-        arrival_city_id: "",
-        start_date: "",
-        end_date: "",
-        bonus: 0,
-        status_id: "",
-        user_id: props.user.id,
-        transport_id: "",
-      });
-    }
-  }, [props.id, props.user.id]);
-
-  const handleMission = async (e) => {
+  // Add mission in BDD
+  const handleAddMission = async (e) => {
     e.preventDefault();
 
-    //Ajout de la mission en BDD
+
     try {
-      console.log(`form data`, formData)
+
       const response = await MissionService.addMission(formData);
 
-      if (response ) {
+      if (response) {
         props.onHide(); //ferme la modal
-        props.onReload(); //recharge le tableau
 
         //clear le form
         setFormData({
@@ -120,29 +79,30 @@ export default function ModalMission(props) {
           end_date: "",
           bonus: 0,
           status_id: "",
-          user_id: props.user.id,
-          transport_id: "",
+          user_id: props.user?.id,
+          transport_id: "" 
         });
       } else {
         console.log(`Error! Status code: ${response}`)
-        //window.alert(`Error! Status code: ${response}`);
+        window.alert(`Error! Status code: ${response}`);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
+  // Update mission in BDD
   const handleUpdateMission = async (e) => {
+
     e.preventDefault();
 
     //Ajout de la mission en BDD
     try {
       const response = await MissionService.updateMission(formData, props.id);
-      if (response === 200) {
+      if (response) {
         props.onHide();
 
-
-        //clear le form
+        // Clear le form
         setFormData({
           missionId: "",
           nature_mission_id: "",
@@ -163,7 +123,9 @@ export default function ModalMission(props) {
     }
   };
 
-
+  const handleCloseModal = () => {
+    props.onHide();
+  };
 
   return (
     <Modal
@@ -183,7 +145,7 @@ export default function ModalMission(props) {
       </Modal.Header>
 
       <Modal.Body className="text-center d-flex flex-column">
-      <MissionForm
+        <MissionForm
           formData={formData}
           setFormData={setFormData}
           isAnError={isAnError}
@@ -192,7 +154,7 @@ export default function ModalMission(props) {
       </Modal.Body>
 
       <Modal.Footer>
-        {props.id !== null ? (
+        {props.mission !== null ? (
           <Button
             className="btn-modal-success"
             onClick={handleUpdateMission}
@@ -203,7 +165,7 @@ export default function ModalMission(props) {
         ) : (
           <Button
             className="btn-modal-success"
-            onClick={handleMission}
+            onClick={handleAddMission}
             disabled={isButtonDisabled}
           >
             Valider

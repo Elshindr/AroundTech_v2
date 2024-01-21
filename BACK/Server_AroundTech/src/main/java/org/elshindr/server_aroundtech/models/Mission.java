@@ -72,6 +72,19 @@ public class Mission {
         this.natureInit = natureInit;
     }
 
+
+    public Mission(@NotNull Nature natureCur, @NotNull City departCity, @NotNull City arrivalCity, @NotNull LocalDate startDate, @NotNull LocalDate endDate, @NotNull Status status, @NotNull User user, @NotNull Transport transport, @NotNull Nature natureInit) {
+        this.natureCur = natureCur;
+        this.departCity = departCity;
+        this.arrivalCity = arrivalCity;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.user = user;
+        this.transport = transport;
+        this.natureInit = natureInit;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -31,7 +31,12 @@ public interface MissionRepository extends JpaRepository<Mission, Integer> {
     @Query("SELECT m FROM Mission m WHERE m.user.id = :idUser AND m.id = :idMission")
     Mission findOneMissionByUserAndId(@Param("idUser") Integer idUser, @Param("idMission") Integer idMission);
 
-    @Query("SELECT m FROM Mission m WHERE m.user.id = :idUser AND m.id = :idMission AND m.startDate = :date")
-    List<Mission> getListMissionsByUserDateAndMission(@Param("idUser") Integer idUser, @Param("date")LocalDate date, @Param("idMission") Integer idMission);
+    //@Query("SELECT m FROM Mission m WHERE m.user.id = :idUser AND :date BETWEEN m.startDate AND m.endDate")
+    @Query("SELECT m FROM Mission m WHERE m.user.id = :idUser AND m.startDate <= :date AND :date <= m.endDate")
+    List<Mission> findMissionByUserBetweenDate(@Param("idUser") Integer idUser, @Param("date")LocalDate date);
+
+   // @Query("SELECT m FROM Mission m WHERE m.user.id = :idUser AND :date BETWEEN m.startDate AND m.endDate")
+   // List<Mission> findMissionsByUserAndDate(@Param("idUser") Integer idUser, @Param("date") LocalDate date);
+
 }
 

@@ -61,10 +61,7 @@ export default class UserService {
 				"Content-Type": "application/json",
 				'X-XSRF-TOKEN': this.cookies.get("XSRF-TOKEN"),
 			},
-			withCredentials: true,
 			credentials: 'include',
-			secure: true,
-			sameSite: "Strict",
 			method: "POST",
 			body: JSON.stringify({ "email": email, "pwd": pwd })
 

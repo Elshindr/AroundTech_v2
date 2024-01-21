@@ -6,14 +6,13 @@ import LeaveService from "../../Services//leaveService";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 import MissionTable from "./MissionTable";
-import ModalDeleteMission from "./delete/ModalDeleteMission";
-//import ModalAddMission from "./add/ModalMission";
-import ModalEditMission from "./add/ModalMission";
-import ModalInformation from "./information/ModalInformation";
+import ModalDeleteMission from "../modals/ModalDeleteMission";
+import ModalEditMission from "../modals/ModalEditMission";
+import ModalInformation from "../modals/ModalInfosMission";
 
 import { useUser } from '../../Contexts/UserContext';
 import { Error, Loading } from '../loadingError/loadingErrorComponent';
-import Utils from '../../Utils/utils';
+
 
 const MissionComponent = () => {
   const [missions, setMissions] = useState([]);
@@ -30,25 +29,24 @@ const MissionComponent = () => {
   const [selectedLeave, setSelectedLeave] = useState(undefined);
 
   // Utilisation du hook useUser
-  const contextUser = useUser();
-  const loading = contextUser.loading;
-  const error = contextUser.error;
-
+  const { user, loading, error } = useUser();
 
   useEffect(() => {
 
     (async () => {
-      if (contextUser.user) {
-        if (reloadTable || contextUser.user) {
+      if (user) {
+        if (reloadTable || user) {
 
-          const data = await MissionService.loadMissionsByUser(contextUser.user.id);
+          const data = await MissionService.loadMissionsByUser(user.id);
           setMissions(data);
           const datas = await LeaveService.loadLeaves();
-          const status = [{'id':3, 'name':"Validée"}];//await StatusService.loadStatusByName("valid");
+          const status = [{ 'id': 3, 'name': "Validée" }];
+
           //Récupère seulement les données sur l'utilisateur connecté et dont le statut est validé
           const filteredLeaves = datas.filter(
-            (leave) => leave.id_user === contextUser.user.id && leave.status === status[0].id
+            (leave) => leave.id_user === user.id && leave.status === status[0].id
           );
+
           //change id status by name
           const updatedLeaves = filteredLeaves.map((leave) => {
             return { ...leave, status: status[0].name };
@@ -60,34 +58,18 @@ const MissionComponent = () => {
         console.log(`nik missionComponent`)
       }
     })();
-  }, [reloadTable, contextUser.user]);
+  }, [reloadTable, user]);
 
-  //loading leaves data
-/*   useEffect(() => {
-    (async () => {
-      const datas = await LeaveService.loadLeaves();
-      const status = {'id':3, 'name':"validée"}//await StatusService.loadStatusByName("valid");
-      //Récupère seulement les données sur l'utilisateur connecté et dont le statut est validé
-      const filteredLeaves = datas.filter(
-        (leave) => leave.id_user === contextUser.user.id && leave.status === status[0].id
-      );
-      //change id status by name
-      const updatedLeaves = filteredLeaves.map((leave) => {
-        return { ...leave, status: status[0].name };
-      });
-      setLeaves(updatedLeaves);
-    })();
-  }, [contextUser.user]); */
 
   // Gérer l'état de chargement
   if (loading) {
     return <Loading />;
   }
 
-/*   // Gérer l'état d'erreur
+  // Gérer l'état d'erreur
   if (error) {
     return <Error />;
-  } */
+  }
 
   return (
     <div>
@@ -101,9 +83,9 @@ const MissionComponent = () => {
             leaves={leaves}
             setShowDeleteModal={setShowDeleteModal}
             setShowUpdateModal={setShowUpdateModal}
+            setMission={setMission}
             setSelectedLeave={setSelectedLeave}
             setModalState={setModalState}
-            setMission={setMission}
           />
         </div>
 
@@ -123,10 +105,6 @@ const MissionComponent = () => {
       </div>
       <ModalDeleteMission
         show={showDeleteModal}
-        /*oreload={() => {
-          setReloadTable(true);
-        }}*/
-
         onHide={() => {
           setReloadTable(!reloadTable);
           setShowDeleteModal(false);
@@ -134,36 +112,33 @@ const MissionComponent = () => {
         mission={mission}
         title="Attention"
       />
+      {user &&
 
-      <ModalEditMission
-        user ={contextUser.user}
-        show={showAddModal}
-        /*onReload={() => {
-          setReloadTable(true);
-        }}*/
-     
-        onHide={() => {
-          setReloadTable(!reloadTable);
-          setShowAddModal(false);
-        }}
-        mission={null}
-        title="Demander une mission"
-      />
+        <ModalEditMission
+          user={user}
+          show={showAddModal}
+          onHide={() => {
+            setReloadTable(!reloadTable);
+            setShowAddModal(false);
+          }}
+          mission={null}
+          title="Demander une mission"
+        />
+      }
 
 
-      <ModalEditMission
-        user = {contextUser.user}
-        show = {showUpdateModal}
-       /* onReload={() => {
-          setReloadTable(true);
-        }}*/
-        onHide={() => {
-          setReloadTable(!reloadTable);
-          setShowUpdateModal(false);
-        }}
-        mission={mission}
-        title="Modifier une mission"
-      />
+      {user && mission &&
+        <ModalEditMission
+          user={user}
+          show={showUpdateModal}
+          onHide={() => {
+            setReloadTable(!reloadTable);
+            setShowUpdateModal(false);
+          }}
+          mission={mission}
+          title="Modifier une mission"
+        />
+      }
 
 
       {

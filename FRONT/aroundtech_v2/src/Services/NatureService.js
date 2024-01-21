@@ -6,47 +6,38 @@ export default class NatureMisService {
   static async loadNaturesMis() {
     return fetch(this.url, {
       method: 'GET',
-      credentials: 'include', // Inclure les cookies si nécessaire
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
       },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((nat) => {
-        return nat;
-      })
-      .catch((error) => {
-        console.error("Erreur dans loadNaturesMis", error);
-      });
+    }).then((res) => {
+      return res.json();
+    }).then((nat) => {
+      return nat;
+    }).catch((error) => {
+      console.error("Erreur dans loadNaturesMis", error);
+    });
   }
 
   //pdf
   static async loadOneNatureMission(idNatureMis) {
-    let urlNat = `${this.url}/${idNatureMis}`;
-    //console.log(`urlNat`, urlNat);
 
-    return fetch(urlNat, {
+    return fetch(`${this.url}/${idNatureMis}`, {
       method: 'GET',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
       },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((exp) => {
-        //console.log(`exp`, exp)
-        return exp;
-      })
-      .catch((error) => {
-        console.error(
-          "Erreur dans loadOnNatureMission idNatureMis =", idNatureMis, error);
-      });
+    }).then((res) => {
+      return res.json();
+    }).then((exp) => {
+      return exp;
+    }).catch((error) => {
+      console.error(
+        "Erreur dans loadOnNatureMission idNatureMis =", idNatureMis, error);
+    });
   }
 
   static async addNature(name, isCharge, isBonus, tjm, percentage, startDate, endDate) {
@@ -68,18 +59,15 @@ export default class NatureMisService {
         startDate: startDate,
         endDate: endDate,
       }),
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          return true;
-        }
-        console.log(`erreur addNature`, res);
-        throw new Error("addNature" + res);
-      })
-      .catch((error) => {
-        console.log(`Error dans addNature`, error);
-        return false;
-      });
+    }).then((res) => {
+      if (res.status === 200) {
+        return true;
+      }
+      throw new Error("addNature" + res);
+    }).catch((error) => {
+      console.log(`Error dans addNature`, error);
+      return false;
+    });
   }
 
   static async deleteNature(id) {
@@ -89,25 +77,21 @@ export default class NatureMisService {
         "Content-Type": "application/json",
         'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
       },
-      credentials: 'include', 
+      credentials: 'include',
       method: "DELETE",
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          return true;
-        }
-
-        console.log(`erreur deleteNature `, res);
-        throw new Error("deleteNature " + res);
-      })
-      .catch((error) => {
-        console.log(`Error dans deleteNature `, error);
-        return false;
-      });
+    }).then((res) => {
+      if (res.status === 200) {
+        return true;
+      }
+      throw new Error("deleteNature " + res);
+    }).catch((error) => {
+      console.log(`Error dans deleteNature `, error);
+      return false;
+    });
   }
 
   static async updateNature(id, name, isCharge, isBonus, tjm, percentage, startDate, endDate) {
-    
+
     return fetch(this.url + "/" + id, {
       headers: {
         Accept: "application/json",
@@ -125,18 +109,15 @@ export default class NatureMisService {
         startDate: startDate,
         endDate: endDate,
       }),
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          return true;
-        }
-        console.log(`erreur dans la mise à jour `, res);
-        throw new Error("updateNature " + res);
-      })
-      .catch((error) => {
-        console.log(`Error dans updateNature !!!! `, error);
-        return false;
-      });
+    }).then((res) => {
+      if (res.status === 200) {
+        return true;
+      }
+      throw new Error("updateNature " + res);
+    }).catch((error) => {
+      console.log(`Error dans updateNature !!!! `, error);
+      return false;
+    });
   }
 
   /**
@@ -145,29 +126,22 @@ export default class NatureMisService {
    * Return array of nature_mission
    */
   static async selectedNatureFilterByDate(date) {
-    const urlUpdated = `${this.url}/byDate/${date}`;
-//console.log(`selectedNatureFilterByDate`)
 
-//console.log(`url`, urlUpdated)
-    return fetch(urlUpdated, {
+    return fetch(`${this.url}/byDate/${date}`, {
       method: 'GET',
-      credentials: 'include', // Inclure les cookies si nécessaire
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-
       },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((natures) => {
-        return natures;
-      })
-      .catch((error) => {
-        console.error(
-          "Erreur de la récupération des données 'mission' dans selectedNatureFilterByDate",
-          error
-        );
-      });
+    }).then((res) => {
+      return res.json();
+    }).then((natures) => {
+      return natures;
+    }).catch((error) => {
+      console.error(
+        "Erreur de la récupération des données 'mission' dans selectedNatureFilterByDate",
+        error
+      );
+    });
   }
 }

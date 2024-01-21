@@ -1,20 +1,12 @@
 import React, { useState } from "react";
-import { Table, Button } from "react-bootstrap";
+import { Table, Pagination } from "react-bootstrap";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Pagination from "react-bootstrap/Pagination";
 import Utils from "../../Utils/utils";
 
-const MissionTable = ({
-  missions,
-  leaves,
-  setShowDeleteModal,
-  setShowUpdateModal,
-  setIdMission,
-  setSelectedLeave,
-  setModalState,
-}) => {
+const MissionTable = ({ missions, leaves, setShowDeleteModal, setShowUpdateModal, setMission, setSelectedLeave, setModalState }) => {
+  
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
   const maxPerPage = 5;
@@ -33,25 +25,19 @@ const MissionTable = ({
   const dataPageMission = missions.slice(firstIndex, lastIndex);
   const dataPageLeaves = leaves.slice(firstIndex, lastIndex);
 
-  // console.log("currentP "+currentPage)
-  // console.log("lastI "+lastIndex)
-  // console.log("firstI "+firstIndex)
-  // console.log("dataM "+dataPageMission.length)
-  // console.log("dataL "+dataPageLeaves.length)
-  // console.log("missions "+missions.length)
-  // console.log("leaves "+leaves.length)
-  // console.log("total "+totalPages)
 
-  const handleOpenDeleteModal = (idMission) => {
+  const handleOpenDeleteModal = (mission) => {
     setShowDeleteModal(true);
-    setIdMission(idMission);
-  };
-  const handleOpenUpdateModal = (idMission) => {
-    setShowUpdateModal(true);
-    setIdMission(idMission);
+    setMission(mission);
   };
 
-  //Modal information
+  const handleOpenUpdateModal = (mission) => {
+    console.log(`updatemodale`, mission)
+    setMission(mission);
+    setShowUpdateModal(true);
+  };
+
+  // Modal information
   const handleSelectedLeave = (leave) => {
     setSelectedLeave(leave);
     setModalState(true);
@@ -88,7 +74,7 @@ const MissionTable = ({
                 actions_button.push(
                   <button
                     className="button_icon button_edit"
-                    onClick={() => handleOpenUpdateModal(mission.id)}
+                    onClick={() => handleOpenUpdateModal(mission)}
                   >
                     <EditIcon className="icon_edit" id="edit_mission" />
                   </button>
@@ -97,7 +83,7 @@ const MissionTable = ({
               actions_button.push(
                 <button
                   className="button_icon button_delete"
-                  onClick={() => handleOpenDeleteModal(mission.id)}
+                  onClick={() => handleOpenDeleteModal(mission)}
                 >
                   <DeleteIcon className="icon_delete" />
                 </button>
@@ -151,7 +137,7 @@ const MissionTable = ({
               );
             })
           }
-          
+
           {
             missions.length === 0 && leaves.length === 0 && (
               <tr>

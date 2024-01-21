@@ -20,8 +20,11 @@ public class City {
     public City(){
     }
 
-    public City(Integer id, @NotNull String name) {
+    public City(Integer id, @NotBlank String name) {
         this.id = id;
+        this.name = name;
+    }
+    public City(@NotBlank String name) {
         this.name = name;
     }
 
