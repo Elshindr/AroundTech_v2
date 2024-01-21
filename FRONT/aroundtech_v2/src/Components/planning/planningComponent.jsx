@@ -3,7 +3,6 @@ import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import style from "./MyCalendar.module.css";
 import MissionService from "../../Services/missionService";
 import LeaveService from "../../Services/leaveService";
-import StatusService from "../../Services/statusService";
 
 import format from "date-fns/format";
 import parse from "date-fns/parse";
@@ -42,34 +41,31 @@ const PlanningComponent = () => {
   const [modalState, setModalState] = useState(false);
   const newEventsList = [];
 
-
   // Utilisation du hook useUser
   const contextUser = useUser();
   const loading = contextUser.loading;
   const error = contextUser.error;
 
-
-
-  //loading leaves et missions
+  // loading leaves et missions
   useEffect(() => {
     if (contextUser.user) {
 
       (async () => {
         const data_mission = await MissionService.loadMissionsByUser(contextUser.user.id);
         const data_leave = await LeaveService.loadLeaves();
-        const status = [{"id":3, "name":"validé"}];
+        const status = [{ "id": 3, "name": "validé" }];
         //Retourne seulement les données sur l'utilisateur connecté et les congés validés
         const filteredLeaves = data_leave.filter(
           (leave) => leave.id_user === contextUser.user.id && leave.status === status[0].id
         );
 
-        //change id status by name
+        // Change id status by name
         const updatedLeaves = filteredLeaves.map((leave) => {
           return { ...leave, status: status[0].name };
         });
         setLeaves(updatedLeaves);
 
-        //Retourne seulement les missions avec le status "validé"
+        // Retourne seulement les missions avec le status "validé"
         const filteredMissions = data_mission.filter(
           (mission) => mission.status.id === status[0].id
         );
@@ -84,7 +80,7 @@ const PlanningComponent = () => {
     // Ajoute des missions à la liste
     missions.forEach((mission) => {
       const newEndDate = new Date(mission.endDate);
-      newEndDate.setDate(newEndDate.getDate() + 1);
+      newEndDate.setDate(newEndDate.getDate() );
       newEventsList.push({
         allDay: true,
         end: newEndDate,
@@ -140,16 +136,15 @@ const PlanningComponent = () => {
     return <Loading />;
   }
 
- /*  // Gérer l'état d'erreur
+  // Gérer l'état d'erreur
   if (error) {
     return <Error />;
-  } */
+  }
 
   return (
     <>
       <Calendar
         selectable
-        // onSelectSlot={(e) => handleSelect(e)}
         onSelectEvent={(e) => handleSelectedEvent(e)}
         components={{
           toolbar: (toolbarProps) => (
@@ -173,7 +168,7 @@ const PlanningComponent = () => {
         onNavigate={(date) => {
           setCurrentDate(date);
         }}
-        // defaultDate={currentDate}
+
         eventPropGetter={(eventsList) => {
           const backgroundColor = eventsList.color ? eventsList.color : "blue";
           return { style: { backgroundColor } };

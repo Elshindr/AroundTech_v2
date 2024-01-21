@@ -6,8 +6,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Utils from "../../Utils/utils";
 
 const MissionTable = ({ missions, leaves, setShowDeleteModal, setShowUpdateModal, setMission, setSelectedLeave, setModalState }) => {
-  
-  // pagination
+
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const maxPerPage = 5;
 
@@ -22,22 +22,36 @@ const MissionTable = ({ missions, leaves, setShowDeleteModal, setShowUpdateModal
 
   const lastIndex = currentPage * maxPerPage;
   const firstIndex = (currentPage - 1) * maxPerPage;
-  const dataPageMission = missions.slice(firstIndex, lastIndex);
-  const dataPageLeaves = leaves.slice(firstIndex, lastIndex);
+  const dataPageMission = [...missions, ...leaves].sort((a, b) => {
+
+    let proA = "startDate";
+    let proB = "startDate";
+    if (!a.hasOwnProperty("startDate")) {
+      proA = "start_date";
+    }
+    if (!b.hasOwnProperty("startDate")) {
+      proB = "start_date";
+    }
+    const dateA = new Date(a[proA]);
+    const dateB = new Date(b[proB]);
+
+    return dateB - dateA;
+  }).slice(firstIndex, lastIndex);
 
 
+  // Modal Mission Delete
   const handleOpenDeleteModal = (mission) => {
     setShowDeleteModal(true);
     setMission(mission);
   };
-
+  // Modal Mission Update
   const handleOpenUpdateModal = (mission) => {
     console.log(`updatemodale`, mission)
     setMission(mission);
     setShowUpdateModal(true);
   };
 
-  // Modal information
+  // Modal Abs information
   const handleSelectedLeave = (leave) => {
     setSelectedLeave(leave);
     setModalState(true);
@@ -61,47 +75,67 @@ const MissionTable = ({ missions, leaves, setShowDeleteModal, setShowUpdateModal
         <tbody>
           {missions.length > 0 &&
             dataPageMission.map((mission) => {
+
               let actions_button = [];
-              //Case where status is initiale or rejet
-              let array_edit = ["initiale", "rejetée", "rejetee"];
-              let stat_name = mission.status.name;
-              let edit_statut = array_edit.some(
-                (x) => x.toLowerCase() == stat_name.toLowerCase()
-              )
-                ? true
-                : false;
-              if (edit_statut) {
+
+              if (mission.natureCur === null || mission.natureCur === undefined) {
                 actions_button.push(
+
                   <button
                     className="button_icon button_edit"
-                    onClick={() => handleOpenUpdateModal(mission)}
+                    key={mission.id_user}
+                    onClick={() => handleSelectedLeave(mission)}
+                    style={{ cursor: "pointer" }}
                   >
-                    <EditIcon className="icon_edit" id="edit_mission" />
+                    <VisibilityIcon className="icon_edit" id="view_mission" />
+                  </button>
+
+                );
+
+
+              } else {
+                //Case where status is initiale or rejet
+                let array_edit = ["initiale", "rejetée", "rejetee"];
+                let stat_name = mission.status.name;
+                let edit_statut = array_edit.some(
+                  (x) => x.toLowerCase() == stat_name.toLowerCase()
+                )
+                  ? true
+                  : false;
+                if (edit_statut) {
+                  actions_button.push(
+                    <button
+                      className="button_icon button_edit"
+                      onClick={() => handleOpenUpdateModal(mission)}
+                    >
+                      <EditIcon className="icon_edit" id="edit_mission" />
+                    </button>
+                  );
+                }
+                actions_button.push(
+                  <button
+                    className="button_icon button_delete"
+                    onClick={() => handleOpenDeleteModal(mission)}
+                  >
+                    <DeleteIcon className="icon_delete" />
                   </button>
                 );
               }
-              actions_button.push(
-                <button
-                  className="button_icon button_delete"
-                  onClick={() => handleOpenDeleteModal(mission)}
-                >
-                  <DeleteIcon className="icon_delete" />
-                </button>
-              );
+
 
               return (
                 <tr key={mission.id}>
                   <td>
-                    {new Date(mission.startDate).toISOString().split("T")[0]}
+                    {mission.startDate !== undefined ? Utils.formatDateTimestampToStr(new Date(mission.startDate).toISOString().split("T")[0]) : Utils.formatDateTimestampToStr(mission.start_date)}
                   </td>
                   <td>
-                    {new Date(mission.endDate).toISOString().split("T")[0]}
+                    {mission.endDate !== undefined ? Utils.formatDateTimestampToStr(new Date(mission.endDate).toISOString().split("T")[0]) : Utils.formatDateTimestampToStr(mission.end_date)}
                   </td>
-                  <td>{mission.natureCur.name}</td>
-                  <td>{mission.departCity.name}</td>
-                  <td>{mission.arrivalCity.name}</td>
-                  <td>{Utils.capitalizeFirstLetter(mission.transport.name)}</td>
-                  <td>{Utils.capitalizeFirstLetter(mission.status.name)}</td>
+                  <td>{mission.endDate !== undefined ? Utils.capitalizeFirstLetter(mission.natureCur.name) : mission.label}</td>
+                  <td>{mission.endDate !== undefined ? Utils.capitalizeFirstLetter(mission.departCity.name) : "-"}</td>
+                  <td>{mission.endDate !== undefined ? Utils.capitalizeFirstLetter(mission.arrivalCity.name) : "-"}</td>
+                  <td>{mission.endDate !== undefined ? Utils.capitalizeFirstLetter(mission.transport.name) : "-"}</td>
+                  <td>{mission.endDate !== undefined ? Utils.capitalizeFirstLetter(mission.status.name) : mission.status}</td>
                   <td style={{ verticalAlign: "middle", textAlign: "center" }}>
                     {actions_button.map((action, index) => (
                       <span key={index}>{action}</span>
@@ -110,33 +144,6 @@ const MissionTable = ({ missions, leaves, setShowDeleteModal, setShowUpdateModal
                 </tr>
               );
             })}
-
-
-          {leaves.length > 0 &&
-            dataPageLeaves.map((leave) => {
-              return (
-                <tr key={leave.id}>
-                  <td>{leave.start_date}</td>
-                  <td>{leave.end_date}</td>
-                  <td>{leave.label}</td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>{leave.status}</td>
-                  <td style={{ verticalAlign: "middle", textAlign: "center" }}>
-                    <button
-                      className="button_icon button_edit"
-                      key={leave.id_user}
-                      onClick={() => handleSelectedLeave(leave)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <VisibilityIcon className="icon_edit" id="view_mission" />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })
-          }
 
           {
             missions.length === 0 && leaves.length === 0 && (
