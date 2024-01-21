@@ -49,7 +49,7 @@ export default function MissionWaitingComponent() {
 
   // Charge les informations de l'utilisateur connecté
   useEffect(() => {
-    if (contextUser.user && (contextUser.user.idRole === 2 || contextUser.user.idRole === 3)) {
+    if (contextUser.user && (contextUser.user.role.id === 2 || contextUser.user.role.id === 3)) {
       setManagerId(contextUser.user.id); // Met à jour l'ID du manager
     }
   }, [contextUser.user]);

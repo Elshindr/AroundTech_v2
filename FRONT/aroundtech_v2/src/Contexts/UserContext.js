@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import UserService from '../Services/UserService';
+import React, { createContext, useContext, useState } from 'react';
 
 const UserContext = createContext(null);
 
@@ -14,17 +13,12 @@ export function UserProvider({ children }) {
 
     const contextValue = {
         user,
-        setUser,
         updateUser,
         error,
         loading,
         setLoading,
         setError
     };
-
-
-
-    
 
     return (
         <UserContext.Provider value={contextValue}>

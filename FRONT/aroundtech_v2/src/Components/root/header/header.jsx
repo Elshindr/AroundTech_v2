@@ -25,33 +25,23 @@ function Header(props) {
 
   // Gère la déconnexion de l'utilisateur
   const handleLogout = async () => {
-    console.log(`user?`, contextUser.user)
-    // Requête à la route API /logout pour initier la déconnexion
 
 
-    const response = await UserService.getLogout();/* await fetch('/login/logout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      // Inclue les cookies dans la requête pour la gestion de session
-      credentials: 'include'
-    }); */
-console.log(`logoutrespo,nse`, response)
-    // Si la déconnexion est réussie, redirige l'utilisateur vers la page de connexion
-    if (true) {
+    console.log(`user?`, contextUser.user);
+    const response = await UserService.getLogout();
+    console.log(`logoutrespo,nse`, response)
+
+    if (response) {
       router('/login', { replace: true });
     } else {
-      // Si la déconnexion échoue, affiche une erreur dans la console
       console.error('Échec de la déconnexion');
     }
   };
 
-     // Pour gérer l'état d'erreur
-    
-    if (error) {
-      return <Error />;
-    } 
+  // Pour gérer l'état d'erreur
+  if (error) {
+    return <Error />;
+  }
 
   // Fonction qui détermine si le chemin actuel est l'un des chemins du NavDropdown
   const isDropdownActive = () => {

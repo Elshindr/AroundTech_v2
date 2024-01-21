@@ -29,7 +29,7 @@ public class MissionController {
 
 
     @GetMapping("byUser/{idUser}")
-    public List<MissionDto> getLstMissionByUser(@PathVariable Integer idUser) {
+    public List<MissionDto> getLstMissionsByUser(@PathVariable Integer idUser) {
         return this.misSvc.getAllByUser(idUser);
     }
 
@@ -53,12 +53,16 @@ public class MissionController {
 
     @GetMapping("byUser/{idUser}/byDate/{date}")
     public ResponseEntity<?> checkIfMissionExistByUserAndDate(@PathVariable Integer idUser, @PathVariable(name = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date ){
-        if (this.misSvc.checkIfMissionExistByUserAndDate(idUser, date)){
+        if (this.misSvc.checkIfMissionExistByUserAndDate(idUser, date) == true){
             return ResponseEntity.ok().body("");
         }
         return ResponseEntity.badRequest().body("");
     }
 
+    @GetMapping("byUser/{idUser}/byDate/{date}/byMission/{idMission}")
+    public List<MissionDto> getListMissionsByUserDateAndMission(@PathVariable Integer idUser, @PathVariable(name = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @PathVariable(name="idMission", required = false) Integer idMission){
 
-
+        System.out.println("========================================================= idUser:"+ idUser + " date:"+date +" idMission:"+idMission);
+        return this.misSvc.getListMissionsByUserDateAndMission(idUser, date, idMission);
+    }
 }

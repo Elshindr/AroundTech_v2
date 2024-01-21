@@ -45,38 +45,15 @@ public class LoginController {
     public ResponseEntity<?> getUserInfo(Authentication authentication) {
         System.out.println("====================================login user-info");
 
-        try{
-
-            // Récupérer les informations de l'utilisateur à partir de l'objet Authentication
-            if (authentication != null && authentication.getPrincipal() != null){
-                System.out.println(authentication.toString());
-                System.out.println(authentication.getPrincipal().toString());
-                // UserDto userDto = (UserDto) ;
-                //return ResponseEntity.ok(userDto);
-
-
-                Optional<User> userOptional = this.userRepo.findDistinctByEmail((String) authentication.getPrincipal())
-                        .stream().findFirst();
-
-                if (userOptional.isPresent()) {
-                    UserDto userDto = UserDto.parseUserToUserDto(userOptional.get(), this.userRepo);
-                    return ResponseEntity.ok().body(userDto);
-                } else {
-                    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-                }
-            }
-            System.out.println("auth null");
-
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch(Exception ex){
-
-            System.out.println("====================== erreur");
-            System.out.println(ex.getMessage());
-            System.out.println(ex);
-            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
+        // Récupérer les informations de l'utilisateur à partir de l'objet Authentication
+        if (authentication != null && authentication.getPrincipal() != null) {
+            System.out.println(authentication.toString());
+            System.out.println(authentication.getPrincipal().toString());
+           UserDto userDto = this.userSvc.getUserInfo(authentication);
+            return ResponseEntity.ok().body(userDto);
         }
 
-
+        return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
     }
 
     @PostMapping("/csrf")
@@ -112,22 +89,6 @@ public class LoginController {
         } else {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-    }
-
-
-
-    ///
-    /// SE DECO
-    ///
-    @PostMapping("/logout")
-    public ResponseEntity<?>  logout(){
-        System.out.println("===================== DECONNEXION ");
-
-      /*  if (newUser == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur à la connexion");
-        }*/
-
-        return ResponseEntity.ok().body("OK");
     }
 
 }

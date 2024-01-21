@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 
 import Root from './Components/root/root';
-import NotFound from "./Components/loadingError/unauthorizedComponent";
+import Unauthorized from "./Components/loadingError/unauthorizedComponent";
 
 import HomeComponent from "./Components/home/home";
 import LoginComponent from "./Components/login/loginComponent";
@@ -26,9 +26,9 @@ import UserFormAdd from "./Components/users/add/UserFormAdd";
 import UserFormUpd from "./Components/users/update/UserFormUpdate";
 import { CookiesProvider } from 'react-cookie';
 import { UserProvider } from './Contexts/UserContext';
-import './index.css';
-import Home from './Components/home/home';
+import RoleGuard from './Components/root/guard/guard';
 
+import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -42,27 +42,26 @@ const router = createBrowserRouter(
         <Route path="/mission/waiting" element={<MissionWaitingComponent />} />
         <Route path="/planning" element={<PlanningComponent />} />
         <Route path="/primes" element={<PrimesComponent />} />
-        <Route path="/motifs" element={<MotifComponent />} />
-        <Route path="/natures" element={<NatureComponent />} />
+        <Route path="/motifs" element={<RoleGuard allowedRoles={[3, 2]}><MotifComponent /></RoleGuard>}/>
+        <Route path="/natures" element={<RoleGuard allowedRoles={[3, 2]}><NatureComponent /></RoleGuard>}/>
         <Route path="/expenses" element={<ExpenseGestionComponent />} />
         <Route path="/expenses/:idMission" element={<ExpenseSaisieComponent />} />
-        <Route path="/users" element={<UserComponent />} />
-        <Route path="/users/add" element={<UserFormAdd />} />
-        <Route path="/users/:idUser" element={<UserFormUpd />} /> 
+        <Route path="/users" element={<RoleGuard allowedRoles={[3]}><UserComponent /></RoleGuard>} />
+        <Route path="/users/add" element={<RoleGuard allowedRoles={[3]}><UserFormAdd /></RoleGuard>} />
+        <Route path="/users/:idUser" element={<RoleGuard allowedRoles={[3]}><UserFormUpd /></RoleGuard>}/> 
       </Route>
-
-      <Route path="*" element={<NotFound />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="*" element={<Unauthorized />} />
     </>
+
   )
 );
 
 root.render(
-
   <CookiesProvider>
     <UserProvider>
       <RouterProvider router={router} />
     </UserProvider>
   </CookiesProvider>
-
 );
 

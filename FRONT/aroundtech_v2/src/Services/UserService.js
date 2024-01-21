@@ -1,14 +1,9 @@
 import Cookies from 'universal-cookie';
 
-
-
-
 export default class UserService {
 
 	static url = `${process.env.REACT_APP_BACK_URL}login/`;
 	static cookies = new Cookies();
-
-	//static [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
 
 	static async loadUsers() {
 		return fetch(`${process.env.REACT_APP_BACK_URL}users/all`, {
@@ -56,7 +51,6 @@ export default class UserService {
 
 		await this.getTokenCsrf();
 
-		//await this.getUserInfo();
 
 		console.log(`url getOneUser`, `${process.env.REACT_APP_BACK_URL}login/`, email, pwd, this.cookies.get("XSRF-TOKEN"))
 
@@ -91,30 +85,24 @@ export default class UserService {
 
 	static async getUserInfo() {
 
-		//console.log(`getUserInfo`)
-		//const jwtToken = localStorage.getItem('AUTH-TOKEN');
-		//const jwtToken = ;
 
 		return await fetch(`${this.url}user-info`, {
 			method: 'GET',
-			credentials: 'include', // Inclure les cookies si nécessaire
+			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': `Bearer ${this.cookies?.get("AUTH-TOKEN")}`
 			},
 		}).then(res => {
-			//console.log(`res 1 `, res)
 			if (res.status === 200) {
 				return res.json();
-			}
-			if (res.status === 204) {
+			} else if (res.status === 204) {
 				return undefined;
 			}
 			throw new Error(res)
 		}).then(user => {
-			//console.log(`user json`, user)
+
 			return user;
-			//this.tokenCsrf = res.headers.get('X-CSRF-TOKEN');
 
 		}).catch(error => {
 			console.log(`error getUserInfo`, error);
@@ -144,22 +132,17 @@ export default class UserService {
 
 	static async getLogout() {
 
-
-		const jwtToken = this.cookies.get("AUTH-TOKEN");
-
 		return await fetch(`${process.env.REACT_APP_BACK_URL}logout`, {
 			method: 'POST',
 			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${jwtToken}`,
 				'X-XSRF-TOKEN': this.cookies.get("XSRF-TOKEN")
 			},
 			body: JSON.stringify({})
 		}).then(res => {
 			if (res.status === 200) {
-				//this.cookies = null;
-				console.log(`cookie`, this.cookies)
+				//console.log(`cookie`, this.cookies)
 				return true;
 			}
 			return false;
@@ -167,12 +150,6 @@ export default class UserService {
 			console.log(`error getTokenCsrf`, error);
 		})
 	}
-
-
-
-
-
-
 
 
 	static async addUser(formData) {
@@ -204,8 +181,6 @@ export default class UserService {
 
 	static async updateUser(formData, idUser) {
 
-		//console.log(`json =`, JSON.stringify({ "firstname": formData.firstname, "lastname": formData.lastname, "email": formData.email, "pwd": formData.password, "idManager":formData.idManager, "nameManager":"" , "role":{"id":formData.idRole, "name":""}}))
-		console.log(`${process.env.REACT_APP_BACK_URL}users/${idUser}`, formData)
 		return fetch(`${process.env.REACT_APP_BACK_URL}users/${idUser}`,
 			{
 				headers: {
@@ -218,14 +193,13 @@ export default class UserService {
 				body: JSON.stringify({ "firstname": formData.firstname, "lastname": formData.lastname, "email": formData.email, "pwd": formData.password, "idManager": formData.idManager, "nameManager": "", "role": { "id": formData.idRole, "name": "" } })
 			})
 			.then((res) => {
-				console.log(`res`, res)
+				//console.log(`res`, res)
 				if (res.status === 200) {
 					return true;
 				}
 
 				throw new Error("add addUser" + res);
-			})
-			.catch(error => {// TODO: Gestion affichage de l'erreur
+			}).catch(error => {// TODO: Gestion affichage de l'erreur
 				console.log(`Error dans addUser`, error);
 				return false;
 			});
@@ -233,7 +207,6 @@ export default class UserService {
 
 	static async deleteUser(idUser) {
 
-		console.log(`${process.env.REACT_APP_BACK_URL}users/${idUser}`)
 		return fetch(`${process.env.REACT_APP_BACK_URL}users/${idUser}`,
 			{
 				headers: {
@@ -262,36 +235,38 @@ export default class UserService {
 
 	static async loadRoles() {
 
-		return fetch(`${process.env.REACT_APP_BACK_URL}users/allRoles`, {
-			method: 'GET',
-			credentials: 'include',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		}).then(res => {
-			return res.json();
-		}).then(roles => {
-			return roles;
-		}).catch(error => {
-			console.error("Erreur dans loadRole", error);
-		});
+		return fetch(`${process.env.REACT_APP_BACK_URL}users/allRoles`,
+			{
+				method: 'GET',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}).then(res => {
+				return res.json();
+			}).then(roles => {
+				return roles;
+			}).catch(error => {
+				console.error("Erreur dans loadRole", error);
+			});
 	}
 
 
 	static async loadManagers() {
 
-		return fetch(`${process.env.REACT_APP_BACK_URL}users/allManagers`, {
-			method: 'GET',
-			credentials: 'include',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		}).then(res => {
-			return res.json();
-		}).then(us => {
-			return us;
-		}).catch(error => {
-			console.error("Erreur dans loadRole", error);
-		});
+		return fetch(`${process.env.REACT_APP_BACK_URL}users/allManagers`,
+			{
+				method: 'GET',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}).then(res => {
+				return res.json();
+			}).then(us => {
+				return us;
+			}).catch(error => {
+				console.error("Erreur dans loadRole", error);
+			});
 	}
 }

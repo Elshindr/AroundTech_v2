@@ -23,12 +23,15 @@ public interface MissionRepository extends JpaRepository<Mission, Integer> {
     List<Mission> findMissionByUser(@Param("idUser") Integer idUser);
 
     @Query("SELECT m FROM Mission m WHERE m.user.id = :idUser AND m.startDate = :date")
-    List<Mission> findMissionByUser(@Param("idUser") Integer idUser, LocalDate date);
+    List<Mission> findMissionByUserAndDate(@Param("idUser") Integer idUser, LocalDate date);
 
     @Query("SELECT m FROM Mission m WHERE m.user.idManager = :idManager AND m.status.id = 2")
     List<Mission> getLstMissionsInWaitByManager(@Param("idManager") Integer idManager);
 
     @Query("SELECT m FROM Mission m WHERE m.user.id = :idUser AND m.id = :idMission")
     Mission findOneMissionByUserAndId(@Param("idUser") Integer idUser, @Param("idMission") Integer idMission);
+
+    @Query("SELECT m FROM Mission m WHERE m.user.id = :idUser AND m.id = :idMission AND m.startDate = :date")
+    List<Mission> getListMissionsByUserDateAndMission(@Param("idUser") Integer idUser, @Param("date")LocalDate date, @Param("idMission") Integer idMission);
 }
 

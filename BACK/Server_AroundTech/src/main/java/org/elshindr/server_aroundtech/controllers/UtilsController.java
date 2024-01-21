@@ -21,8 +21,7 @@ import java.util.List;
 @RequestMapping("/transports")
 public class UtilsController {
 
-    //@Autowired
-    //private UserRepository userRepo;
+
     @Autowired
     private TransportService trsSvc;
 

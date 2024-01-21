@@ -10,14 +10,17 @@ import org.elshindr.server_aroundtech.models.Role;
 import org.elshindr.server_aroundtech.models.User;
 import org.elshindr.server_aroundtech.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.elshindr.server_aroundtech.repositories.UserRepository;
-
+import org.springframework.security.core.Authentication;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Service
@@ -39,60 +42,12 @@ public class UserService {
         this.pwdEncoder = wbSecurityConf.passwordEncoder();
     }
 
-    /*
-        public User create(User newUser){
-            System.out.println("SERVICE User CREATE");
-            //System.out.println(newUser.toString());
 
-            //System.out.println(this.userRepo.findAll().stream().filter(u -> u.getEmail().equals(newUser.getEmail())).toList().isEmpty());
-            if(newUser != null && !newUser.getEmail().isEmpty() && this.userRepo.findAll().stream().filter(u -> u.getEmail().equals(newUser.getEmail())).toList().isEmpty()){
-                User user = new User(newUser.getLastname(), newUser.getFirstname(), this.pwdEncoder.encode(newUser.getPwd()), newUser.getEmail(), null);
-
-                this.userRepo.save(user);
-                return user;
-            }
-
-
-            return null;
-        }
-    /*
-        public Boolean deleteProfil(Integer id){
-
-            try {
-
-                this.userRepo.getReferenceById(id).setIdRole(null);
-                this.userRepo.deleteById(id);
-                System.out.println(this.userRepo.getReferenceById(id));
-
-                // Si la référence est null, l'utilisateur a été supprimé avec succès
-                if (this.userRepo.getReferenceById(id) == null) {
-                    return true;
-                }
-
-                return false;
-            } catch (EntityNotFoundException e) {
-                // Gérer l'exception EntityNotFoundException
-                return true;
-            }
-        }
-
-        public Boolean updateProfil(Integer id, User user){
-
-            this.userRepo.getReferenceById(id).setIdRole(user.getIdRole());
-            this.userRepo.save(user);
-
-            // Si la référence null, supprimé avec succès
-            if (this.userRepo.getReferenceById(id) == null) {
-                return true;
-            }
-
-            return false;
-        }
 
       /**
          * Construction du cookie d'authentification selon un user connecté donné
          *
-         * @param user utilisateur connecté.
+         * @param userDto utilisateur connecté.
          * @return cookie sous la forme d'une chaîne de caractères
          */
     public String buildJWTCookie(UserDto userDto, JWTConfig jwtConfig) {
@@ -135,6 +90,31 @@ public class UserService {
     public List<UserDto> findLstUsers(){
         List<User> lstUser = this.userRepo.findAll();
         return lstUser.stream().map(user -> UserDto.parseUserToUserDto(user, this.userRepo)).toList();
+    }
+
+    public UserDto getUserInfo(Authentication auth){
+
+        try{
+
+                Optional<User> userOptional = this.userRepo.findDistinctByEmail((String) auth.getPrincipal())
+                        .stream().findFirst();
+
+                if (userOptional.isPresent()) {
+                    UserDto userDto = UserDto.parseUserToUserDto(userOptional.get(), this.userRepo);
+                    return userDto;
+                } else {
+                    System.out.println("user null");
+                    return null;
+                }
+
+
+        } catch(Exception ex){
+
+            System.out.println("====================== erreur");
+            System.out.println(ex.getMessage());
+            System.out.println(ex);
+            return null;
+        }
     }
 
     public List<Role> findLstRoles(){

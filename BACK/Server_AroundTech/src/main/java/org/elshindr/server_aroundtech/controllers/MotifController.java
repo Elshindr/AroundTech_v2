@@ -20,8 +20,7 @@ import java.util.Map;
 public class MotifController {
 
 
-    @Autowired
-    private UserRepository userRepo;
+
     @Autowired
     private MotifService motSvc;
 

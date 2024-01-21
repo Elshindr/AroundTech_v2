@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -72,12 +71,9 @@ public class WebSecurity implements WebMvcConfigurer {
 
 
         http.authorizeHttpRequests(
-                        // toutes les requêtes sont permises
-                        // => aucune n'est soumise à authentification
                         auth -> auth
                                 .requestMatchers(HttpMethod.POST, "/login/csrf").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                                //.anyRequest().permitAll()
                                 .anyRequest().authenticated()
                 )
                .csrf(csrf -> csrf
@@ -92,7 +88,6 @@ public class WebSecurity implements WebMvcConfigurer {
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                 );
-                //.csrf(csrf -> csrf.disable());
 
         return http.build();
     }

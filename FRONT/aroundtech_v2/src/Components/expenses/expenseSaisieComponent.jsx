@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Table, Button } from 'react-bootstrap';
-import { NavLink, useParams, useNavigate} from 'react-router-dom'
+import { NavLink, useParams, useNavigate } from 'react-router-dom'
 
 import ModalRootComponent from '../modals/modalRootComponent';
 import ModalChildEditComponent from '../modals/modalChildEditExpenseComponent';
@@ -35,10 +35,9 @@ export default function ExpenseSaisieComponent() {
 
 
     // Utilisation du hook useUser
-    const contextUser = useUser();
-    const loading = contextUser.loading;
-    const error = contextUser.error;
-    
+    const { user, error, loading } = useUser();
+
+
 
     ////  Setters && Getters for modals
     const [isEditBtnDisabled, setIsEditBtnDisabled] = useState(true);
@@ -61,35 +60,34 @@ export default function ExpenseSaisieComponent() {
 
     useEffect(() => {
         (async () => {
-            if (contextUser.user) {
+            if (user) {
 
-                const dataMission = await MissionService.loadOneMission(contextUser.user.id, idMission);
+                const dataMission = await MissionService.loadOneMission(user.id, idMission);
                 setAMission(dataMission);
 
                 if (dataMission) {
                     const dataNatMisInit = dataMission.natureInit;
                     setANatMisInit(dataNatMisInit);
 
-                    const dataExpenses = await ExpenseService.loadExpensesFromOneMission(contextUser.user.id, idMission);
+                    const dataExpenses = await ExpenseService.loadExpensesFromOneMission(user.id, idMission);
                     setLstExpenses(dataExpenses);
 
                     const dataNatures = await NatureExpService.loadNaturesExp();
 
-                    if(dataNatures){
+                    if (dataNatures) {
                         const dataPrime = validExpenses(dataNatures, dataExpenses, dataMission, dataNatMisInit);
                         setInfosPrime(dataPrime);
                     }
 
 
-                } else{
+                } else {
                     // Redirige vers la page de gestion des dépenses
-                    console.log(`connnard !!!!!!!!!!!!!!!!!!!!!!!!!!!`)
-                   // router(`/expenses`, { replace: true });
+                    router(`/expenses`, { replace: true });
                 }
             }
         })();
 
-    }, [contextUser.user, refreshDisplay]);
+    }, [user, refreshDisplay]);
 
     // Gérer l'état de chargement
     if (loading) {
@@ -97,11 +95,11 @@ export default function ExpenseSaisieComponent() {
         return <Loading />;
     }
 
-/*     // Gérer l'état d'erreur
+    // Gérer l'état d'erreur
     if (error) {
         console.log(`error in saisiExpense`, error)
         return <Error />;
-    }  */
+    }
 
     ////  Reset Modal
     const handleResetModal = (isRefresh) => {
@@ -142,7 +140,7 @@ export default function ExpenseSaisieComponent() {
         if (inputDateEdit.current && inputNatExpEdit.current && inputAmountEdit) {
 
             const selectedIndexNatExp = inputNatExpEdit.current.selectedIndex;
-           // console.log(`inputDateEdit.current.value`,inputDateEdit.current.value)
+            // console.log(`inputDateEdit.current.value`,inputDateEdit.current.value)
             let idNat = 0
             if (selectedIndexNatExp !== 0) {
                 idNat = inputNatExpEdit.current[selectedIndexNatExp].id;
@@ -227,7 +225,7 @@ export default function ExpenseSaisieComponent() {
                 inputAmountEdit.current.value = "";
                 inputAmountEdit.current.focus();
 
-                const dataExpenses = await ExpenseService.loadExpensesFromOneMission(contextUser.user.id, idMission);
+                const dataExpenses = await ExpenseService.loadExpensesFromOneMission(user.id, idMission);
                 setLstExpenses(dataExpenses);
                 handleResetModal(true);
 
@@ -326,11 +324,11 @@ export default function ExpenseSaisieComponent() {
 
         event.preventDefault();
 
-        const response = await ExpenseService.updateDateExpenses(contextUser.user.id, aMission.id);
+        const response = await ExpenseService.updateDateExpenses(user.id, aMission.id);
 
         if (response === true) {
 
-            const dataExpenses = await ExpenseService.loadExpensesFromOneMission(contextUser.user.id, idMission);
+            const dataExpenses = await ExpenseService.loadExpensesFromOneMission(user.id, idMission);
             setLstExpenses(dataExpenses);
             handleResetModal(true);
 
@@ -358,156 +356,153 @@ export default function ExpenseSaisieComponent() {
     }
 
 
-    if (aMission !== undefined) {
-        return (
-            <>
-                <div id="title-cont">
-                    <NavLink className="button_add"  to="/expenses"id="link-return"><KeyboardReturnRoundedIcon /></NavLink>
-                    <h1>Saisie des notes de Frais</h1>
-                </div>
 
-                <div id="infos-mission-cont">
+    return (
+        <>
+            <div id="title-cont">
+                <NavLink className="button_add" to="/expenses" id="link-return"><KeyboardReturnRoundedIcon /></NavLink>
+                <h1>Saisie des notes de Frais</h1>
+            </div>
 
-                    <div className='infos-mission-a'>
-                        <div className="infos-mission">
-                            <p className="label-info-mission">Date de début</p>
-                            <p className="data-info-mission"> {aMission.startDate !== undefined ? Utils.formatDateTimestampToStr(aMission.startDate) : ""}</p>
-                        </div>
+            <div id="infos-mission-cont">
 
-                        <div className="infos-mission">
-                            <p className="label-info-mission">Date de fin</p>
-                            <p className="data-info-mission">{aMission.endDate !== undefined ? Utils.formatDateTimestampToStr(aMission.endDate) : ""}</p>
-                        </div>
-
-                        <div className="infos-mission">
-                            <p className="label-info-mission">Nature</p>
-                            <p className="data-info-mission">{aMission.natureCur !== undefined ? Utils.capitalizeFirstLetter(aMission.natureCur.name) : ""}</p>
-                        </div>
+                <div className='infos-mission-a'>
+                    <div className="infos-mission">
+                        <p className="label-info-mission">Date de début</p>
+                        <p className="data-info-mission"> {aMission?.startDate !== undefined ? Utils.formatDateTimestampToStr(aMission.startDate) : ""}</p>
                     </div>
 
-                    <div className='infos-mission-b'>
-                        <div className="infos-mission">
-                            <p className="label-info-mission">Estimation prime</p>
-                            <p className="data-info-mission">
-                                {
-                                    aMission.natureInit!== undefined  &&  aMission.natureInit.percentage !== undefined && aNatMisInit.id !== undefined && lstExpenses[0] !== undefined && lstExpenses[0].validAt === null ? (infosPrime.prime + " €") : (parseFloat(infosPrime.prime - infosPrime.expDeduc).toFixed(2) + "€")
-                                }
-                            </p>
-                        </div>
-
-                        <div className="infos-mission">
-                            <p className="label-info-mission">Ville de départ</p>
-                            <p className="data-info-mission">{aMission.departCity!== undefined && aMission.departCity.name !== undefined ? Utils.capitalizeFirstLetter(aMission.departCity.name) : ""}</p>
-                        </div>
-
-                        <div className="infos-mission">
-                            <p className="label-info-mission">Ville d'arrivée</p>
-                            <p className="data-info-mission">{aMission.arrivalCity!== undefined && aMission.arrivalCity.name !== undefined ? Utils.capitalizeFirstLetter(aMission.arrivalCity.name) : ""}</p>
-                        </div>
+                    <div className="infos-mission">
+                        <p className="label-info-mission">Date de fin</p>
+                        <p className="data-info-mission">{aMission?.endDate !== undefined ? Utils.formatDateTimestampToStr(aMission.endDate) : ""}</p>
                     </div>
 
+                    <div className="infos-mission">
+                        <p className="label-info-mission">Nature</p>
+                        <p className="data-info-mission">{aMission?.natureCur !== undefined ? Utils.capitalizeFirstLetter(aMission.natureCur.name) : ""}</p>
+                    </div>
                 </div>
 
-                <section className="d-flex justify-content-center">
-                    {
-                        (lstExpenses !== undefined || lstExpenses.length !== 0) && (<button className="button_add" onClick={() => onClickShowModalValid()}>
-                            Valider la note de frais : <CheckCircleIcon />
-                        </button>)
-                    }
-                </section>
+                <div className='infos-mission-b'>
+                    <div className="infos-mission">
+                        <p className="label-info-mission">Estimation prime</p>
+                        <p className="data-info-mission">
+                            {
+                                aMission?.natureInit?.percentage !== undefined && aNatMisInit.id !== undefined && lstExpenses[0]?.validAt === null ? (infosPrime.prime + " €") : (parseFloat(infosPrime.prime - infosPrime.expDeduc).toFixed(2) + "€")
+                            }
+                        </p>
+                    </div>
 
-                <div className="d-flex flex-column justify-content-center my-4">
-                    <div className="text-center my-4 mx-4">
-                        <Table responsive>
+                    <div className="infos-mission">
+                        <p className="label-info-mission">Ville de départ</p>
+                        <p className="data-info-mission">{aMission?.departCity?.name !== undefined ? Utils.capitalizeFirstLetter(aMission.departCity.name) : ""}</p>
+                    </div>
 
-                            <thead>
+                    <div className="infos-mission">
+                        <p className="label-info-mission">Ville d'arrivée</p>
+                        <p className="data-info-mission">{aMission?.arrivalCity?.name !== undefined ? Utils.capitalizeFirstLetter(aMission.arrivalCity.name) : ""}</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <section className="d-flex justify-content-center">
+                {
+                    (lstExpenses !== undefined || lstExpenses.length !== 0) && (<button className="button_add" onClick={() => onClickShowModalValid()}>
+                        Valider la note de frais : <CheckCircleIcon />
+                    </button>)
+                }
+            </section>
+
+            <div className="d-flex flex-column justify-content-center my-4">
+                <div className="text-center my-4 mx-4">
+                    <Table responsive>
+
+                        <thead>
+                            <tr>
+                                <th className="table-subtitle">Date</th>
+                                <th className="table-subtitle">Nature</th>
+                                <th className="table-subtitle">Montant (€)</th>
+                                <th className="table-subtitle">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {( lstExpenses?.length === 0) && (
                                 <tr>
-                                    <th className="table-subtitle">Date</th>
-                                    <th className="table-subtitle">Nature</th>
-                                    <th className="table-subtitle">Montant (€)</th>
-                                    <th className="table-subtitle">Actions</th>
+                                    <td colSpan={8} className="text-center">
+                                        Aucun résultat
+                                    </td>
                                 </tr>
-                            </thead>
+                            )}
 
-                            <tbody>
+                            { lstExpenses?.length > 0 &&
+                                lstExpenses.map((expense) => {
+                                    return (
 
-                                {(lstExpenses === undefined || lstExpenses.length === 0) && (
-                                    <tr>
-                                        <td colSpan={8} className="text-center">
-                                            Aucun résultat
-                                        </td>
-                                    </tr>
-                                )}
+                                        <tr key={expense.id}>
+                                            <td>{Utils.formatDateTimestampToStr(expense.createdAt)}</td>
+                                            <td>{expense !== undefined ? Utils.capitalizeFirstLetter(expense.motif.name) : "n"}</td>
+                                            <td>{Utils.formatAmount(expense.amount) + " €"}</td>
+                                            <td>
 
-                                {lstExpenses !== undefined && lstExpenses.length !== 0 &&
-                                    lstExpenses.map((expense) => {
-                                        return (
+                                                <button className="button_icon button_edit">
+                                                    <EditIcon className="icon_edit" onClick={() => onClickShowModalUpdate(expense)} />
+                                                </button>
 
-                                            <tr key={expense.id}>
-                                                <td>{Utils.formatDateTimestampToStr(expense.createdAt)}</td>
-                                                <td>{expense !== undefined ? Utils.capitalizeFirstLetter(expense.motif.name) : "n"}</td>
-                                                <td>{Utils.formatAmount(expense.amount) + " €"}</td>
-                                                <td>
+                                                <button className="button_icon button_delete" onClick={() => {
+                                                    onClickShowModalDelete(expense)
+                                                }}>
 
-                                                    <button className="button_icon button_edit">
-                                                        <EditIcon className="icon_edit" onClick={() => onClickShowModalUpdate(expense)} />
-                                                    </button>
+                                                    <DeleteIcon className="icon_delete" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
 
-                                                    <button className="button_icon button_delete" onClick={() => {
-                                                        onClickShowModalDelete(expense)
-                                                    }}>
+                        </tbody>
 
-                                                        <DeleteIcon className="icon_delete" />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
-                                    })}
-
-                            </tbody>
-
-                        </Table>
-                    </div>
+                    </Table>
                 </div>
+            </div>
 
-                <section className="d-flex justify-content-center mb-4">
-                    <button className="button_add" onClick={() => onClickShowModalAdd()}>
-                        Ajouter un frais : <AddCircleIcon />
-                    </button>
-                </section>
+            <section className="d-flex justify-content-center mb-4">
+                <button className="button_add" onClick={() => onClickShowModalAdd()}>
+                    Ajouter un frais : <AddCircleIcon />
+                </button>
+            </section>
 
-                <div id="modal-add-cont">
+            <div id="modal-add-cont">
+                <ModalRootComponent
+                    show={modalShow}
+                    onHide={() => handleResetModal(false)}
+                    title={modalTitle}
+                    childmodal={modalChild}
+                    footerbuttons={(
+                        <>
+                            <Button
+                                className="btn-modal-success"
+                                disabled={isEditBtnDisabled}
+                                type="submit"
+                                onClick={(event) => { handleModalClick(event) }}
+                            >
+                                {modalBtnLabel}
+                            </Button>
 
-                    <ModalRootComponent
-                        show={modalShow}
-                        onHide={() => handleResetModal(false)}
-                        title={modalTitle}
-                        childmodal={modalChild}
-                        footerbuttons={(
-                            <>
+                            <Button className="btn-modal-cancel" onClick={() => { handleResetModal(false) }}>Annuler</Button>
+                        </>
+                    )}
 
-                                <Button
-                                    className="btn-modal-success"
-                                    disabled={isEditBtnDisabled}
-                                    type="submit"
-                                    onClick={(event) => { handleModalClick(event) }}
-                                >
-                                    {modalBtnLabel}
-                                </Button>
+                />
+            </div>
 
-                                <Button className="btn-modal-cancel" onClick={() => { handleResetModal(false) }}>Annuler</Button>
-                            </>
-                        )}
-
-                    />
-                </div>
-
-            </>
-        );
-    }
+        </>
+    );
 
 
-    return (<></>);
+
 
 }
 

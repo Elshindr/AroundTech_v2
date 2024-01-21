@@ -71,8 +71,8 @@ public class MissionService {
 
     public Boolean checkIfMissionExistByUserAndDate(Integer idUser, LocalDate date){
         try {
-            List<Mission> lstMissionByUser = this.misRepo.findMissionByUser(idUser, date);
-            if(lstMissionByUser.isEmpty()){
+            List<Mission> lstMissionByUser = this.misRepo.findMissionByUserAndDate(idUser, date);
+            if (lstMissionByUser.isEmpty()){
                 return true;
             }
 
@@ -83,5 +83,12 @@ public class MissionService {
             System.out.println(ex);
             return false;
         }
+    }
+
+
+    public List<MissionDto> getListMissionsByUserDateAndMission(Integer idUser, LocalDate date, Integer idMission){
+        List<Mission> lstMission = this.misRepo.getListMissionsByUserDateAndMission(idUser, date, idMission);
+
+        return lstMission.stream().map(MissionDto::parseMissionToMissionDto).toList();
     }
 }

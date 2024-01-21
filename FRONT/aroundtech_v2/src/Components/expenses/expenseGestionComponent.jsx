@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
@@ -70,7 +70,6 @@ export default function ExpenseGestionComponent() {
         // Récupération des frais associés à la mission et à l'utilisateur
         const mission = await MissionService.loadOneMission(contextUser.user.id, missionId);
         const expenses = await ExpenseService.loadExpensesFromOneMission(contextUser.user.id, missionId);
-        console.log(`mission`,mission)
         const natureInit = await NatureMisService.loadOneNatureMission(mission.natureInit.id);
 
         // Génération du PDF
@@ -85,17 +84,17 @@ export default function ExpenseGestionComponent() {
         return <Loading />;
     }
 
-         // Pour gérer l'état d'erreur
-        if (error) {
-            console.log(`error`, error)
-            return <Error />;
-        } 
+    // Pour gérer l'état d'erreur
+    if (error) {
+        console.log(`error`, error)
+        return <Error />;
+    }
 
     const NOT_SPECIFIED = "Non spécifié";
 
 
     return (
-        <> 
+        <>
             <h1>Gestion des notes de frais</h1>
             <div className="d-flex flex-column justify-content-center my-4">
                 <div className="text-center my-4 mx-4">
@@ -113,7 +112,16 @@ export default function ExpenseGestionComponent() {
                             </tr>
                         </thead>
                         <tbody>
-                            {dataPageExpense.map(mission => (
+                        {(dataPageExpense === undefined || dataPageExpense.length === 0) && (
+                                <tr>
+                                    <td colSpan={8} className="text-center">
+                                        Aucun résultat
+                                    </td>
+                                </tr>
+                            )}
+
+                            {dataPageExpense !== undefined && dataPageExpense.length !== 0 &&
+                            dataPageExpense.map(mission => (
                                 <tr key={mission.id}>
                                     <td>{Utils.formatDateTimestampToStr(mission.startDate)}</td>
                                     <td>{Utils.formatDateTimestampToStr(mission.endDate)}</td>
@@ -130,7 +138,7 @@ export default function ExpenseGestionComponent() {
                                     <td >
                                         {/* Si date de fin < à date du jour alors les boutons s'affichent */}
 
-                                        { Utils.compareDateStr(mission.endDate) && (
+                                        {Utils.compareDateStr(mission.endDate) && (
                                             <div className="button-container-gestion">
                                                 <button className="button_icon button_gestion" onClick={() => redirectToExpensePage(mission.id)}>
                                                     <AddCircleIcon />

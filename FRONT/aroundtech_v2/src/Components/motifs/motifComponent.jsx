@@ -49,7 +49,7 @@ export default function MotifComponent(props) {
 
     useEffect(() => {
         (async () => {
-            if (contextUser?.user?.id && contextUser?.user?.idRole === 3) {
+            if (contextUser?.user?.id && (contextUser?.user?.role.id === 3|| contextUser?.user?.role.id === 2) ) {
 
                 const dataNatures = await NatureExpService.loadNaturesExp();
                 setLstNaturesExp(dataNatures);

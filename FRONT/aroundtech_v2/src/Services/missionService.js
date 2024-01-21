@@ -7,21 +7,20 @@ export default class MissionService {
 
   static async loadMissionsByUser(idUser) {
 
-    //let urlUpdated = `${this.url}/${idUser}`;
     let urlUpdated = `${this.url}/byUser/${idUser}`;
-    //console.log(`url`, urlUpdated)
-    return fetch(urlUpdated, {
-      method: 'GET',
-      credentials: 'include', // Inclure les cookies si nécessaire
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
+
+    return fetch(urlUpdated,
+      {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
       .then((res) => {
         return res.json();
       })
       .then((missions) => {
-        //console.log(`lstmission`, missions)
         return missions;
       })
       .catch((error) => {
@@ -30,16 +29,15 @@ export default class MissionService {
   }
 
   static async loadOneMission(idUser, idMission) {
-    //let url = `${this.url}/${idUser}/${idMission}`;
-    let url = `${this.url}/${idUser}/${idMission}`;
-    //console.log(`loadOneMission url`, url)
-    return fetch(url, {
-      method: 'GET',
-      credentials: 'include', // Inclure les cookies si nécessaire
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
+
+    return fetch(`${this.url}/${idUser}/${idMission}`,
+      {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
       .then((res) => {
         console.log(`res`, res)
         return res.json();
@@ -56,19 +54,18 @@ export default class MissionService {
   // Recupération des missions pour les managers
   static async loadMissionsInWaitByManager(idUser) {
 
-    let urlUpdated = `${this.url}/byManager/${idUser}`;
-    return fetch(urlUpdated, {
-      method: 'GET',
-      credentials: 'include', // Inclure les cookies si nécessaire
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
+    return fetch(`${this.url}/byManager/${idUser}`,
+      {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
       .then((res) => {
         return res.json();
       })
       .then((missions) => {
-        // console.log(`loadMissionsInWaitByManager:`, missions)
         return missions;
       })
       .catch((error) => {
@@ -78,8 +75,7 @@ export default class MissionService {
 
   // Mise à jour du statut de la mission
   static async updateMissionStatus(idMission, idNewStatus) {
-   // console.log(idMission, idNewStatus)
-    //console.log(JSON.stringify({ "idStatus": idNewStatus }))
+
     return fetch(`${this.url}/status/${idMission}`,
       {
         headers: {
@@ -240,7 +236,7 @@ export default class MissionService {
 
     return fetch(urlUpdated, {
       method: 'GET',
-      credentials: 'include', // Inclure les cookies si nécessaire
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -263,11 +259,12 @@ export default class MissionService {
    * Return boolean
    */
   static async selectedDateIsValid(date, idUser, idMission) {
+
     const urlUpdated = `${this.url}/byUser/${idUser}/byDate/${date}/byMission`;
 
     return fetch(urlUpdated, {
       method: 'GET',
-      credentials: 'include', // Inclure les cookies si nécessaire
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -311,7 +308,7 @@ export default class MissionService {
 
     return fetch(urlUpdated, {
       method: 'GET',
-      credentials: 'include', // Inclure les cookies si nécessaire
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },

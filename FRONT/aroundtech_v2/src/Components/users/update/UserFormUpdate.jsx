@@ -62,8 +62,6 @@ const UserFormUpdate = () => {
 					idRole: dataUser.role.id,
 					idManager: dataUser.idManager,
 				})
-			} else {
-				console.log(`connard updateform !!!!!!!!!!!!!!!!!!!!!!!!!!!`)
 			}
 		})();
 	}, [contextUser.user]);

@@ -18,11 +18,9 @@ import java.util.Map;
 @RequestMapping("/expenses")
 public class ExpenseController {
 
-    @Autowired
-    private UserRepository userRepo;
+
     @Autowired
     private ExpenseService expSvc;
-
 
     @GetMapping("{idUser}")
     public List<Expense> getlstExpenseByUser(@PathVariable Integer idUser) {

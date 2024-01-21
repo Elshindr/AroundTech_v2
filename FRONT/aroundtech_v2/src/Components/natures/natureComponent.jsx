@@ -69,12 +69,12 @@ export default function NatureComponent(props) {
                 console.error("Erreur lors du chargement des natures de mission :", error);
             }
         };
-        if (contextUser?.user?.id && (contextUser?.user?.role.id === 2||contextUser?.user?.role.id  === 3)) {
+        if (contextUser?.user?.id && (contextUser?.user?.role.id === 2 || contextUser?.user?.role.id === 3)) {
             fetchData();
             let dateDuJour = new Date().toISOString().split("T")[0];
             setDateDebut(dateDuJour);
         }
-        
+
     }, [contextUser.user, refreshDisplay]);
 
 
@@ -83,11 +83,11 @@ export default function NatureComponent(props) {
         return <Loading />;
     }
 
-      // Gérer l'état d'erreur
-        if (error) {
-            return <Error />;
-        }
-     
+    // Gérer l'état d'erreur
+    if (error) {
+        return <Error />;
+    }
+
 
     const handleResetModal = (isRefresh) => {
         setModalShow(false);
@@ -128,11 +128,11 @@ export default function NatureComponent(props) {
         // si facturée est = oui on affiche le tjm
         if (isCharge === true) {
             tjm = parseFloat(inputNatureTJM.current.value);
-        } 
+        }
         // si versement de prime est = oui on affiche le %prime
         if (isBonus === true) {
             percentage = parseFloat(inputNaturePercentage.current.value);
-        } 
+        }
 
         if (!name || isNaN(tjm) || isNaN(percentage) || (tjm < 1 && tjm !== null) || (percentage > 10 && percentage !== null) || dateFin !== null) {
             // console.log("name: ", name, " facturée: ", isCharge," prime: ",isBonus," tjm: ", tjm," percentage: ", percentage," dateDebut ", dateDebut," dateFin ", dateFin);
@@ -236,7 +236,7 @@ export default function NatureComponent(props) {
 
     const onClickModalEdit = (nature_mission) => {
 
-       // console.log(nature_mission, listeNaturesMissions)
+        // console.log(nature_mission, listeNaturesMissions)
         setModalNature(nature_mission);
         setModalType('update');
         setModalChild((
@@ -246,10 +246,10 @@ export default function NatureComponent(props) {
                 inputNameEdit={inputNatureName}
                 inputIsChargeEdit={inputNatureIsCharge}
                 inputIsBonusEdit={inputNatureIsBonus}
-                inputTJMEdit={inputNatureTJM }
+                inputTJMEdit={inputNatureTJM}
                 inputPercentageEdit={inputNaturePercentage}
                 inputStartDate={inputNatureStartDate} // ajout dateDebut 
-                inputEndDate={inputNatureEndDate } // ajout dateFin 
+                inputEndDate={inputNatureEndDate} // ajout dateFin 
                 idNatureMisEdit={listeNaturesMissions.id}
 
                 listeNaturesMissions={listeNaturesMissions}
@@ -326,7 +326,7 @@ export default function NatureComponent(props) {
                                             {nature_mission.charge === true ? 'Oui' : 'Non'}
                                         </td>
                                         <td className="align-middle">{/* prime */}
-                                            {nature_mission.bonus === true? 'Oui' : 'Non'}
+                                            {nature_mission.bonus === true ? 'Oui' : 'Non'}
                                         </td>
                                         <td className="align-middle">{/* TJM €*/}
                                             {nature_mission.tjm !== null ? Utils.formatAmount(nature_mission.tjm) + " €" : "-"}
