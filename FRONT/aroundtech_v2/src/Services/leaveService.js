@@ -1,5 +1,5 @@
 export default class LeaveService {
-  static url = "http://localhost:8000/leaves";
+  static url = "http://localhost:8082/leaves";
   //Lecture du fichier db.json dans le dossier json-abs
   static async loadLeaves() {
     return fetch(this.url)

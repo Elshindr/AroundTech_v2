@@ -1,0 +1,9 @@
+FROM node:latest
+
+WORKDIR /usr/src/app
+COPY db.json /usr/src/app
+RUN npm install -g json-server
+
+ENTRYPOINT ["json-server", "--port", "8082", "--host", "0.0.0.0"]
+
+CMD ["/usr/src/app/db.json"]
