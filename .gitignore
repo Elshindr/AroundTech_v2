@@ -1,2 +1,6 @@
 .idea/
 BACK/Server_AroundTech/src/main/resources/application.properties
+
+DOCUMENTATIONS/UML/*.drawio
+DOCUMENTATIONS/UML/*.excalidraw
+DOCUMENTATIONS/structure_projet.png
