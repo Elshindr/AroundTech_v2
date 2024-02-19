@@ -8,22 +8,17 @@ export default function useUserData() {
   const contextUser = useUser();
 
   useEffect(() => {
-    console.log(`hook userData`)
     async function fetchUserData() {
-      console.log(`hook userData in fetch userData`)
       try {
         // Envoi d'une requête GET à l'API pour récupérer les données de l'utilisateur
         const response = await fetch('/info-user', { credentials: 'include' });
-        console.log(`hook userData`, response)
         if (response.ok) {
           // Si la réponse est réussie, extrait les données JSON et les stocke dans le state userData
           const data = await response.json();
-          console.log(`hook user data`, data)
           setUserData(data);
           contextUser.updateUser(data);
 
         } else {
-          console.log(`hook user data fail`, response)
           // Si la réponse n'est pas réussie, lance une exception
           throw new Error('Échec du chargement des données utilisateur');
         }

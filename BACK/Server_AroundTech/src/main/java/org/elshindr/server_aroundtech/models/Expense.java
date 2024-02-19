@@ -1,13 +1,15 @@
 package org.elshindr.server_aroundtech.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
 /**
- * User
- * Modele d'utilisateur (JPA)
+ * Expense
+ * Modele de note de frais (JPA)
  */
 @Entity
 @Table(name="expense_report")
@@ -18,13 +20,13 @@ public class Expense {
     private Integer id;
 
     @NotNull
+    @Min(value = 1, message = "La valeur doit être supérieure à 0")
     @Column(name = "amount")
     private float amount;
 
     @NotNull
     @Column(name = "created_at")
     private LocalDate createdAt;
-
 
     @Column(name = "valid_at")
     private LocalDate validAt;
@@ -39,10 +41,13 @@ public class Expense {
     @JoinColumn(name = "nature_expense_id")
     private Motif motif;
 
+    @AssertTrue(message = "La date de validation doit être supérieure à la date de création")
+    private boolean isDateFinSuperieure() {
+        return validAt == null || validAt.isAfter(createdAt);
+    }
 
     public Expense(){
     }
-
     public Expense(Integer id, @NotNull float amount, @NotNull LocalDate createdAt, LocalDate validAt, @NotNull Mission mission, @NotNull Motif motif) {
         this.id = id;
         this.amount = amount;
@@ -51,15 +56,22 @@ public class Expense {
         this.mission = mission;
         this.motif = motif;
     }
-
     public Expense(@NotNull float amount, @NotNull LocalDate createdAt, LocalDate validAt, @NotNull Mission mission, @NotNull Motif motif) {
         this.amount = amount;
         this.createdAt = createdAt;
         this.validAt = validAt;
         this.mission = mission;
         this.motif = motif;
+
+        this.isDateFinSuperieure();
     }
 
+    @PreUpdate
+    private void preUpdate() {
+        if (validAt != null) {
+            throw new IllegalStateException("La date de validité ne peut pas être modifieée une fois définie.");
+        }
+    }
 
     public Integer getId() {
         return id;

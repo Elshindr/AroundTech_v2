@@ -23,30 +23,57 @@ public class UserController {
     private UserService userSvc;
 
 
+    /**
+     * Gets one user.
+     *
+     * @param idUser the id user
+     * @return the one user
+     */
     @GetMapping("{idUser}")
     public UserDto getOneUser(@PathVariable Integer idUser) {
         return userSvc.findDistinctById(idUser);
     }
 
 
+    /**
+     * Gets all users.
+     *
+     * @return the all users
+     */
     @GetMapping("/all")
     public List<UserDto> getAllUsers() {
         return userSvc.findLstUsers();
     }
 
 
+    /**
+     * Gets all roles.
+     *
+     * @return the all roles
+     */
     @GetMapping("/allRoles")
     public List<Role> getAllRoles() {
         return userSvc.findLstRoles();
     }
 
 
+    /**
+     * Gets all managers.
+     *
+     * @return the all managers
+     */
     @GetMapping("/allManagers")
-    public List<UserDto> getallManagers() {
+    public List<UserDto> getAllManagers() {
         return userSvc.findLstManagers();
     }
 
 
+    /**
+     * Create user response entity.
+     *
+     * @param newUserDto the new user dto
+     * @return the response entity
+     */
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserDto newUserDto){
         System.out.println("===================== CREATE User:"+ newUserDto);
@@ -61,6 +88,13 @@ public class UserController {
     }
 
 
+    /**
+     * Update user response entity.
+     *
+     * @param upUserDto the up user dto
+     * @param idUser    the id user
+     * @return the response entity
+     */
     @PutMapping("{idUser}")
     public ResponseEntity<?> updateUser(@RequestBody UserDto upUserDto, @PathVariable Integer idUser){
         System.out.println("===================== UPDATE User:"+ upUserDto);
@@ -75,6 +109,12 @@ public class UserController {
     }
 
 
+    /**
+     * Delete user response entity.
+     *
+     * @param idUser the id user
+     * @return the response entity
+     */
     @DeleteMapping("{idUser}")
     public ResponseEntity<?> deleteUser(@PathVariable Integer idUser){
         if (this.userSvc.deleteUser(idUser)){

@@ -20,16 +20,25 @@ import java.util.Map;
 public class MotifController {
 
 
-
     @Autowired
     private MotifService motSvc;
 
-
+    /**
+     * Gets motifs.
+     *
+     * @return the motifs
+     */
     @GetMapping
     public List<Motif> getlstMotifs() {
         return this.motSvc.findAll();
     }
 
+    /**
+     * Create motif response entity.
+     *
+     * @param jsonMap the json map
+     * @return the response entity
+     */
     @PostMapping
     public ResponseEntity<?> createMotif(@RequestBody Map<String, Object> jsonMap) {
         System.out.println(jsonMap);
@@ -40,6 +49,13 @@ public class MotifController {
         return ResponseEntity.badRequest().body("");
     }
 
+    /**
+     * Update motif response entity.
+     *
+     * @param idMotif the id motif
+     * @param jsonMap the json map
+     * @return the response entity
+     */
     @PutMapping("{idMotif}")
     public ResponseEntity<?> updateMotif(@PathVariable Integer idMotif, @RequestBody Map<String, Object> jsonMap) {
         if(this.motSvc.updateMotif(jsonMap, idMotif)){
@@ -48,6 +64,12 @@ public class MotifController {
         return ResponseEntity.badRequest().body("");
     }
 
+    /**
+     * Delete motif response entity.
+     *
+     * @param idMotif the id motif
+     * @return the response entity
+     */
     @DeleteMapping("{idMotif}")
     public ResponseEntity<?> deleteMotif(@PathVariable Integer idMotif){
         if (this.motSvc.deleteMotif(idMotif)){

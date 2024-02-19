@@ -22,7 +22,20 @@
         <java.version>17</java.version>
         <!-- version de la librairie jjwt -->
         <jjwt.version>0.11.5</jjwt.version>
+
     </properties>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+
     <dependencies>
 
         <dependency>
@@ -89,6 +102,20 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version> <!-- Utilisez la dernière version disponible -->
         </dependency>
+
+        <!-- Apache POI pour la manipulation des fichiers Excel -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.2.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.0.0</version>
+        </dependency>
+
 
     </dependencies>
 </project>

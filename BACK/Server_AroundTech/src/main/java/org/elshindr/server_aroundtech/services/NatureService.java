@@ -12,6 +12,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Nature service.
+ */
 @Service
 public class NatureService {
 
@@ -21,14 +24,31 @@ public class NatureService {
     @Autowired
     private NatureRepository natRepo;
 
+    /**
+     * Find all list.
+     *
+     * @return the list
+     */
     public List<Nature> findAll() {
         return natRepo.findAll();
     }
 
+    /**
+     * Find one nature.
+     *
+     * @param idNature the id nature
+     * @return the nature
+     */
     public Nature findOne(Integer idNature) {
         return natRepo.findDistinctById(idNature).get();
     }
 
+    /**
+     * Find nature by date list.
+     *
+     * @param date the date
+     * @return the list
+     */
     public List<Nature> findNatureByDate(LocalDate date){
         if(date == null){
             return this.natRepo.findAll().stream().toList();
@@ -37,6 +57,12 @@ public class NatureService {
        return this.natRepo.findNatureByDate(date);
     }
 
+    /**
+     * Create nature boolean.
+     *
+     * @param jsonMap the json map
+     * @return the boolean
+     */
     public Boolean createNature(Map<String, Object> jsonMap) {
         try {
             String name = jsonMap.get("name").toString();
@@ -72,6 +98,13 @@ public class NatureService {
         }
     }
 
+    /**
+     * Update nature boolean.
+     *
+     * @param jsonMap  the json map
+     * @param idNature the id nature
+     * @return the boolean
+     */
     public Boolean updateNature(Map<String, Object> jsonMap, Integer idNature) {
         try {
             String name = jsonMap.get("name").toString();
@@ -115,6 +148,12 @@ public class NatureService {
         }
     }
 
+    /**
+     * Delete nature boolean.
+     *
+     * @param idNature the id nature
+     * @return the boolean
+     */
     public Boolean deleteNature(Integer idNature) {
 
         if (!natRepo.existsById(idNature)) {

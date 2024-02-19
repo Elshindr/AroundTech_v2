@@ -30,49 +30,108 @@ public class Motif {
     @Column(name="cap_value")
     private Float valCap;
 
+    /**
+     * Instantiates a new Motif.
+     */
     public Motif(){
     }
 
+    /**
+     * Instantiates a new Motif.
+     *
+     * @param id       the id
+     * @param name     the name
+     * @param isCapped the is capped
+     * @param valCap   the val cap
+     */
     public Motif(Integer id, String name, @NotNull Boolean isCapped, Float valCap) {
         this.id = id;
         this.name = name;
         this.isCapped = isCapped;
         this.valCap = valCap;
     }
+
+    /**
+     * Instantiates a new Motif.
+     *
+     * @param name     the name
+     * @param isCapped the is capped
+     * @param valCap   the val cap
+     */
     public Motif(String name, @NotNull Boolean isCapped, Float valCap) {
         this.name = name;
         this.isCapped = isCapped;
         this.valCap = valCap;
     }
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public Integer getId() {
         return id;
     }
 
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets capped.
+     *
+     * @return the capped
+     */
     public Boolean getCapped() {
         return isCapped;
     }
 
+    /**
+     * Sets capped.
+     *
+     * @param capped the capped
+     */
     public void setCapped(Boolean capped) {
         isCapped = capped;
     }
 
+    /**
+     * Gets val cap.
+     *
+     * @return the val cap
+     */
     public Float getValCap() {
         return valCap;
     }
 
+    /**
+     * Sets val cap.
+     *
+     * @param valCap the val cap
+     */
     public void setValCap(Float valCap) {
         this.valCap = valCap;
     }

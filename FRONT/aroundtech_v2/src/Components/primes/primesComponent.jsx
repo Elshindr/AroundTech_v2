@@ -17,6 +17,7 @@ import { Error, Loading } from '../loadingError/loadingErrorComponent';
 import Utils from '../../Utils/utils';
 
 import "./primes.css";
+import ExportsService from '../../Services/exportsService';
 
 export default function PrimesComponent(props) {
 
@@ -41,17 +42,15 @@ export default function PrimesComponent(props) {
     useEffect(() => {
 
         (async () => {
-
             if (contextUser?.user?.id) {
                 let dataMissionsAll = await MissionService.loadMissionsByUser(contextUser.user.id);
-                dataMissionsAll = dataMissionsAll.filter(mis => new Date(mis.endDate) < new Date())
+                //dataMissionsAll = dataMissionsAll.filter(mis => new Date(mis.endDate) < new Date())
                 setLstMissionsAll(dataMissionsAll);
 
                 const dataNatMis = await NatureService.loadNaturesMis();
                 setLstNatMis(dataNatMis);
 
-                const dataLstYears = dataMissionsAll.map(mis => new Date(mis.endDate).getFullYear())
-                    .filter((year, index, self) => self.indexOf(year) === index);
+                const dataLstYears = dataMissionsAll.map(mis => new Date(mis.endDate).getFullYear()).filter((year, index, self) => self.indexOf(year) === index);
                 setLstYears(dataLstYears);
             }
         })();
@@ -62,10 +61,10 @@ export default function PrimesComponent(props) {
         return <Loading />;
     }
 
-/*     // Gérer l'état d'erreur
+    // Gérer l'état d'erreur
     if (error) {
         return <Error />;
-    } */
+    }
 
 
     //// Gestion Grap
@@ -152,8 +151,9 @@ export default function PrimesComponent(props) {
                 "Prime (€)": Utils.getPrime(mis, nature)
             }
         });
-
-        exportToXls(jsonToExport);
+console.log(`jsonToExport`, jsonToExport);
+        ExportsService.exportPrimeToXls(contextUser.user.id, jsonToExport);
+        //xportToXls(jsonToExport);
     }
 
 

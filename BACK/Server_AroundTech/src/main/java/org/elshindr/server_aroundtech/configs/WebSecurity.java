@@ -16,11 +16,9 @@ import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * WebSecurity
@@ -30,6 +28,11 @@ import java.util.Map;
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = false)
 public class WebSecurity implements WebMvcConfigurer {
 
+    /**
+     * Cors configuration source cors configuration source.
+     *
+     * @return the cors configuration source
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource()
     {
@@ -45,34 +48,27 @@ public class WebSecurity implements WebMvcConfigurer {
 
     /**
      * Encodage des passwords user avec BCrypt
-     * @return
+     * @return PasswordEncoder password encoder
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-
-
     /**
-     * Création d'un bean Spring de type `SecurityFilterChain`.
+     * Bean pour configurer la chaîne de filtres Spring Security
      *
-     * Bean pour configurer la chaîne de filtres Spring Security :
-     * - activer/désactiver des filtres
-     * - paramétrer des filtres
-     * - ajouter des filtres
-     *
-     * @param http objet fourni par Spring Security pour écrire la configuration.
-     * @return La chaîne de filtres configurée à appliquer par Spring Security.
-     * @throws Exception
+     * @param http      objet de configuration de Spring Security
+     * @param jwtFilter the jwt filter
+     * @param jwtConfig the jwt config
+     * @return chaîne des filtres configurée à appliquer
+     * @throws Exception the exception
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JWTAuthorizationFilter jwtFilter, JWTConfig jwtConfig) throws Exception{
-
-
         http.authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers(HttpMethod.POST, "/login/csrf").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/login/csrf").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -88,7 +84,6 @@ public class WebSecurity implements WebMvcConfigurer {
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                 );
-
         return http.build();
     }
 }

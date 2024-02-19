@@ -30,6 +30,11 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     private JWTConfig jwtConfig;
 
+    /**
+     * Instantiates a new Jwt authorization filter.
+     *
+     * @param jwtConfig the jwt config
+     */
     public JWTAuthorizationFilter(JWTConfig jwtConfig) {
         this.jwtConfig = jwtConfig;
     }
@@ -46,6 +51,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                     .filter(cookie -> cookie.getName().equals(jwtConfig.getCookie()))
                     .map(Cookie::getValue)
                     .forEach(token -> {
+
                         Claims body = Jwts.parserBuilder()
                                 .setSigningKey(jwtConfig.getSecretKey())
                                 .build()
@@ -53,8 +59,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                                 .getBody();
 
                         String userName = body.getSubject();
-                        System.out.println("test BUG");
-                        System.out.println("test BUG 2 :"+ body.get("roles"));
                         List<String> roles = new ArrayList<String>();
                         roles.add(body.get("roles").toString());
 

@@ -26,6 +26,11 @@ public class UtilsController {
     private TransportService trsSvc;
 
 
+    /**
+     * Gets lst transports.
+     *
+     * @return the lst transports
+     */
     @GetMapping
     public List<Transport> getLstTransports() {
         return this.trsSvc.getLstTransports();

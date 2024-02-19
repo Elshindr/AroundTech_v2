@@ -25,19 +25,41 @@ public class NatureController {
         @Autowired
         private NatureService natSvc;
 
+        /**
+         * Gets natures.
+         *
+         * @return the natures
+         */
         @GetMapping
         public List<Nature> getlstNatures() {
             return this.natSvc.findAll();
         }
 
+        /**
+         * Gets one nature.
+         *
+         * @param idNature the id nature
+         * @return the one nature
+         */
         @GetMapping("{idNature}")
         public Nature getOneNature(@PathVariable Integer idNature) {
                 return this.natSvc.findOne(idNature);
         }
 
+        /**
+         * Getlst natures by date empty list.
+         *
+         * @return the list
+         */
         @GetMapping("byDate/")
         public List<Nature> getlstNaturesByDateEmpty(){return this.natSvc.findNatureByDate(null);}
 
+        /**
+         * Find nature by date list.
+         *
+         * @param date the date
+         * @return the list
+         */
         @GetMapping("byDate/{date}")
         public List<Nature> findNatureByDate(@PathVariable(name = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> date) {
 
@@ -48,6 +70,12 @@ public class NatureController {
                 return this.natSvc.findAll();
         }
 
+        /**
+         * Create nature response entity.
+         *
+         * @param jsonMap the json map
+         * @return the response entity
+         */
         @PostMapping
         public ResponseEntity<?> createNature(@RequestBody Map<String, Object> jsonMap) {
                 System.out.println(jsonMap);
@@ -58,6 +86,13 @@ public class NatureController {
                 return ResponseEntity.badRequest().body("");
         }
 
+        /**
+         * Create nature response entity.
+         *
+         * @param jsonMap  the json map
+         * @param idNature the id nature
+         * @return the response entity
+         */
         @PutMapping("{idNature}")
         public ResponseEntity<?> createNature(@RequestBody Map<String, Object> jsonMap, @PathVariable Integer idNature) {
                 System.out.println(jsonMap);
@@ -68,6 +103,12 @@ public class NatureController {
                 return ResponseEntity.badRequest().body("");
         }
 
+        /**
+         * Delete nature response entity.
+         *
+         * @param idNature the id nature
+         * @return the response entity
+         */
         @DeleteMapping("{idNature}")
         public ResponseEntity<?> deleteNature(@PathVariable Integer idNature){
                 if (this.natSvc.deleteNature(idNature)){

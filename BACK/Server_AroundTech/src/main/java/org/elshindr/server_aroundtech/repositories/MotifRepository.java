@@ -11,6 +11,12 @@ import java.util.Optional;
  */
 public interface MotifRepository extends JpaRepository<Motif, Integer> {
 
+    /**
+     * Find distinct by id optional.
+     *
+     * @param id the id
+     * @return the optional
+     */
     Optional<Motif> findDistinctById(Integer id);
 
 }

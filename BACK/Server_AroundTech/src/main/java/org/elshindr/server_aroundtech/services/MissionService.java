@@ -16,6 +16,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * The type Mission service.
+ */
 @Service
 public class MissionService {
 
@@ -37,23 +40,49 @@ public class MissionService {
     @Autowired
     private NatureRepository natRepo;
 
+    /**
+     * Gets all by user.
+     *
+     * @param idUser the id user
+     * @return the all by user
+     */
     public List<MissionDto> getAllByUser(Integer idUser) {
         List<Mission> lstMissions = this.misRepo.findMissionByUser(idUser).stream().toList();
         return lstMissions.stream().map(mission -> MissionDto.parseMissionToMissionDto(mission)).toList();
     }
 
 
+    /**
+     * Gets one mission by user and id.
+     *
+     * @param idUser    the id user
+     * @param idMission the id mission
+     * @return the one mission by user and id
+     */
     public MissionDto getOneMissionByUserAndId(Integer idUser, Integer idMission) {
         return MissionDto.parseMissionToMissionDto(misRepo.findOneMissionByUserAndId(idUser, idMission));
     }
 
 
+    /**
+     * Gets lst missions in wait by manager.
+     *
+     * @param idManager the id manager
+     * @return the lst missions in wait by manager
+     */
     public List<MissionDto> getLstMissionsInWaitByManager(Integer idManager) {
         List<Mission> lstMissions = this.misRepo.getLstMissionsInWaitByManager(idManager).stream().toList();
         return lstMissions.stream().map(mission -> MissionDto.parseMissionToMissionDto(mission)).toList();
     }
 
 
+    /**
+     * Update mission status boolean.
+     *
+     * @param idMission the id mission
+     * @param jsonMap   the json map
+     * @return the boolean
+     */
     public Boolean updateMissionStatus(Integer idMission, Map<String, Object> jsonMap) {
         try {
             Mission updMission = this.misRepo.findDistinctById(idMission).get();
@@ -76,6 +105,13 @@ public class MissionService {
     }
 
 
+    /**
+     * Check if mission exist by user and date boolean.
+     *
+     * @param idUser the id user
+     * @param date   the date
+     * @return the boolean
+     */
     public Boolean checkIfMissionExistByUserAndDate(Integer idUser, LocalDate date) {
         try {
             List<Mission> lstMissionByUser = this.misRepo.findMissionByUserAndDate(idUser, date);
@@ -93,6 +129,12 @@ public class MissionService {
     }
 
 
+    /**
+     * Is mission exist boolean.
+     *
+     * @param jsonMap the json map
+     * @return the boolean
+     */
     public Boolean isMissionExist(Map<String, Object> jsonMap) {
 
         try {
@@ -152,6 +194,12 @@ public class MissionService {
         }
     }
 
+    /**
+     * Add mission boolean.
+     *
+     * @param missionDto the mission dto
+     * @return the boolean
+     */
     public Boolean addMission(MissionDto missionDto) {
         try {
             // Gestion des villes
@@ -202,6 +250,12 @@ public class MissionService {
         }
     }
 
+    /**
+     * Update mission boolean.
+     *
+     * @param missionDto the mission dto
+     * @return the boolean
+     */
     public Boolean updateMission(MissionDto missionDto){
         try {
             Mission uptMission = this.misRepo.findOneMissionByUserAndId(missionDto.getUserId(), missionDto.getId());
@@ -256,6 +310,12 @@ public class MissionService {
         }
     }
 
+    /**
+     * Delete mission boolean.
+     *
+     * @param idMission the id mission
+     * @return the boolean
+     */
     public Boolean deleteMission(Integer idMission){
         try {
             Optional<Mission> mission = this.misRepo.findDistinctById(idMission);

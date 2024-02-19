@@ -16,9 +16,21 @@ import java.util.Optional;
  */
 public interface NatureRepository extends JpaRepository<Nature, Integer> {
 
+    /**
+     * Find distinct by id optional.
+     *
+     * @param id the id
+     * @return the optional
+     */
     Optional<Nature> findDistinctById(Integer id);
 
 
+    /**
+     * Find nature by date list.
+     *
+     * @param targetDate the target date
+     * @return the list
+     */
     @Query("SELECT n FROM Nature n " +
             "WHERE (n.endDate IS NOT NULL AND :targetDate BETWEEN n.startDate AND n.endDate) " +
             "OR (n.endDate IS NULL AND :targetDate >= n.startDate)")

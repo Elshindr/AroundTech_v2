@@ -27,12 +27,41 @@ public class MissionController {
     @Autowired
     private MissionService misSvc;
 
-
     @GetMapping("byUser/{idUser}")
     public List<MissionDto> getLstMissionsByUser(@PathVariable Integer idUser) {
         return this.misSvc.getAllByUser(idUser);
     }
 
+    @PostMapping("isMissionExist")
+    public ResponseEntity<?> isMissionExist( @RequestBody Map<String, Object> jsonMap){
+        if (Boolean.TRUE.equals(this.misSvc.isMissionExist(jsonMap))){
+            return ResponseEntity.ok().body("true");
+        } else if(Boolean.FALSE.equals(this.misSvc.isMissionExist(jsonMap))){
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.badRequest().body("");
+    }
+
+    @PostMapping
+    public ResponseEntity<?> addMission(@RequestBody MissionDto  missionDto){
+
+        if (Boolean.TRUE.equals(this.misSvc.addMission(missionDto))){
+            return ResponseEntity.ok().body("true");
+        }
+
+        return ResponseEntity.badRequest().body("");
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateMission(@RequestBody MissionDto  missionDto){
+
+        if (Boolean.TRUE.equals(this.misSvc.updateMission(missionDto))){
+            return ResponseEntity.ok().body("true");
+        }
+
+        return ResponseEntity.badRequest().body("");
+    }
 
     @GetMapping("{idUser}/{idMission}")
     public MissionDto getOneMissionByUserAndId(@PathVariable Integer idUser, @PathVariable Integer idMission) {
@@ -65,37 +94,7 @@ public class MissionController {
     }
 
 
-    @PostMapping("isMissionExist")
-    public ResponseEntity<?> isMissionExist( @RequestBody Map<String, Object> jsonMap){
-     if (Boolean.TRUE.equals(this.misSvc.isMissionExist(jsonMap))){
-            return ResponseEntity.ok().body("true");
-        } else if(Boolean.FALSE.equals(this.misSvc.isMissionExist(jsonMap))){
-            return ResponseEntity.noContent().build();
-        }
 
-        return ResponseEntity.badRequest().body("");
-    }
-
-
-    @PostMapping
-    public ResponseEntity<?> addMission(@RequestBody MissionDto  missionDto){
-
-       if (Boolean.TRUE.equals(this.misSvc.addMission(missionDto))){
-            return ResponseEntity.ok().body("true");
-        }
-
-        return ResponseEntity.badRequest().body("");
-    }
-
-    @PutMapping
-    public ResponseEntity<?> updateMission(@RequestBody MissionDto  missionDto){
-
-        if (Boolean.TRUE.equals(this.misSvc.updateMission(missionDto))){
-            return ResponseEntity.ok().body("true");
-        }
-
-        return ResponseEntity.badRequest().body("");
-    }
 
     @DeleteMapping("{idMission}")
     public ResponseEntity<?> deleteMission(@PathVariable(name="idMission") Integer idMission){

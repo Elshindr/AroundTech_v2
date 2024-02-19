@@ -12,5 +12,11 @@ import java.util.Optional;
  */
 public interface RoleRepository extends JpaRepository<Role, Integer> {
 
+    /**
+     * Find distinct by id optional.
+     *
+     * @param id the id
+     * @return the optional
+     */
     Optional<Role> findDistinctById(Integer id);
 }

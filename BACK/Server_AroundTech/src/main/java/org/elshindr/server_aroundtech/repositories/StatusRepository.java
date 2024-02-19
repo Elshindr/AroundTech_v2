@@ -13,6 +13,12 @@ import java.util.Optional;
  */
 public interface StatusRepository extends JpaRepository<Status, Integer> {
 
+    /**
+     * Find distinct by id optional.
+     *
+     * @param id the id
+     * @return the optional
+     */
     Optional<Status> findDistinctById(Integer id);
 
 }

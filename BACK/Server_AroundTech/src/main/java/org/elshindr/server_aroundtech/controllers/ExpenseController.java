@@ -22,6 +22,12 @@ public class ExpenseController {
     @Autowired
     private ExpenseService expSvc;
 
+    /**
+     * Gets expense by user.
+     *
+     * @param idUser the id user
+     * @return the expense by user
+     */
     @GetMapping("{idUser}")
     public List<Expense> getlstExpenseByUser(@PathVariable Integer idUser) {
         // Récupérer les informations de l'utilisateur à partir de l'objet Authentication
@@ -34,22 +40,40 @@ public class ExpenseController {
     }
 
 
+    /**
+     * Gets one expense by user and mission.
+     *
+     * @param idUser    the id user
+     * @param idMission the id mission
+     * @return the one expense by user and mission
+     */
     @GetMapping("{idUser}/{idMission}")
     public List<Expense> getOneExpenseByUserAndMission(@PathVariable Integer idUser, @PathVariable Integer idMission) {
         return this.expSvc.getLstExpensesByUserAndMission(idUser, idMission);
     }
 
 
+    /**
+     * Create expense response entity.
+     *
+     * @param jsonMap the json map
+     * @return the response entity
+     */
     @PostMapping
     public ResponseEntity<?> createExpense(@RequestBody Map<String, Object> jsonMap) {
-        System.out.println(jsonMap);
        if(this.expSvc.createExpense(jsonMap)){
            return ResponseEntity.ok().body("");
        }
-
         return ResponseEntity.badRequest().body("");
     }
 
+    /**
+     * Update expense response entity.
+     *
+     * @param idExpense the id expense
+     * @param jsonMap   the json map
+     * @return the response entity
+     */
     @PutMapping("{idExpense}")
     public ResponseEntity<?> updateExpense(@PathVariable Integer idExpense, @RequestBody Map<String, Object> jsonMap) {
         if(this.expSvc.updateExpense(jsonMap, idExpense)){
@@ -58,6 +82,12 @@ public class ExpenseController {
         return ResponseEntity.badRequest().body("");
     }
 
+    /**
+     * Delete expense response entity.
+     *
+     * @param idExpense the id expense
+     * @return the response entity
+     */
     @DeleteMapping("{idExpense}")
     public ResponseEntity<?> deleteExpense(@PathVariable Integer idExpense){
         if (this.expSvc.deleteExpense(idExpense)){
@@ -67,6 +97,13 @@ public class ExpenseController {
     }
 
 
+    /**
+     * Update valid at expense response entity.
+     *
+     * @param idMission the id mission
+     * @param jsonMap   the json map
+     * @return the response entity
+     */
     @PutMapping("valid/{idMission}")
     public ResponseEntity<?> updateValidAtExpense(@PathVariable Integer idMission, @RequestBody Map<String, Object> jsonMap) {
         if(this.expSvc.updateValidAtExpense(jsonMap, idMission)){

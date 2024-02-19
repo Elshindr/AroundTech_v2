@@ -16,6 +16,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Expense service.
+ */
 @Service
 public class ExpenseService {
 
@@ -28,15 +31,34 @@ public class ExpenseService {
     @Autowired
     private MotifRepository motifRepo;
 
+    /**
+     * Gets all by user.
+     *
+     * @param idUser the id user
+     * @return the all by user
+     */
     public List<Expense> getAllByUser(Integer idUser) {
         return expRepo.findLstExpensesByUser(idUser);
     }
 
+    /**
+     * Gets lst expenses by user and mission.
+     *
+     * @param idUser    the id user
+     * @param idMission the id mission
+     * @return the lst expenses by user and mission
+     */
     public List<Expense> getLstExpensesByUserAndMission(Integer idUser, Integer idMission) {
         return expRepo.findLstExpensesByUserAndMission(idUser, idMission);
     }
 
 
+    /**
+     * Create expense boolean.
+     *
+     * @param jsonMap the json map
+     * @return the boolean
+     */
     public Boolean createExpense(Map<String, Object> jsonMap) {
 
         Integer idMotif = NumberUtils.toInt(jsonMap.get("idMotif").toString(), 0);
@@ -55,6 +77,13 @@ public class ExpenseService {
         return true;
     }
 
+    /**
+     * Update expense boolean.
+     *
+     * @param jsonMap   the json map
+     * @param idExpense the id expense
+     * @return the boolean
+     */
     public Boolean updateExpense(Map<String, Object> jsonMap, Integer idExpense) {
 
         try {
@@ -92,6 +121,12 @@ public class ExpenseService {
         }
     }
 
+    /**
+     * Delete expense boolean.
+     *
+     * @param idExpense the id expense
+     * @return the boolean
+     */
     public Boolean deleteExpense(Integer idExpense) {
 
         if (!expRepo.existsById(idExpense)) {
@@ -102,6 +137,13 @@ public class ExpenseService {
         return true;
     }
 
+    /**
+     * Update valid at expense boolean.
+     *
+     * @param jsonMap   the json map
+     * @param idMission the id mission
+     * @return the boolean
+     */
     public Boolean updateValidAtExpense(Map<String, Object> jsonMap, Integer idMission){
         try {
 

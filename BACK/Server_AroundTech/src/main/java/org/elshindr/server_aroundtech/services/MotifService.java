@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Motif service.
+ */
 @Service
 public class MotifService {
 
@@ -18,10 +21,21 @@ public class MotifService {
     @Autowired
     private MotifRepository motRepo;
 
+    /**
+     * Find all list.
+     *
+     * @return the list
+     */
     public List<Motif> findAll(){
         return motRepo.findAll();
     }
 
+    /**
+     * Create motif boolean.
+     *
+     * @param jsonMap the json map
+     * @return the boolean
+     */
     public Boolean createMotif(Map<String, Object> jsonMap){
 
         try{
@@ -41,6 +55,13 @@ public class MotifService {
 
     }
 
+    /**
+     * Update motif boolean.
+     *
+     * @param jsonMap the json map
+     * @param idMotif the id motif
+     * @return the boolean
+     */
     public Boolean updateMotif(Map<String, Object> jsonMap, Integer idMotif) {
 
         try {
@@ -62,6 +83,12 @@ public class MotifService {
     }
 
 
+    /**
+     * Delete motif boolean.
+     *
+     * @param idMotif the id motif
+     * @return the boolean
+     */
     public Boolean deleteMotif(Integer idMotif) {
 
         if (!motRepo.existsById(idMotif)) {

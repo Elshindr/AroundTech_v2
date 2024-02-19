@@ -27,9 +27,7 @@ export default class ExpenseService {
 
     static async loadExpensesFromOneMission(idUser, idMission) {
 
-        let urlP = `${this.url}/${idUser}/${idMission}`;
-        //console.log(`url`, urlP)
-        return fetch(urlP, {
+        return fetch(`${this.url}/${idUser}/${idMission}`, {
             method: 'GET',
             credentials: 'include', // Inclure les cookies si nécessaire
             headers: {
@@ -43,13 +41,13 @@ export default class ExpenseService {
                 return exp;
             })
             .catch(error => {
-                console.error("Erreur dans loadExpensesFromOneMission idMission =", idMission, error);
+                throw new Error("loadExpensesFromOneMission", error)
+                //console.error("Erreur dans loadExpensesFromOneMission idMission =", idMission, error);
             });
     }
 
     static async addExpense(date, idMotif, amount, idMission) {
 
-        console.log("addExpense", UserService.getCookie("XSRF-TOKEN"))
         return fetch(`${this.url}`,
             {
                 headers: {
@@ -57,7 +55,7 @@ export default class ExpenseService {
                     "Content-Type": "application/json",
                     'X-XSRF-TOKEN': UserService.getCookie("XSRF-TOKEN"),
                 },
-                credentials: 'include', // Inclure les cookies si nécessaire
+                credentials: 'include',
                 method: "POST",
                 body: JSON.stringify({ "createdAt": date, "amount": parseFloat(amount), "idMission": idMission, "idMotif": idMotif })
             })
@@ -68,9 +66,8 @@ export default class ExpenseService {
 
                 throw new Error("add Expense" + res);
             })
-            .catch(error => {// TODO: Gestion affichage de l'erreur
-                console.log(`Error dans addExpense`, error);
-                return false;
+            .catch(error => {
+                throw new Error("addExpense", error)
             });
     }
 

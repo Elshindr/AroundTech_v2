@@ -23,6 +23,9 @@ import java.util.Map;
 import java.util.Optional;
 
 
+/**
+ * The type User service.
+ */
 @Service
 public class UserService {
 
@@ -33,23 +36,26 @@ public class UserService {
     private RoleRepository roleRepo;
     @Autowired
     private PasswordEncoder pwdEncoder;
-
     private User userCur;
 
 
+    /**
+     * Instantiates a new User service.
+     *
+     * @param wbSecurityConf the wb security conf
+     */
     public UserService(WebSecurity wbSecurityConf) {
-        System.out.println("USER SERVICE pwdencode");
         this.pwdEncoder = wbSecurityConf.passwordEncoder();
     }
 
 
-
-      /**
-         * Construction du cookie d'authentification selon un user connecté donné
-         *
-         * @param userDto utilisateur connecté.
-         * @return cookie sous la forme d'une chaîne de caractères
-         */
+    /**
+     * Construction du cookie d'authentification selon un user connecté donné
+     *
+     * @param userDto   utilisateur connecté.
+     * @param jwtConfig the jwt config
+     * @return cookie sous la forme d'une chaîne de caractères
+     */
     public String buildJWTCookie(UserDto userDto, JWTConfig jwtConfig) {
 
         Keys.secretKeyFor(SignatureAlgorithm.HS512);
@@ -73,79 +79,109 @@ public class UserService {
 
     /**
      * Getter et Setter userCur
+     *
+     * @return the user cur
      */
-
     public User getUserCur() {
         return userCur;
     }
 
+    /**
+     * Sets user cur.
+     *
+     * @param userCur the user cur
+     */
     public void setUserCur(User userCur) {
         this.userCur = userCur;
     }
 
+    /**
+     * Find distinct by id user dto.
+     *
+     * @param idUser the id user
+     * @return the user dto
+     */
     public UserDto findDistinctById(Integer idUser){
         return UserDto.parseUserToUserDto(userRepo.findDistinctById(idUser).get(), this.userRepo);
     }
 
+    /**
+     * Find lst users list.
+     *
+     * @return the list
+     */
     public List<UserDto> findLstUsers(){
         List<User> lstUser = this.userRepo.findAll();
         return lstUser.stream().map(user -> UserDto.parseUserToUserDto(user, this.userRepo)).toList();
     }
 
+    /**
+     * Get user info user dto.
+     *
+     * @param auth the auth
+     * @return the user dto
+     */
     public UserDto getUserInfo(Authentication auth){
-
         try{
-
                 Optional<User> userOptional = this.userRepo.findDistinctByEmail((String) auth.getPrincipal())
                         .stream().findFirst();
-
                 if (userOptional.isPresent()) {
-                    UserDto userDto = UserDto.parseUserToUserDto(userOptional.get(), this.userRepo);
-                    return userDto;
+                    return UserDto.parseUserToUserDto(userOptional.get(), this.userRepo);
                 } else {
-                    System.out.println("user null");
                     return null;
                 }
 
-
         } catch(Exception ex){
-
-            System.out.println("====================== erreur");
             System.out.println(ex.getMessage());
             System.out.println(ex);
             return null;
         }
     }
 
+    /**
+     * Find lst roles list.
+     *
+     * @return the list
+     */
     public List<Role> findLstRoles(){
         return this.roleRepo.findAll();
     }
 
+    /**
+     * Find lst managers list.
+     *
+     * @return the list
+     */
     public List<UserDto> findLstManagers(){
         List<User> lstManagers = this.userRepo.findAllManagers().stream().toList();
-
-       List<UserDto> lst = lstManagers.stream().map(user ->  UserDto.parseUserToUserDtoManager(user)).toList();
-
-        System.out.println(lst.toString());
-        return lst;
+        return lstManagers.stream().map(UserDto::parseUserToUserDtoManager).toList();
     }
 
+    /**
+     * Create user boolean.
+     *
+     * @param newUserDto the new user dto
+     * @return the boolean
+     */
     public Boolean createUser(UserDto newUserDto){
-
         try{
-
             User user = UserDto.parseUserDtoToUser(newUserDto, this.userRepo, this.pwdEncoder);
             this.userRepo.save(user);
             return true;
-
         } catch (Exception ex){
             System.out.println(ex.getMessage());
             System.out.println(ex.toString());
             return false;
         }
-
     }
 
+    /**
+     * Update user boolean.
+     *
+     * @param updUserDto the upd user dto
+     * @param idUser     the id user
+     * @return the boolean
+     */
     public Boolean updateUser(UserDto updUserDto, Integer idUser){
         try{
             User user = this.userRepo.findDistinctById(idUser).get();
@@ -168,12 +204,17 @@ public class UserService {
         }
     }
 
+    /**
+     * Delete user boolean.
+     *
+     * @param idUser the id user
+     * @return the boolean
+     */
     public  Boolean deleteUser(Integer idUser){
         if (!userRepo.existsById(idUser)) {
             return false;
         }
         userRepo.deleteById(idUser);
-
         return true;
     }
 }

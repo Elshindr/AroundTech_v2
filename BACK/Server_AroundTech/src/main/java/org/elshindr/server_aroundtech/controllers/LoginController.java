@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 import org.elshindr.server_aroundtech.repositories.UserRepository;
 import org.elshindr.server_aroundtech.services.UserService;
@@ -34,6 +35,14 @@ public class LoginController {
     private JWTConfig jwtConfig;
     private UserService userSvc;
 
+    /**
+     * Instantiates a new Login controller.
+     *
+     * @param jwtConfig  the jwt config
+     * @param userRepo   the user repo
+     * @param pwdEncoder the pwd encoder
+     * @param userSvc    the user svc
+     */
     public LoginController(JWTConfig jwtConfig, UserRepository userRepo, PasswordEncoder pwdEncoder, UserService userSvc){
         this.userRepo = userRepo;
         this.pwdEncoder = pwdEncoder;
@@ -41,9 +50,14 @@ public class LoginController {
         this.jwtConfig = jwtConfig;
     }
 
+    /**
+     * Gets user info.
+     *
+     * @param authentication the authentication
+     * @return the user info
+     */
     @GetMapping("/user-info")
     public ResponseEntity<?> getUserInfo(Authentication authentication) {
-        System.out.println("====================================login user-info");
 
         // Récupérer les informations de l'utilisateur à partir de l'objet Authentication
         if (authentication != null && authentication.getPrincipal() != null) {
@@ -56,25 +70,32 @@ public class LoginController {
         return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
     }
 
-    @PostMapping("/csrf")
-    public ResponseEntity<?> getSession(HttpServletRequest request) {
+    /**
+     * Gets session.
+     *
+     * @param csrfToken csrfToken
+     * @return the session
+     */
+    @GetMapping("/session")
+    public CsrfToken getSession(CsrfToken csrfToken) {
+        //String xsrfToken = request.getHeader("X-XSRF-TOKEN");
 
-        System.out.println("====================== GET CSRF ==========================");
+       // HttpHeaders headers = new HttpHeaders();
+        //headers.add("X-XSRF-TOKEN", xsrfToken);
 
-        String xsrfToken = request.getHeader("X-XSRF-TOKEN");
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-XSRF-TOKEN", xsrfToken);
-
-        System.out.println(xsrfToken);
-        return ResponseEntity.ok().headers(headers).body(new Response("Connexion trouvée"));
+        //System.out.println(xsrfToken);
+        //return ResponseEntity.ok().headers(headers).body(new Response("Connexion trouvée"));
+        return csrfToken;
     }
 
+    /**
+     * Get login response entity.
+     *
+     * @param loginDto the login dto
+     * @return the response entity
+     */
     @PostMapping
-    public ResponseEntity<?> getLogin(@RequestBody LoginDto loginDto){
-
-        System.out.println("===================== LoginController POST  /login");
-        System.out.println(loginDto.toString());
+    public ResponseEntity<?> setLogin(@RequestBody LoginDto loginDto){
 
         Optional<User> userOptional = this.userRepo.findDistinctByEmail(loginDto.getEmail())
                 .filter(user -> pwdEncoder.matches(loginDto.getPwd(), user.getPwd()));
