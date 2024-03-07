@@ -1,6 +1,5 @@
 package org.elshindr.server_aroundtech.services;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.elshindr.server_aroundtech.models.Nature;
 import org.elshindr.server_aroundtech.repositories.NatureRepository;

@@ -3,7 +3,6 @@ package org.elshindr.server_aroundtech.repositories;
 import org.elshindr.server_aroundtech.models.City;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**

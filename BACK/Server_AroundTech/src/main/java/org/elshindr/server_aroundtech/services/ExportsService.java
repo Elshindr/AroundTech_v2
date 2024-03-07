@@ -1,6 +1,7 @@
 package org.elshindr.server_aroundtech.services;
 
-
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -44,6 +45,7 @@ public class ExportsService {
             cell.setCellValue(key);
         }
 
+
         // Corps
         int rowIndex = 1;
         for (Map<String, Object> data : ((List<Map<String, Object>>) jsonData.get("primes")).stream().toList()) {
@@ -67,8 +69,13 @@ public class ExportsService {
         return ResponseEntity.ok().headers(headers).body(outputStream.toByteArray());
     }
 
-
+    /**
+     * Rempli une cellule avec la valeur données
+     * @param cell
+     * @param value
+     */
     private static void setCellValue(Cell cell, Object value) {
+
         if (value == null) {
             cell.setCellValue("");
         } else if (value instanceof Number) {

@@ -22,7 +22,6 @@
         <java.version>17</java.version>
         <!-- version de la librairie jjwt -->
         <jjwt.version>0.11.5</jjwt.version>
-
     </properties>
 
 
@@ -100,7 +99,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version> <!-- Utilisez la dernière version disponible -->
+            <version>3.12.0</version>
         </dependency>
 
         <!-- Apache POI pour la manipulation des fichiers Excel -->
@@ -112,8 +111,37 @@
 
         <dependency>
             <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>5.0.0</version>
+        </dependency>
+
+
+
+        <!-- Gestion des Mails -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+        <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+        <!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.6.2</version>
         </dependency>
 
 

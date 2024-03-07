@@ -1,7 +1,6 @@
 package org.elshindr.server_aroundtech.controllers;
 
 import org.elshindr.server_aroundtech.models.Motif;
-import org.elshindr.server_aroundtech.repositories.UserRepository;
 import org.elshindr.server_aroundtech.services.MotifService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

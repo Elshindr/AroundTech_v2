@@ -2,8 +2,6 @@ package org.elshindr.server_aroundtech.controllers;
 
 
 import org.elshindr.server_aroundtech.dtos.MissionDto;
-import org.elshindr.server_aroundtech.models.Mission;
-import org.elshindr.server_aroundtech.repositories.UserRepository;
 import org.elshindr.server_aroundtech.services.MissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * MissionController

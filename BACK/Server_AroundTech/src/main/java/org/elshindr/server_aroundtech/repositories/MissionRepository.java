@@ -1,10 +1,12 @@
 package org.elshindr.server_aroundtech.repositories;
 
 import org.elshindr.server_aroundtech.models.Mission;
-import org.elshindr.server_aroundtech.models.User;
+import org.elshindr.server_aroundtech.models.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,15 +16,15 @@ import java.util.Optional;
  * MissionRepository
  * Interface de récupération des données du model Mission via JPA
  */
+@Repository
 public interface MissionRepository extends JpaRepository<Mission, Integer> {
 
-    /**
-     * Find distinct mission by user.
-     *
-     * @param user the user
-     * @return the optional mission
-     */
-    Optional<Mission> findDistinctByUser(User user);
+
+    @Modifying
+    @Query("UPDATE Mission m SET m.status = :status WHERE m.id = :idMission")
+    int updateMissionByStatus(@Param("status") Status status, @Param("idMission") Integer idMission);
+
+
 
     /**
      * Find distinct by id.
@@ -31,6 +33,14 @@ public interface MissionRepository extends JpaRepository<Mission, Integer> {
      * @return the optional mission
      */
     Optional<Mission> findDistinctById(Integer id);
+
+    /**
+     * Find list of mission by status
+     * @param idStatus the new status
+     * @return the list
+     */
+    @Query("SELECT m FROM Mission m WHERE m.status.id = :idStatus")
+    List<Mission> findMissionByStatus(@Param("idStatus") Integer idStatus);
 
     /**
      * Find list of mission by user.

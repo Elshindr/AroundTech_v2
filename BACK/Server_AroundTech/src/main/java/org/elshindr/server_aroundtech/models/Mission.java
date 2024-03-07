@@ -1,7 +1,6 @@
 package org.elshindr.server_aroundtech.models;
-
-
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
@@ -23,6 +22,10 @@ public class Mission {
     private Nature natureCur;
 
     @NotNull
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "departure_city_id")
     private City departCity;
@@ -31,10 +34,6 @@ public class Mission {
     @ManyToOne
     @JoinColumn(name = "arrival_city_id")
     private City arrivalCity;
-
-    @NotNull
-    @Column(name = "start_date")
-    private LocalDate startDate;
 
     @NotNull
     @Column(name = "end_date")
@@ -65,6 +64,38 @@ public class Mission {
      */
     public Mission(){}
 
+
+    /**
+     * Instantiates a new Mission.
+     *
+     * @param natureCur   the nature cur
+     * @param departCity  the depart city
+     * @param arrivalCity the arrival city
+     * @param startDate   the start date
+     * @param endDate     the end date
+     * @param status      the status
+     * @param user        the user
+     * @param transport   the transport
+     * @param natureInit  the nature init
+     */
+    public Mission(@NotNull Nature natureCur, @NotNull City departCity, @NotNull City arrivalCity, @NotNull LocalDate startDate, @NotNull LocalDate endDate, @NotNull Status status, @NotNull User user, @NotNull Transport transport, @NotNull Nature natureInit) {
+        this.natureCur = natureCur;
+        this.departCity = departCity;
+        this.arrivalCity = arrivalCity;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.user = user;
+        this.transport = transport;
+        this.natureInit = natureInit;
+    }
+
+
+    @AssertTrue(message = "La date de début doit être antérieure à la date de fin")
+    private boolean isValidDateOrder() {
+        return startDate.isBefore(endDate);
+    }
+
     /**
      * Instantiates a new Mission.
      *
@@ -92,30 +123,7 @@ public class Mission {
         this.natureInit = natureInit;
     }
 
-    /**
-     * Instantiates a new Mission.
-     *
-     * @param natureCur   the nature cur
-     * @param departCity  the depart city
-     * @param arrivalCity the arrival city
-     * @param startDate   the start date
-     * @param endDate     the end date
-     * @param status      the status
-     * @param user        the user
-     * @param transport   the transport
-     * @param natureInit  the nature init
-     */
-    public Mission(@NotNull Nature natureCur, @NotNull City departCity, @NotNull City arrivalCity, @NotNull LocalDate startDate, @NotNull LocalDate endDate, @NotNull Status status, @NotNull User user, @NotNull Transport transport, @NotNull Nature natureInit) {
-        this.natureCur = natureCur;
-        this.departCity = departCity;
-        this.arrivalCity = arrivalCity;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = status;
-        this.user = user;
-        this.transport = transport;
-        this.natureInit = natureInit;
-    }
+
 
     /**
      * Gets id.

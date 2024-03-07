@@ -1,10 +1,10 @@
 package org.elshindr.server_aroundtech.repositories;
 
 import org.elshindr.server_aroundtech.models.Expense;
-import org.elshindr.server_aroundtech.models.Mission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +14,7 @@ import java.util.Optional;
  * ExpenseRepository
  * Interface de récupération des données du model Expense via JPA
  */
+@Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
 
     /**

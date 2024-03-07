@@ -1,6 +1,5 @@
 package org.elshindr.server_aroundtech.repositories;
 
-import org.elshindr.server_aroundtech.models.Motif;
 import org.elshindr.server_aroundtech.models.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 

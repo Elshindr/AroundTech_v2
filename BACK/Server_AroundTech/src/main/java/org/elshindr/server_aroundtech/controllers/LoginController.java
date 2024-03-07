@@ -1,10 +1,9 @@
 package org.elshindr.server_aroundtech.controllers;
 
+import jakarta.servlet.ServletContext;
 import org.elshindr.server_aroundtech.configs.JWTConfig;
 import org.elshindr.server_aroundtech.dtos.LoginDto;
 import org.elshindr.server_aroundtech.dtos.UserDto;
-import org.elshindr.server_aroundtech.models.Response;
-import jakarta.servlet.http.HttpServletRequest;
 
 import org.elshindr.server_aroundtech.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,9 @@ public class LoginController {
     private PasswordEncoder pwdEncoder;
     private JWTConfig jwtConfig;
     private UserService userSvc;
+
+
+
 
     /**
      * Instantiates a new Login controller.

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Objects;
+
 /**
  * User
  * Modele d'utilisateur (JPA)
@@ -41,30 +43,9 @@ public class User {
 
 
     /**
-     * Instantiates a new User.
+     * Instantiates a new JPA User.
      */
     public User(){
-    }
-
-    /**
-     * Instantiates a new User.
-     *
-     * @param id        the id
-     * @param role      the role
-     * @param idManager the id manager
-     * @param lastname  the lastname
-     * @param firstname the firstname
-     * @param pwd       the pwd
-     * @param email     the email
-     */
-    public User(Integer id, @NotNull Role role, @NotNull Integer idManager, String lastname, String firstname, String pwd, String email) {
-        this.id = id;
-        this.role = role;
-        this.idManager = idManager;
-        this.lastname = lastname;
-        this.firstname = firstname;
-        this.pwd = pwd;
-        this.email = email;
     }
 
     /**
@@ -212,6 +193,29 @@ public class User {
         this.email = email;
     }
 
+
+    /**
+     * Instantiates a new User.
+     *
+     * @param id        the id
+     * @param role      the role
+     * @param idManager the id manager
+     * @param lastname  the lastname
+     * @param firstname the firstname
+     * @param pwd       the pwd
+     * @param email     the email
+     */
+    public User(Integer id, @NotNull Role role, @NotNull Integer idManager, String lastname, String firstname, String pwd, String email) {
+        this.id = id;
+        this.role = role;
+        this.idManager = idManager;
+        this.lastname = lastname;
+        this.firstname = firstname;
+        this.pwd = pwd;
+        this.email = email;
+    }
+
+
     @Override
     public String toString() {
         return "User{" +
@@ -223,5 +227,17 @@ public class User {
                 ", pwd='" + pwd + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getRole().getId(), user.getRole().getId()) && Objects.equals(getIdManager(), user.getIdManager()) && Objects.equals(getLastname(), user.getLastname()) && Objects.equals(getFirstname(), user.getFirstname()) && Objects.equals(getPwd(), user.getPwd()) && Objects.equals(getEmail(), user.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getRole(), getIdManager(), getLastname(), getFirstname(), getPwd(), getEmail());
     }
 }

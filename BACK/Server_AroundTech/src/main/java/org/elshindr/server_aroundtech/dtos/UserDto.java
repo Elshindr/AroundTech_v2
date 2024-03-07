@@ -5,6 +5,8 @@ import org.elshindr.server_aroundtech.models.User;
 import org.elshindr.server_aroundtech.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Objects;
+
 /**
  * UserDto
  * Modele d'utilisateur (Client)
@@ -261,5 +263,17 @@ public class UserDto {
                 ", firstname='" + firstname + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserDto userDto)) return false;
+        return Objects.equals(getId(), userDto.getId()) && Objects.equals(getRole().getId(), userDto.getRole().getId()) && Objects.equals(getIdManager(), userDto.getIdManager()) && Objects.equals(getNameManager(), userDto.getNameManager()) && Objects.equals(getLastname(), userDto.getLastname()) && Objects.equals(getFirstname(), userDto.getFirstname()) && Objects.equals(getEmail(), userDto.getEmail()) && Objects.equals(getPwd(), userDto.getPwd());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getRole().getId(), getIdManager(), getNameManager(), getLastname(), getFirstname(), getEmail(), getPwd());
     }
 }

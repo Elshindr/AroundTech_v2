@@ -1,6 +1,7 @@
 package org.elshindr.server_aroundtech.services;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.elshindr.server_aroundtech.exceptions.EntityNotFoundException;
 import org.elshindr.server_aroundtech.models.Expense;
 import org.elshindr.server_aroundtech.models.Mission;
 import org.elshindr.server_aroundtech.models.Motif;
@@ -52,29 +53,35 @@ public class ExpenseService {
         return expRepo.findLstExpensesByUserAndMission(idUser, idMission);
     }
 
-
     /**
      * Create expense boolean.
      *
      * @param jsonMap the json map
      * @return the boolean
      */
-    public Boolean createExpense(Map<String, Object> jsonMap) {
+    public Boolean createExpense(Map<String, Object> jsonMap) throws Exception{
 
-        Integer idMotif = NumberUtils.toInt(jsonMap.get("idMotif").toString(), 0);
-        Integer idMission = NumberUtils.toInt(jsonMap.get("idMission").toString(), 0);
-        Float amount = NumberUtils.toFloat(jsonMap.get("amount").toString(), 0.0f);
+        try{
+            Integer idMotif = NumberUtils.toInt(jsonMap.get("idMotif").toString(), 0);
+            Integer idMission = NumberUtils.toInt(jsonMap.get("idMission").toString(), 0);
+            Float amount = NumberUtils.toFloat(jsonMap.get("amount").toString(), 0.0f);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime createdAt = LocalDateTime.parse((String) jsonMap.get("createdAt"), formatter);
-        LocalDate date = createdAt.toLocalDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime createdAt = LocalDateTime.parse((String) jsonMap.get("createdAt"), formatter);
+            LocalDate date = createdAt.toLocalDate();
 
-        Motif motif = motifRepo.findDistinctById(idMotif).get();
-        Mission mission = misRepo.findDistinctById(idMission).get();
+            Mission mission = misRepo.findDistinctById(idMission).orElseThrow(EntityNotFoundException::new);
+            Motif motif = motifRepo.findDistinctById(idMotif).orElseThrow(EntityNotFoundException::new);
 
-        Expense newExpense = new Expense(amount, date, null, mission, motif);
-        expRepo.save(newExpense);
-        return true;
+            Expense newExpense = new Expense(amount, date, null, mission, motif);
+            expRepo.save(newExpense);
+
+            return true;
+
+        } catch (Exception e){
+            throw new Exception("Erreur création une note de frais: "+e);
+           // throw new MyException("Erreur création une note de frais: ", "ExpenseService","createExpense", e.getMessage());
+        }
     }
 
     /**

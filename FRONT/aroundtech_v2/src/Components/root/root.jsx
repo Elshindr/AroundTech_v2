@@ -4,8 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import '../../index.css';
 import { useUser } from '../../Contexts/UserContext';
 import UserService from '../../Services/UserService';
-import Header from "./header/header";
-import Footer from './footer/footer';
+import Header from "../Modules/header/header";
+import Footer from '../Modules/footer/footer';
 
 
 export default function Root() {

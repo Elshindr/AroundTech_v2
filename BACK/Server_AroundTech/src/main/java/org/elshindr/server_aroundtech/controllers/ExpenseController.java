@@ -1,7 +1,6 @@
 package org.elshindr.server_aroundtech.controllers;
 
 import org.elshindr.server_aroundtech.models.Expense;
-import org.elshindr.server_aroundtech.repositories.UserRepository;
 import org.elshindr.server_aroundtech.services.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +59,7 @@ public class ExpenseController {
      * @return the response entity
      */
     @PostMapping
-    public ResponseEntity<?> createExpense(@RequestBody Map<String, Object> jsonMap) {
+    public ResponseEntity<?> createExpense(@RequestBody Map<String, Object> jsonMap) throws Exception {
        if(this.expSvc.createExpense(jsonMap)){
            return ResponseEntity.ok().body("");
        }

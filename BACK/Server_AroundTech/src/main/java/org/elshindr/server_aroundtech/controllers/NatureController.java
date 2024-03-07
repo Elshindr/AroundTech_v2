@@ -1,11 +1,11 @@
 package org.elshindr.server_aroundtech.controllers;
 
 import org.elshindr.server_aroundtech.models.Nature;
-import org.elshindr.server_aroundtech.repositories.UserRepository;
 import org.elshindr.server_aroundtech.services.NatureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -94,6 +94,7 @@ public class NatureController {
          * @return the response entity
          */
         @PutMapping("{idNature}")
+        @Secured("ROLE_ADMIN")
         public ResponseEntity<?> createNature(@RequestBody Map<String, Object> jsonMap, @PathVariable Integer idNature) {
                 System.out.println(jsonMap);
                 if(this.natSvc.updateNature(jsonMap, idNature)){
@@ -110,6 +111,7 @@ public class NatureController {
          * @return the response entity
          */
         @DeleteMapping("{idNature}")
+        @Secured("ROLE_ADMIN")
         public ResponseEntity<?> deleteNature(@PathVariable Integer idNature){
                 if (this.natSvc.deleteNature(idNature)){
                         return ResponseEntity.ok().body("");

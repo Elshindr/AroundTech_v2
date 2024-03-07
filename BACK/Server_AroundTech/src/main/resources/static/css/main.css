@@ -1,0 +1,93 @@
+* {
+    color:#6610f2;
+    margin:auto;
+}
+
+
+h1 {
+    margin-top: 1em !important;
+    margin-left: 1em;
+    color: #6f42c1 !important;
+}
+
+h1 {
+    margin-top: 1em !important;
+    margin-left: 1em;
+    color: red !important;
+}
+
+
+#form-create{
+    margin: 0.5em;
+}
+
+i {
+    font-size: 1.5rem;
+}
+
+i:hover {
+    color:#00b09b;
+}
+
+#table-actions-btn {
+    display: flex;
+    flex-direction:row;
+}
+
+.btn {
+    margin-left: 2rem;
+    margin : 2rem;
+}
+
+#btn-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.btn.btn-add {
+    color:#fff;!important;
+}
+
+.btn.btn-add:hover {
+    background-color:#00b09b !important;
+    color:#fff;
+}
+
+.btn-add, .btn-prev{
+    color:#fff !important;
+    background-color:#6610f2 !important;
+    margin-left:1.5em;
+}
+
+.btn-add:hover, .btn-save:hover, .btn-prev:hover {
+    background-color: #00b09b !important;
+    color:#fff;
+}
+
+.btn-save{
+    background-color: #96c93d !important;
+    color:#fff !important;
+}
+
+.col-md-4{
+    margin-bottom: 2.5em;
+}
+
+.icon-add {
+    color:#fff;
+}
+
+.errors{
+    color: #dc3545;
+}
+
+.form-label{
+    color:#000 ;
+}
+
+.form-hidden{
+    background:none;
+    width:fit-content;
+    margin:0;
+}

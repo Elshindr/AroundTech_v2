@@ -10,9 +10,7 @@ import org.elshindr.server_aroundtech.models.Role;
 import org.elshindr.server_aroundtech.models.User;
 import org.elshindr.server_aroundtech.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.elshindr.server_aroundtech.repositories.UserRepository;
@@ -156,6 +154,8 @@ public class UserService {
         List<User> lstManagers = this.userRepo.findAllManagers().stream().toList();
         return lstManagers.stream().map(UserDto::parseUserToUserDtoManager).toList();
     }
+
+
 
     /**
      * Create user boolean.

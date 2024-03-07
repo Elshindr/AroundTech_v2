@@ -30,7 +30,6 @@ public class WebSecurity implements WebMvcConfigurer {
 
     /**
      * Cors configuration source cors configuration source.
-     *
      * @return the cors configuration source
      */
     @Bean

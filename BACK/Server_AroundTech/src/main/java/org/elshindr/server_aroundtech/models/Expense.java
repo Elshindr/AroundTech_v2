@@ -48,15 +48,7 @@ public class Expense {
 
     public Expense(){
     }
-    public Expense(Integer id, @NotNull float amount, @NotNull LocalDate createdAt, LocalDate validAt, @NotNull Mission mission, @NotNull Motif motif) {
-        this.id = id;
-        this.amount = amount;
-        this.createdAt = createdAt;
-        this.validAt = validAt;
-        this.mission = mission;
-        this.motif = motif;
-    }
-    public Expense(@NotNull float amount, @NotNull LocalDate createdAt, LocalDate validAt, @NotNull Mission mission, @NotNull Motif motif) {
+     public Expense(@NotNull float amount, @NotNull LocalDate createdAt, LocalDate validAt, @NotNull Mission mission, @NotNull Motif motif) {
         this.amount = amount;
         this.createdAt = createdAt;
         this.validAt = validAt;
@@ -69,7 +61,7 @@ public class Expense {
     @PreUpdate
     private void preUpdate() {
         if (validAt != null) {
-            throw new IllegalStateException("La date de validité ne peut pas être modifieée une fois définie.");
+            throw new IllegalStateException("La date de validité ne peut pas être modifiée une fois définie.");
         }
     }
 
@@ -118,6 +110,14 @@ public class Expense {
     }
 
     public void setMotif(Motif motif) {
+        this.motif = motif;
+    }
+    public Expense(Integer id, @NotNull float amount, @NotNull LocalDate createdAt, LocalDate validAt, @NotNull Mission mission, @NotNull Motif motif) {
+        this.id = id;
+        this.amount = amount;
+        this.createdAt = createdAt;
+        this.validAt = validAt;
+        this.mission = mission;
         this.motif = motif;
     }
 

@@ -2,14 +2,13 @@ package org.elshindr.server_aroundtech.services;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.elshindr.server_aroundtech.dtos.MissionDto;
+
 import org.elshindr.server_aroundtech.models.*;
 import org.elshindr.server_aroundtech.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +74,15 @@ public class MissionService {
         return lstMissions.stream().map(mission -> MissionDto.parseMissionToMissionDto(mission)).toList();
     }
 
+    /**
+     * Gets missions by status.
+     *
+     * @param idStatus the id status
+     * @return list of Missions
+     */
+    public List<Mission> getLstMissionsByStatus(Integer idStatus){
+        return this.misRepo.findMissionByStatus(idStatus);
+    }
 
     /**
      * Update mission status boolean.
@@ -293,6 +301,10 @@ public class MissionService {
 
             uptMission.setArrivalCity(arrivalCity.get());
             uptMission.setDepartCity(departCity.get());
+
+            if(missionDto.getStartDate().isBefore(missionDto.getEndDate())){
+
+
             uptMission.setEndDate(missionDto.getEndDate());
             uptMission.setStartDate(missionDto.getStartDate());
             uptMission.setNatureCur(natureCur.get());
@@ -302,12 +314,36 @@ public class MissionService {
             this.misRepo.save(uptMission);
 
             return true;
+            } else{
+                throw new Exception("Date de début après la date de fin de mission");
+            }
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             System.out.println(ex.toString());
             return false;
         }
+    }
+
+    /**
+     * Maj du status d'une misson
+     * @param idMission
+     * @param idStatus
+     * @return boolean vrai si maj reussi
+     */
+    public Boolean updateMissionByStatus(Integer idMission, Integer idStatus){
+
+        try{
+            Status newStatus = this.statusRepo.findDistinctById(idStatus).get();
+            Mission updatMssin =  this.misRepo.findDistinctById(idMission).get();
+            updatMssin.setStatus(newStatus);
+            this.misRepo.save(updatMssin);
+
+            return true;
+        } catch(Exception e){
+            return false;
+        }
+
     }
 
     /**
