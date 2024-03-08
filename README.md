@@ -1,4 +1,4 @@
 
 
 # Déploiement
-docker-compose y --build
+ docker-compose up --build 
