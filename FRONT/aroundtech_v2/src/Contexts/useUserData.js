@@ -10,7 +10,7 @@ export default function useUserData() {
   useEffect(() => {
     async function fetchUserData() {
       try {
-        // Envoi d'une requête GET à l'API pour récupérer les données de l'utilisateur
+        // Envoi une requête GET à l'API pour récupérer les données de l'utilisateur
         const response = await fetch('/info-user', { credentials: 'include' });
         if (response.ok) {
           // Si la réponse est réussie, extrait les données JSON et les stocke dans le state userData

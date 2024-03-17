@@ -26,7 +26,8 @@ import UserFormAdd from "./Components/Pages/users/add/UserFormAdd";
 import UserFormUpd from "./Components/Pages/users/update/UserFormUpdate";
 import { CookiesProvider } from 'react-cookie';
 import { UserProvider } from './Contexts/UserContext';
-import RoleGuard from './Components/root/guard/guard';
+import RoleGuard from './Components/root/guards/RoleGuard';
+import LoginGuard from './Components/root/guards/LoginGuard'
 
 import './index.css';
 
@@ -35,8 +36,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/login" element={<LoginComponent />} />
-      <Route path="/" element={<Root />}>
+      <Route path="/login" element={<LoginComponent />}/>
+      <Route path="/"  element={<Root />}>
         <Route path="/" element={<HomeComponent />} />
         <Route path="/missions" element={<MissionComponent />} />
         <Route path="/mission/waiting" element={<MissionWaitingComponent />} />
@@ -50,8 +51,8 @@ const router = createBrowserRouter(
         <Route path="/users/add" element={<RoleGuard allowedRoles={[3]}><UserFormAdd /></RoleGuard>} />
         <Route path="/users/:idUser" element={<RoleGuard allowedRoles={[3]}><UserFormUpd /></RoleGuard>}/> 
       </Route>
-      <Route path="/unauthorized" element={<Unauthorized />} />
-      <Route path="*" element={<Unauthorized />} />
+      <Route path="/unauthorized" element={<LoginGuard ><Unauthorized /></LoginGuard>} />
+      <Route path="*" element={<LoginGuard ><Unauthorized /></LoginGuard>} />
     </>
 
   )

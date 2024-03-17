@@ -103,11 +103,8 @@
         </dependency>
 
         <!-- Apache POI pour la manipulation des fichiers Excel -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>5.2.5</version>
-        </dependency>
+
+
 
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -118,6 +115,19 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>5.0.0</version>
+        </dependency>
+
+
+        <!-- Génération pdf-->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.24</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.2</version>
         </dependency>
 
 

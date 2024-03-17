@@ -1,13 +1,12 @@
 package org.elshindr.server_aroundtech.services;
-
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,17 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
 
 /**
  * The type Exports service.
@@ -84,6 +94,78 @@ public class ExportsService {
             cell.setCellValue((Boolean) value);
         } else {
             cell.setCellValue(value.toString());
+        }
+    }
+
+
+    public static ByteArrayOutputStream exportPdf(List<Map<String, Object>> queryResults) throws DocumentException {
+        Document document = new Document();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, outputStream);
+        document.open();        // Write column names
+
+
+        Map<String, Object> firstRow = queryResults.get(0);
+        for (String column : firstRow.keySet()) {
+            Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            Paragraph paragraph = new Paragraph(column, boldFont);
+            document.add(paragraph);
+        }
+        document.add(new Paragraph("\n"));        // Write data rows
+        for (Map<String, Object> row : queryResults) {
+            for (Object value : row.values()) {
+                Paragraph paragraph = new Paragraph(value.toString());
+                document.add(paragraph);
+            }
+            document.add(new Paragraph("\n"));
+        }        document.close();
+        return outputStream;
+    }
+
+
+    /**
+     * Export json to pdf response entity.
+     * @param jsonMap the json data
+     * @return the response entity
+     * @throws IOException the io exception
+     */
+    public static ResponseEntity<byte[]>  createPdfd(Map<String, Object> jsonMap) throws IOException {
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+                contentStream.newLineAtOffset(100, 700);
+                contentStream.showText("Hello, World!");
+                contentStream.newLineAtOffset(100, 700);
+                contentStream.showText("Hello, World!");
+                contentStream.newLineAtOffset(100, 700);
+                contentStream.showText("Hello, World!");
+                contentStream.newLineAtOffset(100, 700);
+                contentStream.showText("Hello, World!");
+                contentStream.newLineAtOffset(100, 700);
+                contentStream.showText("Hello, World!");
+                contentStream.newLineAtOffset(100, 700);
+                contentStream.showText("Hello, World!");
+                contentStream.newLineAtOffset(100, 700);
+                contentStream.showText("Hello, World!");
+
+
+
+                contentStream.endText();
+            }
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            document.save(baos);
+            byte[] pdfBytes = baos.toByteArray();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "MesNotesDeFrais.pdf");
+
+            return ResponseEntity.ok().headers(headers).contentLength(pdfBytes.length).body(pdfBytes);
         }
     }
 }

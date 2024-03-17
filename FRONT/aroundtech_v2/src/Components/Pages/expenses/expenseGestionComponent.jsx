@@ -16,6 +16,7 @@ import { Error, Loading } from '../../Modules/loadingError/loadingErrorComponent
 
 import Utils from '../../../Utils/utils';
 import "./expense.css";
+//import ExportsService from './../../../Services/exportsService';
 
 
 export default function ExpenseGestionComponent() {
@@ -72,6 +73,9 @@ export default function ExpenseGestionComponent() {
         const expenses = await ExpenseService.loadExpensesFromOneMission(contextUser.user.id, missionId);
         const natureInit = await NatureMisService.loadOneNatureMission(mission.natureInit.id);
 
+
+
+        //const respNDF = await exportToPDF//ExportsService.exportExpenseToPdf(contextUser.user.id, missionId)
         // Génération du PDF
         exportToPDF(mission, expenses, natureInit);
     };
@@ -112,7 +116,7 @@ export default function ExpenseGestionComponent() {
                             </tr>
                         </thead>
                         <tbody>
-                        {(dataPageExpense === undefined || dataPageExpense.length === 0) && (
+                            {(dataPageExpense === undefined || dataPageExpense.length === 0) && (
                                 <tr>
                                     <td colSpan={8} className="text-center">
                                         Aucun résultat
@@ -121,36 +125,38 @@ export default function ExpenseGestionComponent() {
                             )}
 
                             {dataPageExpense !== undefined && dataPageExpense.length !== 0 &&
-                            dataPageExpense.map(mission => (
-                                <tr key={mission.id}>
-                                    <td>{Utils.formatDateTimestampToStr(mission.startDate)}</td>
-                                    <td>{Utils.formatDateTimestampToStr(mission.endDate)}</td>
-                                    <td>{Utils.capitalizeFirstLetter(mission.natureCur.name) || NOT_SPECIFIED}</td>
-                                    <td>{Utils.capitalizeFirstLetter(mission.departCity.name) || NOT_SPECIFIED}</td>
-                                    <td>{Utils.capitalizeFirstLetter(mission.arrivalCity.name) || NOT_SPECIFIED}</td>
-                                    <td>{Utils.capitalizeFirstLetter(mission.transport.name) || NOT_SPECIFIED}</td>
-                                    <td>{Utils.formatAmount(lstExpenses
-                                        // Filtre pour avoir les dépenses de la mission actuelle
-                                        .filter(expense => expense.mission.id === mission.id)
-                                        // Somme tous les montants des dépenses de cette mission sinon 0
-                                        .reduce((acc, expense) => acc + expense.amount, 0)) || 0}€</td>
+                                dataPageExpense.map(mission => (
+                                    <tr key={mission.id}>
+                                        <td>{Utils.formatDateTimestampToStr(mission.startDate)}</td>
+                                        <td>{Utils.formatDateTimestampToStr(mission.endDate)}</td>
+                                        <td>{Utils.capitalizeFirstLetter(mission.natureCur.name) || NOT_SPECIFIED}</td>
+                                        <td>{Utils.capitalizeFirstLetter(mission.departCity.name) || NOT_SPECIFIED}</td>
+                                        <td>{Utils.capitalizeFirstLetter(mission.arrivalCity.name) || NOT_SPECIFIED}</td>
+                                        <td>{Utils.capitalizeFirstLetter(mission.transport.name) || NOT_SPECIFIED}</td>
+                                        <td>{Utils.formatAmount(lstExpenses
+                                            // Filtre pour avoir les dépenses de la mission actuelle
+                                            .filter(expense => expense.mission.id === mission.id)
+                                            // Somme tous les montants des dépenses de cette mission sinon 0
+                                            .reduce((acc, expense) => acc + expense.amount, 0)) || 0}€</td>
 
-                                    <td >
-                                        {/* Si date de fin < à date du jour alors les boutons s'affichent */}
+                                        <td >
+                                            {/* Si date de fin < à date du jour alors les boutons s'affichent */}
 
-                                        {Utils.compareDateStr(mission.endDate) && (
-                                            <div className="button-container-gestion">
-                                                <button className="button_icon button_gestion" onClick={() => redirectToExpensePage(mission.id)}>
-                                                    <AddCircleIcon />
-                                                </button>
-                                                <button className="button_icon button_pdf" data-mission-id={mission.id} onClick={handleExportToPDF}>
-                                                    <PictureAsPdfIcon />
-                                                </button>
-                                            </div>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
+                                            {Utils.compareDateStr(mission.endDate) && (
+                                                <div className="button-container-gestion">
+                                                
+                                                    <button className="button_icon button_gestion" onClick={() => redirectToExpensePage(mission.id)}>
+                                                        <AddCircleIcon />
+                                                    </button>
+                                                
+                                                    <button className="button_icon button_pdf" data-mission-id={mission.id} onClick={handleExportToPDF}>
+                                                        <PictureAsPdfIcon />
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
                         </tbody>
                     </Table>
                     <div className="d-flex justify-content-center">

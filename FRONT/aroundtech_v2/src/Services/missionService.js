@@ -40,11 +40,11 @@ export default class MissionService {
         }
       })
       .then((res) => {
-        console.log(`res`, res)
+       // console.log(`res`, res)
         return res.json();
       })
       .then((mis) => {
-        console.log(`mis`, mis)
+        //console.log(`mis`, mis)
         return mis;
       })
       .catch((error) => {
@@ -253,6 +253,4 @@ export default class MissionService {
       });
 
   }
-
-
 }

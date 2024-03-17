@@ -16,7 +16,6 @@ public class EmailConfiguration {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-
         mailSender.setUsername("aroundtech.bot@gmail.com");
         mailSender.setPassword("baxtoexubawtkfcj");
 
@@ -25,7 +24,6 @@ public class EmailConfiguration {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.debug", "true");
-        //props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         return mailSender;
     }
 }

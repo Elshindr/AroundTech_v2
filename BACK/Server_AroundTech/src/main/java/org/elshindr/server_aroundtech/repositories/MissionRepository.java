@@ -1,5 +1,4 @@
 package org.elshindr.server_aroundtech.repositories;
-
 import org.elshindr.server_aroundtech.models.Mission;
 import org.elshindr.server_aroundtech.models.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,13 +17,6 @@ import java.util.Optional;
  */
 @Repository
 public interface MissionRepository extends JpaRepository<Mission, Integer> {
-
-
-    @Modifying
-    @Query("UPDATE Mission m SET m.status = :status WHERE m.id = :idMission")
-    int updateMissionByStatus(@Param("status") Status status, @Param("idMission") Integer idMission);
-
-
 
     /**
      * Find distinct by id.

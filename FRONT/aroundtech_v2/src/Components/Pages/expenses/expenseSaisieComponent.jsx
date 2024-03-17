@@ -333,7 +333,7 @@ export default function ExpenseSaisieComponent() {
             handleResetModal(true);
 
         } else {
-            alert("Erreur à la update de la note");
+            alert("Erreur: La mission n'a pas encore débuté.");
         } //TODO: gestion Erreur
 
     }
@@ -408,7 +408,7 @@ export default function ExpenseSaisieComponent() {
 
             <section className="d-flex justify-content-center">
                 {
-                    (lstExpenses !== undefined || lstExpenses.length !== 0) && (<button className="button_add" onClick={() => onClickShowModalValid()}>
+                    (lstExpenses !== undefined || lstExpenses.length !== 0)  && lstExpenses[0]?.validAt === null  && (<button className="button_add" onClick={() => onClickShowModalValid()}>
                         Valider la note de frais : <CheckCircleIcon />
                     </button>)
                 }
@@ -445,18 +445,20 @@ export default function ExpenseSaisieComponent() {
                                             <td>{Utils.formatDateTimestampToStr(expense.createdAt)}</td>
                                             <td>{expense !== undefined ? Utils.capitalizeFirstLetter(expense.motif.name) : "n"}</td>
                                             <td>{Utils.formatAmount(expense.amount) + " €"}</td>
-                                            <td>
+                                            <td>{ lstExpenses[0]?.validAt === null && (
+                                                <>
+                                                    <button className="button_icon button_edit">
+                                                        <EditIcon className="icon_edit" onClick={() => onClickShowModalUpdate(expense)} />
+                                                    </button>
 
-                                                <button className="button_icon button_edit">
-                                                    <EditIcon className="icon_edit" onClick={() => onClickShowModalUpdate(expense)} />
-                                                </button>
+                                                    <button className="button_icon button_delete" onClick={() => {
+                                                        onClickShowModalDelete(expense)
+                                                    }}>
 
-                                                <button className="button_icon button_delete" onClick={() => {
-                                                    onClickShowModalDelete(expense)
-                                                }}>
-
-                                                    <DeleteIcon className="icon_delete" />
-                                                </button>
+                                                        <DeleteIcon className="icon_delete" />
+                                                    </button>
+                                                </>)
+                                            }
                                             </td>
                                         </tr>
                                     )
@@ -468,10 +470,11 @@ export default function ExpenseSaisieComponent() {
                 </div>
             </div>
 
-            <section className="d-flex justify-content-center mb-4">
+            <section className="d-flex justify-content-center mb-4">{ (lstExpenses.length === 0 || lstExpenses[0]?.validAt === null) && (
+                
                 <button className="button_add" onClick={() => onClickShowModalAdd()}>
                     Ajouter un frais : <AddCircleIcon />
-                </button>
+                </button>)}
             </section>
 
             <div id="modal-add-cont">

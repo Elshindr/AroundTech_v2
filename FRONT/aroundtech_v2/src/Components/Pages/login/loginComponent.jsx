@@ -12,40 +12,37 @@ const LoginComponent = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(undefined);
   const router = useNavigate();
 
   // Utilisation du hook useUser
   const contextUser = useUser();
-  //const loading = contextUser.loading;
-  //const error = contextUser.error;
+  const loading = contextUser.loading;
+
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
     // Réinitialise l'erreur
-    setError('');
+    setError(undefined);
 
     try {
 
       const response = await userService.getOneUser(email, password);
-
-      console.log(`response login `, response)
-
-      if (response.email !== "") {
-        contextUser.updateUser(response);
+      
+      if (response.email !== "" && response.email !== undefined) {
         // Redirection vers la page d'accueil si la connexion est réussie
-        //router.push('/');
+        contextUser.updateUser(response);
         router('/', { replace: true });
 
       } else {
-        console.log(`test no connect`, response)
+
         // Message d'erreur si la connexion échoue
-        const errorData = await response.json();
-        setError(errorData.message);
+        //const errorData = await response.json();
+        const errorData = "Email ou mot de passe erronné";
+        setError(errorData);
       }
     } catch (error) {
-      console.log(`errrur login`, error)
       // Gestion des erreurs lors de l'appel à l'API
       setError('Impossible de se connecter au serveur.');
     }
@@ -103,7 +100,7 @@ const LoginComponent = () => {
                   </div>
 
                 </div>
-                {error && <Alert severity="error">{error}</Alert>}
+                {error !== undefined && <Alert severity="error">{error}</Alert>}
               </Form>
             </Card.Body>
           </Card>

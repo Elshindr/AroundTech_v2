@@ -48,22 +48,23 @@ public class Expense {
 
     public Expense(){
     }
-     public Expense(@NotNull float amount, @NotNull LocalDate createdAt, LocalDate validAt, @NotNull Mission mission, @NotNull Motif motif) {
+    public Expense(@NotNull float amount, @NotNull LocalDate createdAt, LocalDate validAt, @NotNull Mission mission, @NotNull Motif motif) {
         this.amount = amount;
         this.createdAt = createdAt;
         this.validAt = validAt;
         this.mission = mission;
         this.motif = motif;
 
-        this.isDateFinSuperieure();
+       // this.isDateFinSuperieure();
     }
 
-    @PreUpdate
-    private void preUpdate() {
+    //@PostUpdate
+    /*private void preUpdate() {
+        System.out.println(validAt);
         if (validAt != null) {
             throw new IllegalStateException("La date de validité ne peut pas être modifiée une fois définie.");
         }
-    }
+    }*/
 
     public Integer getId() {
         return id;

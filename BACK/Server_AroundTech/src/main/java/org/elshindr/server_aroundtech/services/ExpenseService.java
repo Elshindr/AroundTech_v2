@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,11 @@ public class ExpenseService {
             Mission mission = misRepo.findDistinctById(idMission).orElseThrow(EntityNotFoundException::new);
             Motif motif = motifRepo.findDistinctById(idMotif).orElseThrow(EntityNotFoundException::new);
 
+            boolean expenseExists = expRepo.existsByCreatedAtAndMotifAndMission(date, motif, mission);
+            if (expenseExists) {
+                throw new Exception("Couple Date - Motif déjà présent pour cette mission");
+            }
+
             Expense newExpense = new Expense(amount, date, null, mission, motif);
             expRepo.save(newExpense);
 
@@ -80,7 +86,6 @@ public class ExpenseService {
 
         } catch (Exception e){
             throw new Exception("Erreur création une note de frais: "+e);
-           // throw new MyException("Erreur création une note de frais: ", "ExpenseService","createExpense", e.getMessage());
         }
     }
 
@@ -157,6 +162,10 @@ public class ExpenseService {
             Integer idUser = NumberUtils.toInt(jsonMap.get("idUser").toString(), 0);
             List<Expense> lstExpenses = this.expRepo.findLstExpensesByUserAndMission(idUser, idMission);
 
+            if (lstExpenses.get(0).getValidAt() != null) {
+                throw new IllegalStateException("La date de validité ne peut pas être modifiée une fois définie.");
+            }
+
             LocalDate dateValid = LocalDate.now();
             if (jsonMap.get("validAt") != null) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -166,7 +175,7 @@ public class ExpenseService {
 
             for (Expense exp :lstExpenses) {
                 exp.setValidAt(dateValid);
-                expRepo.save(exp);
+                this.expRepo.save(exp);
             }
 
             return true;

@@ -13,7 +13,7 @@ export const exportToPDF = (mission, expenses, nature) => {
   const doc = new jsPDF();
   const missionData = mission;
 
-console.log(`  nature in pdf`, nature)
+
   // Titre du document
   // Mise en forme du titre
   doc.setTextColor(colorSecondary);

@@ -26,17 +26,11 @@ export default function Root() {
             contextUser.setLoading(true);
             const response = await UserService.getUserInfo();
             if (response !== undefined) {
-
                 const dataUser = response;
-                console.log(`context userfetch`, dataUser);
                 contextUser.updateUser(dataUser);
-
             } else if (response === undefined) {
-                console.log(`hook user data fail`, response);
                 contextUser.updateUser(null);
-
                 navigate('/login', { replace: true });
-
             } else {
                 throw new Error('Échec du chargement des données utilisateur');
             }

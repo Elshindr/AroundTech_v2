@@ -1,21 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
-
 import { Table, Form } from 'react-bootstrap';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-
 import MissionService from '../../../Services/missionService';
 import NatureService from '../../../Services/NatureService';
-
 import Chart from 'chart.js/auto';
-
 import { format } from 'date-fns';
 import fr from 'date-fns/locale/fr';
-
-import exportToXls from '../../../Services/xlsExport';
 import { useUser } from '../../../Contexts/UserContext';
 import { Error, Loading } from '../../Modules/loadingError/loadingErrorComponent';
 import Utils from '../../../Utils/utils';
-
 import "./primes.css";
 import ExportsService from '../../../Services/exportsService';
 
@@ -67,7 +60,7 @@ export default function PrimesComponent(props) {
     }
 
 
-    //// Gestion Grap
+    //// Gestion Grap event
     const onClickChangeYear = (event) => {
 
         event.preventDefault();
@@ -108,7 +101,7 @@ export default function PrimesComponent(props) {
 
         }
     }
-
+    //// Gestion Graph asset
     const setGraph = (year, dataGraph) => {
 
         const ctx = inputGraph.current.getContext('2d');
@@ -137,8 +130,6 @@ export default function PrimesComponent(props) {
 
         setChart(graph);
     }
-
-
     //// Gestion Export xls
     const onClickExport = async () => {
 
@@ -152,9 +143,7 @@ export default function PrimesComponent(props) {
             }
         });
 
-       let test =  await ExportsService.exportPrimeToXls(contextUser.user.id, jsonToExport);
-       console.log(`test`, test)
-       // exportToXls(jsonToExport);
+        await ExportsService.exportPrimeToXls(contextUser.user.id, jsonToExport);
     }
 
 
@@ -246,6 +235,4 @@ export default function PrimesComponent(props) {
             </div>
         </>
     );
-
 }
-

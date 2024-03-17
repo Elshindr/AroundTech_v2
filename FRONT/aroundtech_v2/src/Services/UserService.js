@@ -55,7 +55,7 @@ export default class UserService {
 		console.log(`url getOneUser`, `${process.env.REACT_APP_BACK_URL}login/`, email, pwd, this.cookies.get("XSRF-TOKEN"))
 
 
-		return await fetch(`${process.env.REACT_APP_BACK_URL}login`, {
+		return fetch(`${process.env.REACT_APP_BACK_URL}login`, {
 			headers: {
 				"Accept": "application/json",
 				"Content-Type": "application/json",
@@ -80,10 +80,10 @@ export default class UserService {
 	}
 
 
-	static async getUserInfo() {
+	static  getUserInfo() {
 
 
-		return await fetch(`${this.url}user-info`, {
+		return  fetch(`${this.url}user-info`, {
 			method: 'GET',
 			credentials: 'include',
 			headers: {
@@ -107,9 +107,9 @@ export default class UserService {
 	}
 
 
-	static async getTokenCsrf() {
+	static  getTokenCsrf() {
 
-		await fetch(`${this.url}csrf`, {
+		fetch(`${this.url}csrf`, {
 			method: 'POST',
 			credentials: 'include', // Inclure les cookies si nécessaire
 			headers: {
@@ -129,7 +129,7 @@ export default class UserService {
 
 	static async getLogout() {
 
-		return await fetch(`${process.env.REACT_APP_BACK_URL}logout`, {
+		return  fetch(`${process.env.REACT_APP_BACK_URL}logout`, {
 			method: 'POST',
 			credentials: 'include',
 			headers: {
