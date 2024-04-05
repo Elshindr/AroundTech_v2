@@ -4,3 +4,5 @@ BACK/Server_AroundTech/src/main/resources/application.properties
 DOCUMENTATIONS/UML/*.drawio
 DOCUMENTATIONS/UML/*.excalidraw
 DOCUMENTATIONS/structure_projet.png
+ANGULAR/aroundTech/src/environments/environment.development.ts
+ANGULAR/aroundTech/src/assets/.gitkeep

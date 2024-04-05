@@ -2,7 +2,7 @@
   box-shadow: 0 3px 10px 0 var(--color-primary)
 }
 
-.button_connect{
+.button_connect {
   color: var(--color-secondary);
   background: none;
   border: 2px solid var(--color-secondary);
@@ -16,6 +16,6 @@
 }
 
 
-form{
+form {
   justify-content: center;
 }
