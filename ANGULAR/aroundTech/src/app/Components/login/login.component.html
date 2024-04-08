@@ -1,0 +1,61 @@
+<div class="container">
+	<div class="justify-content-md-center mt-5 ">
+		<div class="md-6">
+			<div class="card login_card">
+				<div class="card-body">
+
+					<div class="d-flex justify-content-center pt-2">
+						<img src="./assets/images/around-tech-logo.png" className="logo " height="100" width="100"
+							alt="Around Tech Logo" />
+					</div>
+
+					<h1 >Gestion des missions</h1>
+
+					<div *ngIf="loginAlert !== ''" class="alert">
+						<p>{{loginAlert}}</p>
+					</div>
+					
+					<form #formLogin="ngForm" (ngSubmit)="onSubmitConnect(formLogin)" class="mt-5">
+						<div class="form-input">
+
+							<div class="form-floating mb-3">
+								<input type="email" class="form-control" id="emailInput" name="emailInput" placeholder="Email" autoComplete="email" required 
+									[(ngModel)]="loginCur.email"
+									#email="ngModel"
+									email="true"
+								>
+								<label for="emailInput">Email</label>
+							
+								<div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert">
+									<p *ngIf=" email.errors?.['email']">Adresse mail non valide</p>
+								</div>
+							</div>
+
+							<div class="form-floating mb-3">
+								<input type="password" class="form-control" id="pwdInput" name="pwdInput" placeholder="Password" autoComplete="current-password" required 
+									[(ngModel)]="loginCur.pwd"
+									#pwd="ngModel"
+									pwd="true"
+								>
+								
+								<label for="pwdInput">Mot de passe</label>
+						
+								<div *ngIf="pwd.invalid && (pwd.dirty || pwd.touched)" class="alert">
+									<p *ngIf="pwd.errors?.['required']">Un mot de passe est requis</p>
+								</div>
+							</div>
+
+
+							<div class="d-flex justify-content-center mt-5">
+								<Button type="submit" class="button_connect btn mb-3" [disabled]="!formLogin.valid">Se connecter</Button>
+							</div>
+
+						</div>
+
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

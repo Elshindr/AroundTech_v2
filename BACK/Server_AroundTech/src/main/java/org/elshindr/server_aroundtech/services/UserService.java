@@ -5,12 +5,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.elshindr.server_aroundtech.configs.JWTConfig;
 import org.elshindr.server_aroundtech.configs.WebSecurity;
+import org.elshindr.server_aroundtech.dtos.LoginDto;
 import org.elshindr.server_aroundtech.dtos.UserDto;
 import org.elshindr.server_aroundtech.models.Role;
 import org.elshindr.server_aroundtech.models.User;
 import org.elshindr.server_aroundtech.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.elshindr.server_aroundtech.repositories.UserRepository;
@@ -74,6 +78,17 @@ public class UserService {
         return tokenCookie.toString();
     }
 
+    /**
+     * Find distinct couple email + pwd
+     * @param loginDto LoginDto
+     * @return userDto associé au login
+     */
+    public UserDto getUserByLogin(LoginDto loginDto){
+        Optional<User> userOptional = this.userRepo.findDistinctByEmail(loginDto.getEmail())
+                .filter(user -> pwdEncoder.matches(loginDto.getPwd(), user.getPwd()));
+
+        return userOptional.map(user -> UserDto.parseUserToUserDto(user, this.userRepo)).orElse(null);
+    }
 
     /**
      * Getter et Setter userCur

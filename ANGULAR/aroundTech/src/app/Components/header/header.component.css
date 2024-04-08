@@ -1,0 +1,61 @@
+header {
+    font-size: 15px;
+}
+
+.active {
+    color: var(--color-primary) !important;
+    font-weight: 600;
+}
+
+.active>a.dropdown-toggle.nav-link {
+    color: var(--color-primary) !important;
+    font-weight: 600;
+}
+
+.logout-icon {
+    color: var(--color-secondary);
+    cursor: default;
+}
+
+.logout-icon:hover {
+    color: var(--color-quaternary);
+}
+
+.account-icon:hover,
+.account-name:hover,
+a.account-link.nav-link:hover {
+    color: rgba(0, 0, 0, 0.65) !important;
+    cursor: default;
+    margin-bottom: 0;
+}
+
+.info-icon {
+    color: var(--color-primary);
+}
+
+#dropdown-nav {
+    background: none;
+    border: none;
+}
+
+i {
+    color: var(--color-primary)
+}
+
+@media (max-width: 1400px) {
+    .navbar-brand {
+        display: flex;
+        justify-content: center;
+        margin: 0;
+    }
+
+    .d-flex {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .col-2 {
+        width: 100% !important;
+    }
+}

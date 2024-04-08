@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.elshindr.server_aroundtech.repositories.UserRepository;
 import org.elshindr.server_aroundtech.services.UserService;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -98,20 +99,22 @@ public class LoginController {
      */
     @PostMapping
     public ResponseEntity<?> setLogin(@RequestBody LoginDto loginDto){
+        
+        System.out.println(loginDto.toString());
+        UserDto userDto = this.userSvc.getUserByLogin(loginDto);
 
-        Optional<User> userOptional = this.userRepo.findDistinctByEmail(loginDto.getEmail())
-                .filter(user -> pwdEncoder.matches(loginDto.getPwd(), user.getPwd()));
+        if (userDto != null) {
 
-        if (userOptional.isPresent()) {
-            UserDto userDto = UserDto.parseUserToUserDto(userOptional.get(), this.userRepo);
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.SET_COOKIE, userSvc.buildJWTCookie(userDto, jwtConfig));
 
             return ResponseEntity.ok().headers(headers).body(userDto);
 
         } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Login non trouvé");
         }
+
+       // return ResponseEntity.ok().body("ok");
     }
 
 }

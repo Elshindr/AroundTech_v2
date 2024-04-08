@@ -1,0 +1,125 @@
+<header class="header">
+    <nav collapseOnSelect expand="xxl" data-bs-theme="light" class="navbar fixed-top navbar-expand-lg justify-content-center px-2 bg-body-tertiary">
+
+        <div class="container-fluid" id="responsive-navbar-nav">
+
+            <div href="/home">
+                <img class="navbar-brand" src="../../../assets/images/around-tech-logo.png" class="logo" height="90" width="90" alt="Around Tech Logo" />
+            </div>
+
+            <div class="collapse navbar-collapse me-auto justify-content-between align-items-center w-100 nav">
+                <div class="d-flex col-10 justify-content-start">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#home">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Gestion des missions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Planning des missions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Primes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Note de frais</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Validation des missions</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"  aria-expanded="false">
+                                Natures
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Nature de mission</a></li>
+                                <li><a class="dropdown-item" href="#">Nature de frais</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Gestions des utilisateurs</a>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="d-flex col-2 justify-content-end">
+                    <ul class="account-link" >
+                        <li class="nav-link" to="#">
+                            <span class="account-icon mx-2">
+                                <i class="fa-solid fa-circle-user account-icon">{{userCur.firstname}}</i>
+                            </span>
+                            <i class="fa-solid fa-right-from-bracket btn logout-icon " (onClick)="handleLogout()"></i>
+                        </li>
+                    </ul>
+                </div>
+
+
+             
+                  
+      
+               
+           
+
+            </div>
+
+
+            <!-- 
+            <Nav class="me-auto justify-content-between align-items-center w-100 nav">
+                <div class="d-flex col-10 justify-content-start">
+                    <Nav class={`link ${pathname==='/' ? 'active' : '' }`}>
+                        <NavLink class="nav-link" to="/">Accueil</NavLink>
+                    </Nav>
+                    <Nav class={`link ${pathname==='/missions' ? 'active' : '' }`}>
+                        <NavLink class="nav-link" to="/missions">Gestion des missions</NavLink>
+                    </Nav>
+                    <Nav class={`link ${pathname==='/planning' ? 'active' : '' }`}>
+                        <NavLink class="nav-link" to="/planning">Planning des missions</NavLink>
+                    </Nav>
+                    <Nav class={`link ${pathname==='/primes' ? 'active' : '' }`}>
+                        <NavLink class="nav-link" to="/primes">Primes</NavLink>
+                    </Nav>
+                    <Nav class={`link ${pathname==='/expenses' ? 'active' : '' }`}>
+                        <NavLink class="nav-link" to="/expenses">Note de frais</NavLink>
+                    </Nav>
+                    {
+                    (contextUser.user && (contextUser.user.role.id === 2 || contextUser.user.role.id === 3)) &&
+                    <Nav class={`link ${pathname==='/mission/waiting' ? 'active' : '' }`}>
+                        <NavLink class="nav-link" to="/mission/waiting">Validation des missions</NavLink>
+                    </Nav>
+                    }
+                    {
+                    contextUser.user && contextUser.user.role.id === 3 && (
+                    <NavDropdown title="Natures" className={`link ${isDropdownActive() ? 'active' : '' }`}>
+                        <NavLink class="nav-link" to="/natures">Nature de mission</NavLink>
+                        <NavLink class="nav-link" to="/motifs">Nature de frais</NavLink>
+                    </NavDropdown>
+                    )
+                    }
+                    {
+                    contextUser.user && contextUser.user.role.id === 3 &&
+                    <Nav class={`link ${pathname==='/users' ? 'active' : '' }`}>
+                        <NavLink class="nav-link" to="/users">Gestions des utilisateurs</NavLink>
+                    </Nav>
+                    }
+                </div>
+                <div class="d-flex col-2 justify-content-end">
+                    <Nav class="account-link" onClick={(e)=> { e.preventDefault(); handleLogout(); }}>
+                        <NavLink class="nav-link" to="#">
+                            <span class="account-icon mx-2">
+                                <AccountCircleIcon />{userName}
+                            </span>
+                            <LogoutIcon class="logout-icon" />
+                        </NavLink>
+                    </Nav>
+                </div>
+            </Nav> -->
+
+
+        </div>
+    </nav>
+</header>

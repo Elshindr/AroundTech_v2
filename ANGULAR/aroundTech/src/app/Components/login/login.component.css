@@ -1,0 +1,61 @@
+.container {
+	display: flex;
+	align-self: flex-start;
+	justify-content: center;
+	margin-top: 0;
+}
+
+.login_card {
+	box-shadow: 0 3px 10px 0 #BADDD5;
+}
+
+form {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+}
+
+.form-input {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+}
+
+
+.form-control:focus {
+	border-color: #23b591 !important;
+	box-shadow: 0 0 0 0.1rem #40eec35e !important;
+}
+
+.button_connect {
+	color: white;
+	background: var(--color-secondary);
+	border: 1px solid #be8afd;
+	border-radius: 17px;
+	padding: 10px 20px;
+	transition: 0.2s;
+}
+
+.button_connect:hover {
+	background: var(--color-primary);
+	border: 1px solid #23b591;
+	box-shadow: 0 0 0 0.1rem #40eec35e;
+	font-weight: bolder;
+}
+
+.button_connect:active {
+	color: white;
+	background: var(--color-primary);
+	border: 1px solid #23b591;
+	box-shadow: 0 0 0 0.1rem #40eec35e;
+	font-weight: bolder;
+}
+
+.form-floating>.form-control,
+.form-floating>.form-control-plaintext,
+.form-floating>.form-select {
+	height: calc(1rem + calc(var(--bs-border-width) * 2));
+	min-height: calc(1rem + calc(var(--bs-border-width) * 2));
+	line-height: 1.25;
+}
