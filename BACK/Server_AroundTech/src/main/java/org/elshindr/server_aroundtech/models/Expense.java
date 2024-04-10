@@ -19,10 +19,10 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "amount")
     @NotNull
     @Min(value = 1, message = "La valeur doit être supérieure à 0")
-    @Column(name = "amount")
-    private float amount;
+    private double amount;
 
     @NotNull
     @Column(name = "created_at")
@@ -74,11 +74,11 @@ public class Expense {
         this.id = id;
     }
 
-    public float getAmount() {
+    public @NotNull @Min(value = 1, message = "La valeur doit être supérieure à 0") double getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(@NotNull @Min(value = 1, message = "La valeur doit être supérieure à 0") double amount) {
         this.amount = amount;
     }
 

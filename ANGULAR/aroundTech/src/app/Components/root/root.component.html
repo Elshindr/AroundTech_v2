@@ -1,4 +1,7 @@
-<app-header *ngIf="userCur?.logged === true" [userCur]="userCur"></app-header>
+<app-header *ngIf="showElm" [userCur]="userCur"></app-header>
+
 <main>
     <router-outlet></router-outlet>
 </main>
+
+<app-footer *ngIf="showElm"></app-footer>

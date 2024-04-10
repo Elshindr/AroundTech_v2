@@ -65,32 +65,3 @@
         margin: 2em;
     }
 }
-
-
-/* ------------------------- */
-/*       expenseGestion      */
-/* ------------------------- */
-
-.button-container-gestion {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.button_gestion {
-    color: var(--color-secondary);
-}
-
-.button_pdf {
-    color: var(--color-quaternary);
-}
-
-.button_gestion:hover {
-    color: white;
-    background: var(--color-secondary);
-}
-
-.button_pdf:hover {
-    color: white;
-    background: var(--color-quaternary);
-}

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
-import { UserInterface } from '../Interfaces/userInterface';
+import { UserInterface } from '../Interfaces/userI.interface';
 import { environment } from 'src/environments/environment.development';
-import { ResponseInterface } from '../Interfaces/responseInterface';
-import { LoginInterface } from '../Interfaces/loginInterface';
+import { ResponseInterface } from '../Interfaces/response.Interface';
+import { LoginInterface } from '../Interfaces/login.interface';
 
 @Injectable({
 	providedIn: 'root'

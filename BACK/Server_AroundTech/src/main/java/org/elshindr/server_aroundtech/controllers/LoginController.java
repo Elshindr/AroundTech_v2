@@ -99,7 +99,7 @@ public class LoginController {
      */
     @PostMapping
     public ResponseEntity<?> setLogin(@RequestBody LoginDto loginDto){
-        
+
         System.out.println(loginDto.toString());
         UserDto userDto = this.userSvc.getUserByLogin(loginDto);
 

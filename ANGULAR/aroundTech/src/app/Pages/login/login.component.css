@@ -13,6 +13,7 @@ form {
 	align-items: center;
 	display: flex;
 	flex-direction: column;
+	margin-top:6em;
 }
 
 .form-input {
@@ -55,7 +56,11 @@ form {
 .form-floating>.form-control,
 .form-floating>.form-control-plaintext,
 .form-floating>.form-select {
-	height: calc(1rem + calc(var(--bs-border-width) * 2));
-	min-height: calc(1rem + calc(var(--bs-border-width) * 2));
+	height: calc(1.5rem + calc(var(--bs-border-width) * 2));
+	/* min-height: calc(1.5rem + calc(var(--bs-border-width) * 2)); */
 	line-height: 1.25;
+}
+
+#contBtnConnect{
+	margin-top: 5em;
 }

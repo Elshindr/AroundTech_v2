@@ -1,7 +1,7 @@
 import { isWeekend, addDays } from "date-fns";
 import Holidays from "date-holidays";
-import { NatureInterface } from "../Interfaces/natureInterface";
-import {MissionInterface} from "../Interfaces/missionInterface";
+import { NatureInterface } from "../Interfaces/nature.interface";
+import {MissionInterface} from "../Interfaces/mission.interface";
 
 
 export default class Utils {

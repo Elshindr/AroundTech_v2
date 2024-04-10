@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { UserInterface } from 'src/app/Interfaces/userInterface';
+import { UserInterface } from 'src/app/Interfaces/userI.interface';
 import { UserService } from 'src/app/Services/user.service';
+import { tap, map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -11,23 +12,32 @@ import { UserService } from 'src/app/Services/user.service';
 })
 export class RootComponent implements OnInit, OnDestroy {
 
-  private _subUser !: Subscription;
+  // TS variables
+  private _subUser!: Subscription;
 
-  userCur !: UserInterface;
+  // HTML variables
+  userCur!: UserInterface;
+  showElm: boolean = false;
 
-  constructor(private _UserService: UserService, private _route: ActivatedRoute) {
+  constructor(private _UserService: UserService, private _route: ActivatedRoute, private router: Router) {
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      if (event.url !== '/login') {
+        this.showElm = true;
+      } else {
+        this.showElm = false;
+      }
+    });
   }
 
   ngOnInit(): void {
-
     this._subUser = this._UserService.userCur$.subscribe(user => {
       this.userCur = user;
     });
-
   }
 
   ngOnDestroy(): void {
-
     this._subUser.unsubscribe();
   }
 

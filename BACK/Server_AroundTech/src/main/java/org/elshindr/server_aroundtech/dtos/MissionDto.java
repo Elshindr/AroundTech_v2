@@ -4,6 +4,8 @@ package org.elshindr.server_aroundtech.dtos;
 import org.elshindr.server_aroundtech.models.*;
 
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
+import java.time.temporal.TemporalAccessor;
 
 /**
  * The type Mission dto.
@@ -20,6 +22,8 @@ public class MissionDto {
     private Integer userId;
     private Transport transport;
     private Nature natureInit;
+    private Double totalExpenses;
+    private boolean editable;
 
 
     /**
@@ -41,7 +45,7 @@ public class MissionDto {
      * @param transport   the transport
      * @param natureInit  the nature init
      */
-    public MissionDto(Integer id, Nature natureCur, City departCity, City arrivalCity, LocalDate startDate, LocalDate endDate, Status status, Integer userId, Transport transport, Nature natureInit) {
+    public MissionDto(Integer id, Nature natureCur, City departCity, City arrivalCity, LocalDate startDate, LocalDate endDate, Status status, Integer userId, Transport transport, Nature natureInit, Double totalExpenses) {
         this.id = id;
         this.natureCur = natureCur;
         this.departCity = departCity;
@@ -52,6 +56,11 @@ public class MissionDto {
         this.userId = userId;
         this.transport = transport;
         this.natureInit = natureInit;
+
+        /* Si date de fin < à date du jour alors les boutons s'affichent */
+        LocalDate dateNow = LocalDate.now();
+        this.editable = endDate.isBefore(LocalDate.now());
+        this.totalExpenses = totalExpenses;
     }
 
     /**
@@ -95,8 +104,8 @@ public class MissionDto {
      * @param mission the mission
      * @return the mission dto
      */
-    public static MissionDto parseMissionToMissionDto(Mission mission){
-        return new MissionDto(mission.getId(), mission.getNatureCur(), mission.getDepartCity(), mission.getArrivalCity(), mission.getStartDate(), mission.getEndDate(), mission.getStatus(), mission.getUser().getId(), mission.getTransport(), mission.getNatureInit());
+    public static MissionDto parseMissionToMissionDto(Mission mission, Double totalExpenses){
+        return new MissionDto(mission.getId(), mission.getNatureCur(), mission.getDepartCity(), mission.getArrivalCity(), mission.getStartDate(), mission.getEndDate(), mission.getStatus(), mission.getUser().getId(), mission.getTransport(), mission.getNatureInit(), totalExpenses);
     }
 
 
@@ -280,6 +289,23 @@ public class MissionDto {
         this.natureInit = natureInit;
     }
 
+
+    public Double getTotalExpenses() {
+        return totalExpenses;
+    }
+
+    public void setTotalExpenses(Double totalExpenses) {
+        this.totalExpenses = totalExpenses;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
     @Override
     public String toString() {
         return "MissionDto{" +
@@ -293,6 +319,8 @@ public class MissionDto {
                 ", userId=" + userId +
                 ", transport=" + transport +
                 ", natureInit=" + natureInit +
+                ", totalExpenses=" + totalExpenses +
+                ", editable=" + editable +
                 '}';
     }
 }

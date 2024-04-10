@@ -27,6 +27,8 @@ public class MissionService {
     private NatureService natSvc;
     @Autowired
     private TransportService trpSvc;
+    @Autowired
+    private ExpenseService expSvc;
 
     @Autowired
     private MissionRepository misRepo;
@@ -47,7 +49,13 @@ public class MissionService {
      */
     public List<MissionDto> getAllByUser(Integer idUser) {
         List<Mission> lstMissions = this.misRepo.findMissionByUser(idUser).stream().toList();
-        return lstMissions.stream().map(mission -> MissionDto.parseMissionToMissionDto(mission)).toList();
+
+        return lstMissions.stream().map(mission -> {
+            List<Expense> lstExpenses = this.expSvc.getLstExpensesByUserAndMission(idUser, mission.getId());
+            Double totalExpenses = lstExpenses.stream().map(expense -> expense.getAmount()).reduce(0.00, (a, b) -> a + b);
+
+             return MissionDto.parseMissionToMissionDto(mission, totalExpenses);
+        }).toList();
     }
 
 
@@ -59,7 +67,10 @@ public class MissionService {
      * @return the one mission by user and id
      */
     public MissionDto getOneMissionByUserAndId(Integer idUser, Integer idMission) {
-        return MissionDto.parseMissionToMissionDto(misRepo.findOneMissionByUserAndId(idUser, idMission));
+        List<Expense> lstExpenses = this.expSvc.getLstExpensesByUserAndMission(idUser, idMission);
+
+        Double totalExpenses = lstExpenses.stream().map(expense -> expense.getAmount()).reduce(0.00, (a, b) -> a + b);
+        return MissionDto.parseMissionToMissionDto(misRepo.findOneMissionByUserAndId(idUser, idMission), totalExpenses);
     }
 
 
@@ -70,8 +81,16 @@ public class MissionService {
      * @return the lst missions in wait by manager
      */
     public List<MissionDto> getLstMissionsInWaitByManager(Integer idManager) {
+
+
         List<Mission> lstMissions = this.misRepo.getLstMissionsInWaitByManager(idManager).stream().toList();
-        return lstMissions.stream().map(mission -> MissionDto.parseMissionToMissionDto(mission)).toList();
+
+        return lstMissions.stream().map(mission ->{
+            List<Expense> lstExpenses = this.expSvc.getLstExpensesByUserAndMission(mission.getUser().getId(), mission.getId());
+            Double totalExpenses = lstExpenses.stream().map(expense -> expense.getAmount()).reduce(0.00, (a, b) -> a + b);
+
+            return MissionDto.parseMissionToMissionDto(mission, totalExpenses);
+        }).toList();
     }
 
     /**

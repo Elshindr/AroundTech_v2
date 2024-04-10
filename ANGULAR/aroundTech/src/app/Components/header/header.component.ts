@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserInterface } from 'src/app/Interfaces/userInterface';
+import { UserInterface } from 'src/app/Interfaces/userI.interface';
 import { UserService } from 'src/app/Services/user.service';
 
 
@@ -11,10 +11,11 @@ import { UserService } from 'src/app/Services/user.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
+  //HTML variable
+  @Input()  userCur!: UserInterface;
+
   constructor(private _userService: UserService,  private _router: Router) {
   }
-
-  @Input()  userCur!: UserInterface;
 
   ngOnInit(): void {
     console.log(`userCur header`,this.userCur)

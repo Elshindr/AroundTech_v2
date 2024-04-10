@@ -63,6 +63,9 @@ app-login {
 }
 
 section{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	margin-top: 5em;
 }
 
@@ -93,25 +96,6 @@ h1 {
 
 
 
-/* ----------------- */
-/*       FOOTER      */
-/* ----------------- */
-footer {
-	width: 100%;
-	height: 130px;
-	bottom: 0;
-	left: 0;
-	right: 0;
-}
-
-footer span {
-	font-size: 10px;
-}
-
-/* .footer-home {
-  position: absolute;
-}
- */
 /* ----------------- */
 /*    BUTTON ADD     */
 /* ----------------- */

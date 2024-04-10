@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginInterface } from 'src/app/Interfaces/loginInterface';
+import { LoginInterface } from 'src/app/Interfaces/login.interface';
 import { Validators } from '@angular/forms';
-import { UserInterface } from 'src/app/Interfaces/userInterface';
+import { UserInterface } from 'src/app/Interfaces/userI.interface';
 import { UserService } from 'src/app/Services/user.service';
 import { Subscription } from 'rxjs';
 @Component({
@@ -25,7 +25,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   
 
   constructor(private _userService: UserService, private _router: Router) {
-
   }
 
 
@@ -57,7 +56,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this._subUser = this._userService.userCur$.subscribe(user => { this.userCur = user });
-
+    console.log(`onINIT login`, this.userCur)
     if (this.userCur.logged != false){
       this._router.navigateByUrl("home");
     }

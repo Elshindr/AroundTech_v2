@@ -3,7 +3,7 @@
 
         <div class="container-fluid" id="responsive-navbar-nav">
 
-            <div href="/home">
+            <div routerLink="/home">
                 <img class="navbar-brand" src="../../../assets/images/around-tech-logo.png" class="logo" height="90" width="90" alt="Around Tech Logo" />
             </div>
 
@@ -11,37 +11,37 @@
                 <div class="d-flex col-10 justify-content-start">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#home">Accueil</a>
+                            <a class="nav-link active" aria-current="page" routerLink="/home">Accueil</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Gestion des missions</a>
+                            <a class="nav-link" routerLink="/missions">Gestion des missions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Planning des missions</a>
+                            <a class="nav-link" routerLink="/planning">Planning des missions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Primes</a>
+                            <a class="nav-link" routerLink="/primes">Primes</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Note de frais</a>
+                            <a class="nav-link" routerLink="/expenses">Notes de frais</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Validation des missions</a>
+                            <a class="nav-link" routerLink="/missions-in-wait">Validation des missions</a>
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"  aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">
                                 Natures
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Nature de mission</a></li>
-                                <li><a class="dropdown-item" href="#">Nature de frais</a></li>
+                                <li><a class="dropdown-item" routerLink="/natures">Nature de mission</a></li>
+                                <li><a class="dropdown-item" routerLink="/motifs">Nature de frais</a></li>
                             </ul>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Gestions des utilisateurs</a>
+                            <a class="nav-link" routerLink="/users">Utilisateurs</a>
                         </li>
 
                     </ul>
@@ -57,14 +57,6 @@
                         </li>
                     </ul>
                 </div>
-
-
-             
-                  
-      
-               
-           
-
             </div>
 
 
