@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="UTF-8"/>
+    <title>Notes de frais</title>
+    <style>
+        * {
+            display:flex;
+            flex-direction: column;
+            margin:auto;
+            justify-items:center;
+            align-items:center;
+            color: black;
+            font-size:12px;
+        }
+        section{
+            margin-top: 4em;
+            display: flex;
+            flex-direction: column;
+        }
+        h1, h1 > span {
+            font-size: 15px;
+            text-align: center;
+            margin-top: 1em;
+            margin-left: 1em;
+            color: #6f42c1 ;
+        }
+        h1 > span{
+            padding: 0;
+            margin: 0;
+        }
+        h2{
+            font-size: 12px;
+        }
+        tr{
+            border: 1px solid gray;
+        }
+        .col-md-4{
+            margin-bottom: 2.5em;
+        }
+
+        ul, li, ul>li{
+            text-decoration: none;
+        }
+
+        .li-title, #totalExpense{
+            font-weight: 600;
+        }
+
+
+        footer{
+            display:flex;
+            justify-items:flex-end;
+        }
+    </style>
+</head>
+
+<body>
+<header></header>
+<section>
+    <h1>Note de frais de la mission du <span th:text="${dateStart}"></span> au <span th:text="${dateEnd}"></span></h1>
+    <h2>Résumé de la mission</h2>
+    <ul>
+        <li><span class="li-title">Identifiant agent:</span> <span th:text="${idUser}"></span></li>
+        <li><span class="li-title">Nom:</span> <span th:text="${lastname}"></span></li>
+        <li><span class="li-title">Prénom:</span> <span th:text="${firstname}"></span></li>
+        <li><span class="li-title">Identifiant mission:</span> <span th:text="${idMission}"></span></li>
+        <li><span class="li-title">Début de la mission:</span> <span th:text="${dateStart}"></span></li>
+        <li><span class="li-title">Fin de la mission:</span> <span th:text="${dateEnd}"></span></li>
+        <li><span class="li-title">Ville de départ:</span> <span th:text="${cityDepart}"></span></li>
+        <li><span class="li-title">Ville d'arrivée:</span> <span th:text="${cityArrival}"></span></li>
+        <li><span class="li-title">Nature de la mission:</span> <span th:text="${nature}"></span></li>
+        <li><span class="li-title">Type de transport:</span> <span th:text="${transport}"></span></li>
+    </ul>
+</section>
+
+
+<section>
+    <div style=" margin-left: 10px; margin-right: 10px">
+        <table>
+            <thead>
+                <th>Date du frais</th>
+                <th>Nature</th>
+                <th>Prix (€)</th>
+            </thead>
+            <tbody>
+                <tr th:each="expenseItem : ${lstExpenses}">
+                    <td th:text="${expenseItem.createdAt}"/>
+                    <td th:text="${expenseItem.motif.name}"/>
+                    <td th:text="${expenseItem.amount}"/>
+                </tr>
+                <tr id="totalExpense">
+                    <td>Dépense Totale:</td>
+                    <td></td>
+                    <td th:text="${expenseTotal}"> €</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+<hr />
+
+<footer>
+    <hr />
+    <p>1/1</p>
+</footer>
+</body>
+</html>

@@ -11,6 +11,7 @@ import org.elshindr.server_aroundtech.repositories.MotifRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -64,7 +65,7 @@ public class ExpenseService {
         try{
             Integer idMotif = NumberUtils.toInt(jsonMap.get("idMotif").toString(), 0);
             Integer idMission = NumberUtils.toInt(jsonMap.get("idMission").toString(), 0);
-            Float amount = NumberUtils.toFloat(jsonMap.get("amount").toString(), 0.0f);
+            BigDecimal amount = NumberUtils.toScaledBigDecimal(jsonMap.get("amount").toString());
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime createdAt = LocalDateTime.parse((String) jsonMap.get("createdAt"), formatter);
@@ -99,7 +100,7 @@ public class ExpenseService {
 
         try {
             Integer idMotif = NumberUtils.toInt(jsonMap.get("idMotif").toString(), 0);
-            Float amount = NumberUtils.toFloat(jsonMap.get("amount").toString(), 0.0f);
+            BigDecimal amount = NumberUtils.toScaledBigDecimal(jsonMap.get("amount").toString());
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime createdAt = LocalDateTime.parse((String) jsonMap.get("createdAt"), formatter);

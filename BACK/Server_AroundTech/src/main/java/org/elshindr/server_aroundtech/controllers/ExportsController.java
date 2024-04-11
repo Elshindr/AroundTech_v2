@@ -38,10 +38,10 @@ public class ExportsController {
 
     @PostMapping("/pdf")
     public ResponseEntity<byte[]> exportPdf(@RequestBody Map<String, Object> jsonMap) throws IOException, DocumentException {
-        List<Map<String, Object>> queryResults = new ArrayList<>();
-        queryResults.add(jsonMap);
 
-        ByteArrayOutputStream pdfStream = exportsSvc.exportPdf(queryResults);
+        System.out.println("JSON MAP EXPORTPDF::"+jsonMap);
+
+        ByteArrayOutputStream pdfStream = exportsSvc.exportPdf(jsonMap);
 
 
         HttpHeaders headers = new HttpHeaders();

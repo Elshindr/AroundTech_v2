@@ -8,6 +8,7 @@ import org.elshindr.server_aroundtech.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -52,7 +53,10 @@ public class MissionService {
 
         return lstMissions.stream().map(mission -> {
             List<Expense> lstExpenses = this.expSvc.getLstExpensesByUserAndMission(idUser, mission.getId());
-            Double totalExpenses = lstExpenses.stream().map(expense -> expense.getAmount()).reduce(0.00, (a, b) -> a + b);
+            BigDecimal totalExpenses = lstExpenses.stream().map(expense -> {
+
+                System.out.println(expense.getAmount());
+                return expense.getAmount();}).reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
 
              return MissionDto.parseMissionToMissionDto(mission, totalExpenses);
         }).toList();
@@ -69,7 +73,12 @@ public class MissionService {
     public MissionDto getOneMissionByUserAndId(Integer idUser, Integer idMission) {
         List<Expense> lstExpenses = this.expSvc.getLstExpensesByUserAndMission(idUser, idMission);
 
-        Double totalExpenses = lstExpenses.stream().map(expense -> expense.getAmount()).reduce(0.00, (a, b) -> a + b);
+        BigDecimal totalExpenses = lstExpenses.stream()
+                .map(expense -> {
+
+                    System.out.println(expense.getAmount());
+                    return expense.getAmount();})
+                .reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
         return MissionDto.parseMissionToMissionDto(misRepo.findOneMissionByUserAndId(idUser, idMission), totalExpenses);
     }
 
@@ -87,7 +96,10 @@ public class MissionService {
 
         return lstMissions.stream().map(mission ->{
             List<Expense> lstExpenses = this.expSvc.getLstExpensesByUserAndMission(mission.getUser().getId(), mission.getId());
-            Double totalExpenses = lstExpenses.stream().map(expense -> expense.getAmount()).reduce(0.00, (a, b) -> a + b);
+            BigDecimal totalExpenses = lstExpenses.stream().map(expense ->{
+
+                    System.out.println(expense.getAmount());
+            return expense.getAmount();}).reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
 
             return MissionDto.parseMissionToMissionDto(mission, totalExpenses);
         }).toList();

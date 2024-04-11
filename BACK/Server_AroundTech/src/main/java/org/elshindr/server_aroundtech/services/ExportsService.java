@@ -1,30 +1,39 @@
 package org.elshindr.server_aroundtech.services;
+
+import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.*;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.elshindr.server_aroundtech.dtos.MissionDto;
+import org.elshindr.server_aroundtech.dtos.UserDto;
+import org.elshindr.server_aroundtech.models.Expense;
+import org.elshindr.server_aroundtech.models.Mission;
+import org.elshindr.server_aroundtech.models.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import java.util.stream.Stream;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 
 /**
@@ -32,6 +41,23 @@ import com.itextpdf.text.pdf.PdfWriter;
  */
 @Service
 public class ExportsService {
+
+    @Autowired
+    private ExpenseService expSrv;
+
+    @Autowired
+    private UserService userSrv;
+
+    @Autowired
+    private MissionService misSrv;
+
+    private TemplateEngine templateEngine;
+
+
+    @Autowired
+    public ExportsService(TemplateEngine templateEngine) {
+        this.templateEngine = templateEngine;
+    }
 
 
     /**
@@ -79,8 +105,11 @@ public class ExportsService {
         return ResponseEntity.ok().headers(headers).body(outputStream.toByteArray());
     }
 
+
     /**
      * Rempli une cellule avec la valeur données
+     * Appellé par exportJsonToExcel
+     *
      * @param cell
      * @param value
      */
@@ -98,74 +127,131 @@ public class ExportsService {
     }
 
 
-    public static ByteArrayOutputStream exportPdf(List<Map<String, Object>> queryResults) throws DocumentException {
-        Document document = new Document();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PdfWriter.getInstance(document, outputStream);
-        document.open();        // Write column names
+    public ByteArrayOutputStream exportPdfdd(Map<String, Object> jsonMap) throws DocumentException {
+        try {
+            // Usual
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
+            // Get User, mission and expenses datas
+            User user = this.userSrv.getUserById((Integer) jsonMap.get("idUser"));
+            MissionDto mission = this.misSrv.getOneMissionByUserAndId(user.getId(), (Integer) jsonMap.get("idMission"));
+            List<Expense> lstExpenses = this.expSrv.getLstExpensesByUserAndMission(user.getId(), mission.getId());
 
 
-        Map<String, Object> firstRow = queryResults.get(0);
-        for (String column : firstRow.keySet()) {
-            Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
-            Paragraph paragraph = new Paragraph(column, boldFont);
-            document.add(paragraph);
-        }
-        document.add(new Paragraph("\n"));        // Write data rows
-        for (Map<String, Object> row : queryResults) {
-            for (Object value : row.values()) {
-                Paragraph paragraph = new Paragraph(value.toString());
-                document.add(paragraph);
-            }
+            // Create the pdf
+            Document document = new Document();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            PdfWriter.getInstance(document, outputStream);
+            document.open();
+
+            // Header Page
+            Font fontHeaderPage = FontFactory.getFont(FontFactory.HELVETICA, 12, 1, BaseColor.DARK_GRAY);
+            Paragraph headerPage = new Paragraph("Copy", fontHeaderPage);
+
+            Rectangle pageSize = document.getPageSize();
+            float x = pageSize.getWidth() / 2;
+            float y = pageSize.getTop() - 20;
+
+            document.addTitle("MON TITRE");
+            document.addCreationDate();
+            document.addHeader("Note de fdfdfdfd", "Note de frais émise le " + LocalDate.now().format(formatter));
+            document.add(headerPage);
+
+            // Title
+            Font fontTitle = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+            Chunk chkTitle = new Chunk("Note de frais", fontTitle);
+            document.add(chkTitle);
             document.add(new Paragraph("\n"));
-        }        document.close();
-        return outputStream;
+
+
+            // Resume
+
+
+            Font fontResume = FontFactory.getFont(FontFactory.HELVETICA, 11, BaseColor.BLACK);
+            Paragraph chkResume = new Paragraph("Résumé :", fontResume);
+            document.add(chkResume);
+
+            // Table of lstExpenses
+            PdfPTable table = new PdfPTable(3);
+
+            /// Header of table
+            Stream.of("Date", "Prix", "Motif")
+                    .forEach(columnTitle -> {
+                        PdfPCell headerTable = new PdfPCell();
+                        headerTable.setBackgroundColor(BaseColor.WHITE);
+                        headerTable.setBorderWidth(1);
+                        headerTable.setPhrase(new Phrase(columnTitle));
+                        table.addCell(headerTable);
+                    });
+
+            /// Rows
+
+            document.add(table);
+
+
+            document.setPageCount(1);
+            document.close();
+            return outputStream;
+
+        } catch (DocumentException e) {
+            throw new DocumentException(e);
+        }
     }
 
 
     /**
      * Export json to pdf response entity.
+     *
      * @param jsonMap the json data
      * @return the response entity
      * @throws IOException the io exception
      */
-    public static ResponseEntity<byte[]>  createPdfd(Map<String, Object> jsonMap) throws IOException {
-        try (PDDocument document = new PDDocument()) {
-            PDPage page = new PDPage();
-            document.addPage(page);
+    public ByteArrayOutputStream exportPdf(Map<String, Object> jsonMap) throws IOException {
+        try {
 
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-                contentStream.newLineAtOffset(100, 700);
-                contentStream.showText("Hello, World!");
-                contentStream.newLineAtOffset(100, 700);
-                contentStream.showText("Hello, World!");
-                contentStream.newLineAtOffset(100, 700);
-                contentStream.showText("Hello, World!");
-                contentStream.newLineAtOffset(100, 700);
-                contentStream.showText("Hello, World!");
-                contentStream.newLineAtOffset(100, 700);
-                contentStream.showText("Hello, World!");
-                contentStream.newLineAtOffset(100, 700);
-                contentStream.showText("Hello, World!");
-                contentStream.newLineAtOffset(100, 700);
-                contentStream.showText("Hello, World!");
+            // Usual
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
+            // Get User, mission and expenses datas
+            User user = this.userSrv.getUserById((Integer) jsonMap.get("idUser"));
+            MissionDto mission = this.misSrv.getOneMissionByUserAndId(user.getId(), (Integer) jsonMap.get("idMission"));
+
+            List<Expense> lstExpenses = this.expSrv.getLstExpensesByUserAndMission(user.getId(), mission.getId());
 
 
+            // Create Thymeleaf template
+            System.out.println("creation context");
+            Context context = new Context();
+            context.setVariable("dateStart", mission.getStartDate().format(formatter));
+            context.setVariable("dateEnd", mission.getEndDate().format(formatter));
+            context.setVariable("lastname", user.getLastname().toUpperCase());
+            context.setVariable("firstname", user.getFirstname());
+            context.setVariable("idMission", mission.getId());
+            context.setVariable("idUser", user.getId());
+            context.setVariable("cityDepart", mission.getDepartCity().getName());
+            context.setVariable("cityArrival", mission.getArrivalCity().getName());
+            context.setVariable("nature", mission.getNatureCur().getName());
+            context.setVariable("transport", mission.getTransport().getName());
+            context.setVariable("expenseTotal", String.format("%.2f", mission.getTotalExpenses()));
+            context.setVariable("lstExpenses", lstExpenses);
 
-                contentStream.endText();
-            }
+            String templatePdf = templateEngine.process("PdfExpensesByMission", context);
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            document.save(baos);
-            byte[] pdfBytes = baos.toByteArray();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.setContentDispositionFormData("attachment", "MesNotesDeFrais.pdf");
+            // Create pdf from template
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-            return ResponseEntity.ok().headers(headers).contentLength(pdfBytes.length).body(pdfBytes);
+            ITextRenderer renderer = new ITextRenderer();
+            renderer.setDocumentFromString(templatePdf);
+            renderer.layout();
+            renderer.createPDF(outputStream);
+
+            outputStream.close();
+            return outputStream;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }

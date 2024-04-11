@@ -3,6 +3,7 @@ package org.elshindr.server_aroundtech.dtos;
 
 import org.elshindr.server_aroundtech.models.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
 import java.time.temporal.TemporalAccessor;
@@ -22,7 +23,7 @@ public class MissionDto {
     private Integer userId;
     private Transport transport;
     private Nature natureInit;
-    private Double totalExpenses;
+    private BigDecimal totalExpenses;
     private boolean editable;
 
 
@@ -45,7 +46,7 @@ public class MissionDto {
      * @param transport   the transport
      * @param natureInit  the nature init
      */
-    public MissionDto(Integer id, Nature natureCur, City departCity, City arrivalCity, LocalDate startDate, LocalDate endDate, Status status, Integer userId, Transport transport, Nature natureInit, Double totalExpenses) {
+    public MissionDto(Integer id, Nature natureCur, City departCity, City arrivalCity, LocalDate startDate, LocalDate endDate, Status status, Integer userId, Transport transport, Nature natureInit, BigDecimal totalExpenses) {
         this.id = id;
         this.natureCur = natureCur;
         this.departCity = departCity;
@@ -58,7 +59,6 @@ public class MissionDto {
         this.natureInit = natureInit;
 
         /* Si date de fin < à date du jour alors les boutons s'affichent */
-        LocalDate dateNow = LocalDate.now();
         this.editable = endDate.isBefore(LocalDate.now());
         this.totalExpenses = totalExpenses;
     }
@@ -104,7 +104,7 @@ public class MissionDto {
      * @param mission the mission
      * @return the mission dto
      */
-    public static MissionDto parseMissionToMissionDto(Mission mission, Double totalExpenses){
+    public static MissionDto parseMissionToMissionDto(Mission mission, BigDecimal totalExpenses){
         return new MissionDto(mission.getId(), mission.getNatureCur(), mission.getDepartCity(), mission.getArrivalCity(), mission.getStartDate(), mission.getEndDate(), mission.getStatus(), mission.getUser().getId(), mission.getTransport(), mission.getNatureInit(), totalExpenses);
     }
 
@@ -290,11 +290,11 @@ public class MissionDto {
     }
 
 
-    public Double getTotalExpenses() {
+    public BigDecimal getTotalExpenses() {
         return totalExpenses;
     }
 
-    public void setTotalExpenses(Double totalExpenses) {
+    public void setTotalExpenses(BigDecimal totalExpenses) {
         this.totalExpenses = totalExpenses;
     }
 

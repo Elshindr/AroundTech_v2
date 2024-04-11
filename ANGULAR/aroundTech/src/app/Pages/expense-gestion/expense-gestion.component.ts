@@ -5,6 +5,8 @@ import { MissionInterface } from 'src/app/Interfaces/mission.interface';
 import { UserInterface } from 'src/app/Interfaces/userI.interface';
 import { UserService } from 'src/app/Services/user.service';
 import { MissionService } from './../../Services/mission.service';
+import { ExportsService } from './../../Services/exports.service';
+
 
 
 @Component({
@@ -25,7 +27,7 @@ export class ExpenseGestionComponent implements OnInit, OnDestroy {
   lstMissions: MissionInterface[] = [];
 
 
-  constructor(private _UserService: UserService, private _MissionService: MissionService, private _router: Router) {
+  constructor(private _UserService: UserService, private _MissionService: MissionService, private _ExportService: ExportsService, private _router: Router) {
   }
 
 
@@ -34,8 +36,14 @@ export class ExpenseGestionComponent implements OnInit, OnDestroy {
     this._router.navigateByUrl("/missions/" + idMission);
   }
 
-  onClickExportToPdf(idMission: number) {
+  async onClickExportToPdf(idMission: number) {
     console.log(`exportToPdf`, idMission);
+    const responseExportToPdf = await this._ExportService.exportExpenseToPdf(idMission);
+    if (responseExportToPdf.status === 200) {
+      console.log(`isOkay`, responseExportToPdf)
+    } else {
+      console.log(`erreur à l'exportation`, responseExportToPdf)
+    }
   }
 
 

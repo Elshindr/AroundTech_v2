@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.NumberFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -21,8 +23,9 @@ public class Expense {
 
     @Column(name = "amount")
     @NotNull
+    @NumberFormat(pattern = "#0.00")
     @Min(value = 1, message = "La valeur doit être supérieure à 0")
-    private double amount;
+    private BigDecimal  amount;
 
     @NotNull
     @Column(name = "created_at")
@@ -48,7 +51,7 @@ public class Expense {
 
     public Expense(){
     }
-    public Expense(@NotNull float amount, @NotNull LocalDate createdAt, LocalDate validAt, @NotNull Mission mission, @NotNull Motif motif) {
+    public Expense(@NotNull BigDecimal amount, @NotNull LocalDate createdAt, LocalDate validAt, @NotNull Mission mission, @NotNull Motif motif) {
         this.amount = amount;
         this.createdAt = createdAt;
         this.validAt = validAt;
@@ -74,11 +77,11 @@ public class Expense {
         this.id = id;
     }
 
-    public @NotNull @Min(value = 1, message = "La valeur doit être supérieure à 0") double getAmount() {
+    public @NotNull @Min(value = 1, message = "La valeur doit être supérieure à 0") BigDecimal  getAmount() {
         return amount;
     }
 
-    public void setAmount(@NotNull @Min(value = 1, message = "La valeur doit être supérieure à 0") double amount) {
+    public void setAmount(@NotNull @Min(value = 1, message = "La valeur doit être supérieure à 0") BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -113,7 +116,7 @@ public class Expense {
     public void setMotif(Motif motif) {
         this.motif = motif;
     }
-    public Expense(Integer id, @NotNull float amount, @NotNull LocalDate createdAt, LocalDate validAt, @NotNull Mission mission, @NotNull Motif motif) {
+    public Expense(Integer id, @NotNull BigDecimal amount, @NotNull LocalDate createdAt, LocalDate validAt, @NotNull Mission mission, @NotNull Motif motif) {
         this.id = id;
         this.amount = amount;
         this.createdAt = createdAt;

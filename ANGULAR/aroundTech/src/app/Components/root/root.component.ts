@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UserInterface } from 'src/app/Interfaces/userI.interface';
@@ -10,7 +10,7 @@ import { tap, map, filter } from 'rxjs/operators';
   templateUrl: './root.component.html',
   styleUrls: ['root.component.html']
 })
-export class RootComponent implements OnInit, OnDestroy {
+export class RootComponent implements OnInit, OnDestroy, OnChanges {
 
   // TS variables
   private _subUser!: Subscription;
@@ -20,18 +20,27 @@ export class RootComponent implements OnInit, OnDestroy {
   showElm: boolean = false;
 
   constructor(private _UserService: UserService, private _route: ActivatedRoute, private router: Router) {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(`ROOT onCHANGE`, changes)
+
+  }
+
+  ngOnInit(): void {
+    
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
-      if (event.url !== '/login') {
+      console.log(`eventINIT ROOT `, event)
+      if (event.url !== '/login' || event.urlAfterRedirects !=="/login") {
         this.showElm = true;
       } else {
         this.showElm = false;
       }
     });
-  }
 
-  ngOnInit(): void {
+
     this._subUser = this._UserService.userCur$.subscribe(user => {
       this.userCur = user;
     });

@@ -36,8 +36,6 @@ public class LoginController {
     private UserService userSvc;
 
 
-
-
     /**
      * Instantiates a new Login controller.
      *
@@ -52,6 +50,7 @@ public class LoginController {
         this.userSvc = userSvc;
         this.jwtConfig = jwtConfig;
     }
+
 
     /**
      * Gets user info.
@@ -73,6 +72,7 @@ public class LoginController {
         return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
     }
 
+
     /**
      * Gets session.
      *
@@ -90,6 +90,7 @@ public class LoginController {
         //return ResponseEntity.ok().headers(headers).body(new Response("Connexion trouvée"));
         return csrfToken;
     }
+
 
     /**
      * Get login response entity.
@@ -114,7 +115,6 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Login non trouvé");
         }
 
-       // return ResponseEntity.ok().body("ok");
     }
 
 }

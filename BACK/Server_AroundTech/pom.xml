@@ -124,13 +124,19 @@
             <artifactId>pdfbox</artifactId>
             <version>2.0.24</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-            <version>5.5.13.2</version>
+            <version>5.5.13.3</version>
         </dependency>
 
 
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf</artifactId>
+            <version>9.5.1</version>
+        </dependency>
 
         <!-- Gestion des Mails -->
         <dependency>

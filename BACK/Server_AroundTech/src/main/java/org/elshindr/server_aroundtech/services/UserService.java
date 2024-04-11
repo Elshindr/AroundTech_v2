@@ -90,6 +90,11 @@ public class UserService {
         return userOptional.map(user -> UserDto.parseUserToUserDto(user, this.userRepo)).orElse(null);
     }
 
+
+    public User getUserById(Integer idUser){
+        return this.userRepo.findDistinctById(idUser).orElseThrow();
+    }
+
     /**
      * Getter et Setter userCur
      *

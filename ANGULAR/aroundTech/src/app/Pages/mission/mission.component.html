@@ -1,5 +1,7 @@
 <section>
-	<h1>Gestion des notes de frais</h1>
+
+	<h1>Gestion des missions</h1>
+
 	<div class="d-flex flex-column justify-content-center my-4">
 		<div class="text-center my-4 mx-4">
 			<table class="table table-striped table-hover" aria-describedby="table mission">
@@ -11,7 +13,7 @@
 						<th scope="col" class="table-subtitle">Départ</th>
 						<th scope="col" class="table-subtitle">Arrivée</th>
 						<th scope="col" class="table-subtitle">Transport</th>
-						<th scope="col" class="table-subtitle">Frais</th>
+						<th scope="col" class="table-subtitle">Statut</th>
 						<th scope="col" class="table-subtitle">Actions</th>
 					</tr>
 				</thead>
@@ -22,6 +24,7 @@
 							Aucun résultat
 						</td>
 					</tr>
+
 					<tr id="{{mission.id}}" *ngFor="let mission of lstMissions">
 						<td>{{mission.startDate | date : 'Y/MM/dd'}}</td>
 						<td>{{mission.endDate | date : 'Y/MM/dd'}}</td>
@@ -29,31 +32,42 @@
 						<td>{{mission.departCity.name | titlecase}}</td>
 						<td>{{mission.arrivalCity.name | titlecase}}</td>
 						<td>{{mission.transport.name | titlecase}}</td>
-						<td>{{mission.totalExpenses}} €</td>
+						<td>{{mission.status.name | titlecase}}</td>
 
 						<td>
 							<div *ngIf="mission.editable" class="button-container-gestion">
-								<i class="fa-solid fa-circle-plus btn button_icon button_gestion"
-									(click)="onClickSee(mission.id)"></i>
-								<i class="fa-solid fa-file-pdf  btn button_icon button_pdf"
-									(click)="onClickExportToPdf(mission.id)"></i>
+								<i class="fa-solid fa-pen btn button_icon button_gestion"
+									(click)="onClickAdd(mission.id)"></i>
+								<i class="fa-solid fa-trash btn button_icon "
+									(click)="onClickDelete(mission.id)"></i>
 							</div>
 						</td>
 					</tr>
 
 				</tbody>
 			</table>
+
+
+			<div class="col-8 m-auto">
+				<div class="d-flex justify-content-center">
+					<i class="button_add btn fa-solid fa-circle-add" (click)="setShowAddModal(true)">
+						Demander une mission
+			
+                    </i>
+				</div>
+			</div>
+
 			<!-- <div class="d-flex justify-content-center">
-            <Pagination>
-                {Array.from({ length: totalPages }).map((_, index) => (
-                <Pagination.Item key={index + 1} active={index + 1===currentPage} onClick={()=> handlePageChange(index +
-                    1)}>
-                    {index + 1}
-                </Pagination.Item>
-                ))}
-            </Pagination>
-        </div> 
-	-->
+                    <Pagination>
+                        {Array.from({ length: totalPages }).map((_, index) => (
+                        <Pagination.Item key={index + 1} active={index + 1===currentPage} onClick={()=> handlePageChange(index +
+                            1)}>
+                            {index + 1}
+                        </Pagination.Item>
+                        ))}
+                    </Pagination>
+                </div> 
+            -->
 		</div>
 	</div>
 </section>

@@ -1,8 +1,8 @@
 .container {
 	display: flex;
-	align-self: flex-start;
+	align-self: center;
 	justify-content: center;
-	margin-top: 0;
+	margin: 0.5em;
 }
 
 .login_card {
@@ -13,7 +13,7 @@ form {
 	align-items: center;
 	display: flex;
 	flex-direction: column;
-	margin-top:6em;
+	margin-top: 4.4em;
 }
 
 .form-input {
@@ -61,6 +61,57 @@ form {
 	line-height: 1.25;
 }
 
-#contBtnConnect{
-	margin-top: 5em;
+#contBtnConnect {
+	margin-top: 3.4em;
+}
+
+* {
+	height: 100vh;
+	width: 100vh;
+	display:flex;
+	flex-direction: column;
+	margin:auto;
+	justify-items:center;
+	align-items:center;
+	color: black;
+	font-size:12px;
+}
+section{
+	margin-top: 4em;
+	display: flex;
+	flex-direction: column;
+}
+h1, h1 > span {
+	font-size: 15px;
+	text-align: center;
+	margin-top: 1em;
+	margin-left: 1em;
+	color: #6f42c1 ;
+}
+h1 > span{
+	padding: 0;
+	margin: 0;
+}
+h2{
+	font-size: 12px;
+}
+table{
+	
+}
+.col-md-4{
+	margin-bottom: 2.5em;
+}
+
+ul, li, ul>li{
+	text-decoration: none;
+}
+
+.li-title, #totalExpense{
+	font-weight: 600;
+}
+
+
+footer{
+	display:flex;
+	justify-items:flex-end;
 }
