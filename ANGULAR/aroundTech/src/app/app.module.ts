@@ -15,6 +15,9 @@ import { UnauthorizedComponent } from './Pages/unauthorized/unauthorized.compone
 import { FooterComponent } from './Components/footer/footer.component';
 import { MissionComponent } from './Pages/mission/mission.component';
 import { ExpenseGestionComponent } from './Pages/expense-gestion/expense-gestion.component';
+import { ModalWindowComponent } from './Components/Modals/modal-window/modal-window.component';
+import { ModalMissionNewComponent } from './Components/Modals/modal-mission-new/modal-mission-new.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 //import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
@@ -27,6 +30,8 @@ import { ExpenseGestionComponent } from './Pages/expense-gestion/expense-gestion
     FooterComponent,
     MissionComponent,
     ExpenseGestionComponent,
+    ModalWindowComponent,
+    ModalMissionNewComponent,
   ],
   imports: [
   //  MatIconModule,
@@ -35,7 +40,8 @@ import { ExpenseGestionComponent } from './Pages/expense-gestion/expense-gestion
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [RootComponent]

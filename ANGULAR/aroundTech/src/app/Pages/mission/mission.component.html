@@ -48,26 +48,13 @@
 			</table>
 
 
+			<!-- MODAL ADD  MISSION-->
 			<div class="col-8 m-auto">
 				<div class="d-flex justify-content-center">
-					<i class="button_add btn fa-solid fa-circle-add" (click)="setShowAddModal(true)">
-						Demander une mission
-			
-                    </i>
+					<app-modal-window [titleBtnModal]="titleBtnModal" [selectorModalContent]="selectorModalContent"></app-modal-window>
 				</div>
 			</div>
 
-			<!-- <div class="d-flex justify-content-center">
-                    <Pagination>
-                        {Array.from({ length: totalPages }).map((_, index) => (
-                        <Pagination.Item key={index + 1} active={index + 1===currentPage} onClick={()=> handlePageChange(index +
-                            1)}>
-                            {index + 1}
-                        </Pagination.Item>
-                        ))}
-                    </Pagination>
-                </div> 
-            -->
 		</div>
 	</div>
 </section>

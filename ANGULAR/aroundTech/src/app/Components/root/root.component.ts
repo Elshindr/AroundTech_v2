@@ -10,7 +10,7 @@ import { tap, map, filter } from 'rxjs/operators';
   templateUrl: './root.component.html',
   styleUrls: ['root.component.html']
 })
-export class RootComponent implements OnInit, OnDestroy, OnChanges {
+export class RootComponent implements OnInit, OnDestroy {
 
   // TS variables
   private _subUser!: Subscription;
@@ -22,10 +22,7 @@ export class RootComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private _UserService: UserService, private _route: ActivatedRoute, private router: Router) {
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(`ROOT onCHANGE`, changes)
 
-  }
 
   ngOnInit(): void {
     

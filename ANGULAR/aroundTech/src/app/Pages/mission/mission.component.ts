@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ModalMissionNewComponent } from 'src/app/Components/Modals/modal-mission-new/modal-mission-new.component';
 import { MissionInterface } from 'src/app/Interfaces/mission.interface';
 import { UserInterface } from 'src/app/Interfaces/userI.interface';
 import { MissionService } from 'src/app/Services/mission.service';
@@ -14,7 +15,6 @@ import { UserService } from 'src/app/Services/user.service';
 })
 export class MissionComponent implements OnInit, OnDestroy {
 
-
 	// TS variables
 	private _subUser!: Subscription;
 	private _subLstMissions !: Subscription;
@@ -24,7 +24,8 @@ export class MissionComponent implements OnInit, OnDestroy {
 	showTab: boolean = false;
 	lstMissions: MissionInterface[] = [];
 	showModalAdd: boolean = false;
-
+	titleBtnModal: string = "Demander une mission";
+	selectorModalContent: any = ModalMissionNewComponent;
 	constructor(private _UserService: UserService, private _MissionService: MissionService, private _router: Router) {
 	}
 
@@ -37,9 +38,6 @@ export class MissionComponent implements OnInit, OnDestroy {
 		console.log(`exportToPdf`, idMission);
 	}
 
-	setShowAddModal(isShow: boolean) {
-		console.log(``)
-	}
 
 	// Hooks
 	async ngOnInit(): Promise<void> {
@@ -65,5 +63,6 @@ export class MissionComponent implements OnInit, OnDestroy {
 		this._subUser.unsubscribe();
 		this._subLstMissions.unsubscribe();
 	}
+
 
 }

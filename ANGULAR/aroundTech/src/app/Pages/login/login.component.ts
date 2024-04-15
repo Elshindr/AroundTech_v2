@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginInterface } from 'src/app/Interfaces/login.interface';
-import { Validators } from '@angular/forms';
 import { UserInterface } from 'src/app/Interfaces/userI.interface';
 import { UserService } from 'src/app/Services/user.service';
 import { Subscription } from 'rxjs';
