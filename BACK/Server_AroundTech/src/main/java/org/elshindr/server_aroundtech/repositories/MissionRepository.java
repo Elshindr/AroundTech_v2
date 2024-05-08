@@ -74,7 +74,8 @@ public interface MissionRepository extends JpaRepository<Mission, Integer> {
 
     /**
      * Find mission by user between date list.
-     *
+     *mission["date_debut"] <= nouvelle_mission["date_debut"] <= mission["date_fin"]) or \
+     *            (mission["date_debut"] <= nouvelle_mission["date_fin"] <= mission["date_fin"]
      * @param idUser the id user
      * @param date   the date
      * @return the list

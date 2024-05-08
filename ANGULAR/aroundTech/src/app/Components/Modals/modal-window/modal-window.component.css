@@ -1,0 +1,75 @@
+/* ----------------- */
+/*       MODAL       */
+/* ----------------- */
+
+.btn-modal-success {
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+}
+
+.btn-modal-success:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-modal-cancel {
+    background-color: var(--color-quaternary);
+    border-color: var(--color-quaternary);
+    color:whitesmoke;
+}
+
+.btn-modal-cancel:hover {
+    background-color: #EF6686;
+    border-color: #EF6686;
+}
+
+.modal-header{
+    justify-content: center;
+}
+.modal-header-title {
+    color: var(--color-secondary);
+    font-family: var(--font-subtitle-lato);
+    font-weight: 700;
+}
+
+/* ----------------- */
+/*      DIALOG       */
+/* ----------------- */
+
+.dialog-title {
+    text-align: center;
+    color: var(--color-primary);
+    font-family: var(--font-subtitle-lato);
+    font-weight: 700;
+}
+
+.dialog-message {
+    font-family: var(--font-subtitle-lato);
+    color: black;
+}
+
+.dialog-buttons .confirm-button {
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+    font-family: var(--font-text-inter);
+    text-transform: capitalize;
+    color: white;
+}
+
+.dialog-buttons .confirm-button:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.dialog-buttons .cancel-button {
+    background-color: var(--color-quaternary);
+    border-color: var(--color-quaternary);
+    font-family: var(--font-text-inter);
+    text-transform: capitalize;
+    color: white;
+}
+
+.dialog-buttons .cancel-button:hover {
+    background-color: #EF6686;
+    border-color: #EF6686;
+}

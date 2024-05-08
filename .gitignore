@@ -8,4 +8,4 @@ ANGULAR/aroundTech/src/environments/environment.development.ts
 ANGULAR/aroundTech/src/assets/.gitkeep
 ANGULAR/aroundTech/.editorconfig
 ANGULAR/aroundTech/.editorconfig
-ANGULAR/aroundTech/.editorconfig
+*/.editorconfig

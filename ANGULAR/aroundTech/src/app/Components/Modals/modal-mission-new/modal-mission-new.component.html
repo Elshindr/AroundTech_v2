@@ -1,2 +1,182 @@
-    <p>modal-mission-new works!</p>
-    <p>Hello, {{ name }}!</p>
+<div class="modal-header">
+	<h4 class="modal-title modal-header-title" id="modal-basic-title">{{titleBtnModal}}</h4>
+</div>
+
+<div class="modal-body">
+	<div className="d-flex justify-content-center col-10 flex-column m-auto">
+		<div *ngIf="isError">
+			<p style=" color: red">{{lblError}}</p>
+		</div>
+
+		<form [formGroup]="missionForm" (ngSubmit)="onSubmitAddMission($event)" #formRef="ngForm">
+
+			<div class="mb-3 d-flex form-cont" controlId="dateStart">
+				<div class="mb-3 d-flex form-group">
+					<label class="form-label col-4 d-flex" for="dateStart">Date de début</label>
+
+					<i class="fa-solid fa-circle-info button_icon info-icon py-0" placement="top"
+						ngbTooltip="La date de début doit être supérieure à la date du jour et ne pas être comprise entre les dates d'une autre mission ou d'un jour de congé">
+					</i>
+
+					<input class="form-control" type="date" name="dateStart" placeholder="Date de début"
+						formControlName="dateStart" [min]=minDateStart required />
+				</div>
+
+				<div *ngIf="missionForm.get('dateStart')?.invalid && missionForm.get('dateStart')?.touched"
+					class="alert">
+					<p *ngIf="missionForm.get('dateStart')?.errors?.['required']">Date de début est requise.
+					</p>
+					<p *ngIf="missionForm.get('dateStart')?.errors?.['invalidDateType']">Date invalide.</p>
+					<p *ngIf="missionForm.get('dateStart')?.errors?.['invalidDateToday']">Date inférieure à la
+						date du
+						jour.</p>
+					<p *ngIf="missionForm.get('dateStart')?.errors?.['invalidDateHolid']">Date sur un jour non
+						travaillé.</p>
+					<p *ngIf="missionForm.get('dateStart')?.errors?.['invalidDateFull']">Date déjà prise par
+						une
+						mission.</p>
+					<p *ngIf="missionForm.get('dateStart')?.errors?.['invalidDateOrder']">Date de fin
+						supérieure à la
+						Date de début</p>
+				</div>
+
+			</div>
+
+
+			<div class="mb-3 d-flex form-cont" controlId="dateEnd">
+				<div class="mb-3 d-flex form-group">
+					<label class="form-label col-4 d-flex" for="dateEnd">Date de fin</label>
+					<i class="fa-solid fa-circle-info button_icon info-icon py-0" placement="top"
+						ngbTooltip="La date de findoit être supérieure à la date de début et ne pas être comprise entre les dates d'une autre mission ou d'un jour de congé">
+					</i>
+					<input class="form-control" type="date" name="dateEnd" placeholder="Date de fin"
+						[min]=minDateStart formControlName="dateEnd" required />
+				</div>
+
+				<div *ngIf="missionForm.get('dateEnd')?.invalid && missionForm.get('dateEnd')?.touched"
+					class="alert">
+					<p *ngIf="missionForm.get('dateEnd')?.errors?.['required']">Date de fin est requise.</p>
+					<p *ngIf="missionForm.get('dateEnd')?.errors?.['invalidDateType']">Date invalide.</p>
+					<p *ngIf="missionForm.get('dateEnd')?.errors?.['invalidDateToday']">Date inférieure à la
+						date du
+						jour.</p>
+					<p *ngIf="missionForm.get('dateEnd')?.errors?.['invalidDateHolid']">Date sur un jour non
+						travaillé.</p>
+					<p *ngIf="missionForm.get('dateEnd')?.errors?.['invalidDateFull']">Date déjà prise par une
+						mission.</p>
+					<p *ngIf="missionForm.get('dateEnd')?.errors?.['invalidDateOrder']">Date de fin supérieure
+						à la Date
+						de début</p>
+				</div>
+			</div>
+
+
+			<div class="mb-3 d-flex form-cont" controlId="natureCur">
+				<div class="mb-3 d-flex form-group">
+					<label class="form-label col-4 d-flex" for="natureCur">Nature</label>
+
+					<i class="fa-solid fa-circle-info button_icon info-icon py-0" placement="top"
+						ngbTooltip="Sélectionner une date de départ pour connaître les natures disponibles"></i>
+
+					<select class="form-select form-control" aria-label="Nature de la mission"
+						formControlName="natureCur" name="natureCur" required>
+						<option value="-1"></option>
+						<option *ngFor="let nature of lstNatures " [value]="nature.id">
+							{{nature.name| titlecase}}
+						</option>
+					</select>
+				</div>
+
+				<div *ngIf="missionForm.get('natureCur')?.invalid && missionForm.get('natureCur')?.touched"
+					class="alert">
+					<p *ngIf="missionForm.get('natureCur')?.errors?.['required']">La nature est requise.</p>
+				</div>
+			</div>
+
+
+			<div class="mb-3 d-flex form-cont" controlId="departCity">
+				<div class="mb-3 d-flex form-group">
+					<label class="form-label col-4 d-flex" for="departCity">Ville de départ</label>
+					<input class="form-control" type="text" name="departCity" placeholder="Ville de départ"
+						(input)="onChangeCity($event)" required list="lstSuggestions"
+						formControlName="departCity" />
+					<datalist id="lstSuggestions">
+						<option *ngFor="let suggestion of lstSuggestions " [value]="suggestion">
+							{{suggestion| titlecase}}
+						</option>
+					</datalist>
+				</div>
+
+				<div *ngIf="missionForm.get('departCity')?.invalid && missionForm.get('departCity')?.touched"
+					class="alert">
+					<p *ngIf="missionForm.get('departCity')?.errors?.['required']">La ville de départ est
+						requise.</p>
+				</div>
+			</div>
+
+
+			<div class="mb-3 d-flex form-cont" controlId="arrivalCity">
+				<div class="mb-3 d-flex form-group">
+					<label class="form-label col-4 d-flex" for="arrivalCity">Ville d'arrivée</label>
+
+					<input class="form-control" type="text" name="arrivalCity" placeholder="Ville d'arrivée"
+						(input)="onChangeCity($event)" list="lstSuggestions" formControlName="arrivalCity"
+						required />
+
+					<datalist id="lstSuggestions">
+						<option *ngFor="let suggestion of lstSuggestions " [value]="suggestion">
+							{{suggestion| titlecase}}
+						</option>
+					</datalist>
+				</div>
+
+				<div *ngIf="missionForm.get('arrivalCity')?.invalid && missionForm.get('arrivalCity')?.touched"
+					class="alert">
+					<p *ngIf="missionForm.get('arrivalCity')?.errors?.['required']">La ville de départ est
+						requise.</p>
+				</div>
+			</div>
+
+
+			<div class="mb-3 d-flex form-cont" controlId="transport">
+				<div class="mb-3 d-flex form-group">
+					<label class="form-label col-4 d-flex" for="transport">Transport</label>
+					<i class="fa-solid fa-circle-info button_icon info-icon py-0" placement="top"
+						ngbTooltip=""></i>
+
+					<select class="form-select form-control" aria-label="Type de transport"
+						formControlName="transport" name="natureCur" required>
+						<option value="-1"></option>
+						<option *ngFor="let transport of lstTransports " [value]="transport.id"
+							[ngValue]="transport.id">
+							{{transport.name| titlecase}}
+						</option>
+					</select>
+				</div>
+
+				<div *ngIf="missionForm.get('transport')?.invalid && missionForm.get('transport')?.touched"
+					class="alert">
+					<p *ngIf="missionForm.get('transport')?.errors?.['required']">La nature est requise.</p>
+				</div>
+			</div>
+
+
+			<!-- 	
+
+		<div className="d-flex mb-3 justify-content-start">
+			<span className="col-4 d-flex">Estimation prime</span>
+			<span onChange={handleForm}>
+				{formData.bonus ? formData.bonus : 0} €
+			</span>
+		</div> -->
+
+
+		</form>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button type="ngForm" class="btn btn-modal-add" (click)="formRef.onSubmit($event)" [disabled]="!formRef.form.valid"
+		form="ngForm">Ajouter</button>
+	<button type="button" class="btn btn-modal-cancel" (click)="modalService.dismissAll()">Fermer</button>
+</div>

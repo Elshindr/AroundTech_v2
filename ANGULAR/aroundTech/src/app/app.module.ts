@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, Validators } from '@angular/forms';
+import { FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -18,6 +18,7 @@ import { ExpenseGestionComponent } from './Pages/expense-gestion/expense-gestion
 import { ModalWindowComponent } from './Components/Modals/modal-window/modal-window.component';
 import { ModalMissionNewComponent } from './Components/Modals/modal-mission-new/modal-mission-new.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ModalMissionDeleteComponent } from './Components/Modals/modal-mission-delete/modal-mission-delete.component';
 //import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
@@ -32,13 +33,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ExpenseGestionComponent,
     ModalWindowComponent,
     ModalMissionNewComponent,
+    ModalMissionDeleteComponent,
   ],
   imports: [
   //  MatIconModule,
+  //FormGroupDirective,
     BrowserModule,
     AppRoutingModule,
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
     NgbModule

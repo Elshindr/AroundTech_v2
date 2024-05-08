@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._subUser = this._userService.userCur$.subscribe( user => this.userCur = user);
 
     console.log(`userCur home`,this.userCur)
-    if (this.userCur.logged === false) {
+    if (!this.userCur.logged) {
       //this._router.navigateByUrl("/login");
       throw new Error("Utilisateur non trouvé");
     }

@@ -51,15 +51,20 @@ export default class Utils {
     }
 
     /**
-     * Formater les dates au format ISO
+     * Formater les dates au format ISO ou 
+     * yyyy-mm-dd
      */
-    static formatDateToISO(inputDate: Date) {
-        const date = new Date(inputDate);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
+    static formatDateToISO(inputDate: Date|null) {
 
-        return `${year}-${month}-${day}`;
+        if(inputDate !== null){
+            const date = new Date(inputDate);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+
+            return `${year}-${month}-${day}`;
+        }
+        return new Date();
     }
 
     /**
@@ -117,11 +122,11 @@ export default class Utils {
      */
     static isWorkingDay(date: Date) {
         if (isWeekend(date) || Utils.isHoliday(date)) {
-            return false;
+            return true;
         }
 
         // jour travaillé
-        return true;
+        return false;
     }
 
     /**

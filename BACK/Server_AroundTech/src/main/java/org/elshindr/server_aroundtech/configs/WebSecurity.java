@@ -71,11 +71,11 @@ public class WebSecurity implements WebMvcConfigurer {
                                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
                                 .anyRequest().authenticated()
                 )
-              /* .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .csrfTokenRequestHandler(new XorCsrfTokenRequestAttributeHandler()::handle)
-                )*/
-                .csrf().disable()
+               .csrf(csrf -> csrf.disable()
+                        //.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                       // .csrfTokenRequestHandler(new XorCsrfTokenRequestAttributeHandler()::handle)
+                )
+                //.csrf().disable()
                 .headers( headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout

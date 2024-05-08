@@ -5,10 +5,12 @@ import { TransportInterface } from './transport.interface';
 
 export interface MissionInterface {
     id: number,
-    startDate: Date,
-    endDate: Date,
+    userId:number,
+    startDate: Date|string,
+    endDate: Date|string,
     tjm: number,
     natureCur: NatureInterface,
+    natureInit:NatureInterface,
     departCity: CityInterface,
     arrivalCity: CityInterface,
     transport: TransportInterface,

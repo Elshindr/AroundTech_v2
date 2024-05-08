@@ -58,8 +58,12 @@ public class MissionDto {
         this.transport = transport;
         this.natureInit = natureInit;
 
-        /* Si date de fin < à date du jour alors les boutons s'affichent */
-        this.editable = endDate.isBefore(LocalDate.now());
+        /* les boutons s'affichent si:
+        * - date de fin < à date du jour alors
+        * - status = En attente
+        * */
+        System.out.println(status.getId());
+        this.editable = endDate.isBefore(LocalDate.now()) || status.getId() == 2;
         this.totalExpenses = totalExpenses;
     }
 
@@ -67,7 +71,7 @@ public class MissionDto {
      * Instantiates a new Mission dto.
      *
      * @param natureCur   the nature cur
-     * @param departCity  the depart city
+     * @param departCity  the departure city
      * @param arrivalCity the arrival city
      * @param startDate   the start date
      * @param endDate     the end date
@@ -89,7 +93,7 @@ public class MissionDto {
     }
 
     /**
-     * Parse mission dto to mission mission.
+     * Parse mission dto to mission .
      *
      * @param missionDto the mission dto
      * @return the mission
@@ -157,7 +161,7 @@ public class MissionDto {
     /**
      * Sets depart city.
      *
-     * @param departCity the depart city
+     * @param departCity the departure city
      */
     public void setDepartCity(City departCity) {
         this.departCity = departCity;

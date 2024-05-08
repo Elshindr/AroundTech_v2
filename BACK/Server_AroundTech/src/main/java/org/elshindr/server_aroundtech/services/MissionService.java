@@ -240,10 +240,13 @@ public class MissionService {
      * @return the boolean
      */
     public Boolean addMission(MissionDto missionDto) {
+
+        System.out.println(missionDto.toString());
         try {
             // Gestion des villes
             Optional<City> arrivalCity = this.cityRepo.findDistinctByName(missionDto.getArrivalCity().getName());
             Optional<City> departCity = this.cityRepo.findDistinctByName(missionDto.getDepartCity().getName());
+
 
             if(!arrivalCity.isPresent() || arrivalCity.isEmpty()){
                 arrivalCity = Optional.of(new City(missionDto.getArrivalCity().getName()));
@@ -254,20 +257,26 @@ public class MissionService {
                 departCity = Optional.of(new City(missionDto.getDepartCity().getName()));
                 this.cityRepo.save(departCity.get());
             }
+            System.out.println("arrvie "+arrivalCity.toString());
+            System.out.println("depart "+departCity.toString());
 
             // Gestion Transport
             Optional<Transport> transport = this.trpSvc.getDistinctTransportById(missionDto.getTransport().getId());
-
+            System.out.println("transport"+transport);
             // Status
             Optional<Status> status = this.statusRepo.findDistinctById(5);
 
             // User
             Optional<User> user = this.userRepo.findDistinctById(missionDto.getUserId());
 
+            System.out.println("user"+user);
+
             // Natures
             Optional<Nature> natureCur = this.natRepo.findDistinctById(missionDto.getNatureCur().getId());
             Optional<Nature> natureInit = this.natRepo.findDistinctById(missionDto.getNatureInit().getId());
 
+            System.out.println(natureCur);
+            System.out.println(natureInit);
             Mission newMission = new Mission(
                     natureCur.get(),
                     departCity.get(),

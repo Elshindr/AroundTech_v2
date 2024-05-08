@@ -7,6 +7,7 @@ import { ResponseInterface } from '../Interfaces/response.Interface';
 import { UserService } from './user.service';
 import { UserInterface } from '../Interfaces/userI.interface';
 
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -44,6 +45,38 @@ export class MissionService {
 							this.lstMissions$.next(lstMissions);
 
 							resolve({ obj: lstMissions, message: "ok", status: 200 });
+						}
+					},
+					error: (error) => {
+						console.error("Erreur lors de la requête", error);
+						resolve({ obj: error, message: "Erreur lors de la requete", status: 400 });
+					}
+				});
+		});
+	}
+
+	public postAddMission(newMission :MissionInterface): Promise<ResponseInterface>{
+		this._idUserCur = 1; // TODO: Suppr
+		newMission.userId = this._idUserCur ;
+		console.log(`newMission:::::::::::`, newMission)
+		return new Promise((resolve, reject) => {
+			const headers = new HttpHeaders({
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			});
+
+			this._http.post<MissionInterface[]>(this._baseUrl, newMission, { headers, withCredentials: true })
+				.subscribe({
+					next: (resp: any) => {
+						if (resp === null || resp === undefined) {
+							console.log("non trouvé :: ", resp);
+
+							resolve({ obj: null, message: "Erreur : utilisateur non trouvé", status: 333 });
+						} else {
+							console.log("ajout ok", resp);
+							//this.lstMissions$.next(lstMissions);
+
+							resolve({ obj: resp, message: "ok", status: 200 });
 						}
 					},
 					error: (error) => {
