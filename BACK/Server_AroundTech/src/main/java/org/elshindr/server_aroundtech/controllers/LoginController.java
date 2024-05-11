@@ -3,6 +3,7 @@ package org.elshindr.server_aroundtech.controllers;
 import jakarta.servlet.ServletContext;
 import org.elshindr.server_aroundtech.configs.JWTConfig;
 import org.elshindr.server_aroundtech.dtos.LoginDto;
+import org.elshindr.server_aroundtech.dtos.ResponseDto;
 import org.elshindr.server_aroundtech.dtos.UserDto;
 
 import org.elshindr.server_aroundtech.models.User;
@@ -87,13 +88,14 @@ public class LoginController {
         //headers.add("X-XSRF-TOKEN", xsrfToken);
 
         //System.out.println(xsrfToken);
-        //return ResponseEntity.ok().headers(headers).body(new Response("Connexion trouvée"));
+        //return ResponseEntity.ok().headers(headers).body(ResponseDto.getSuccessResponse(null));
         return csrfToken;
     }
 
 
     /**
      * Get login response entity.
+     * On submit login
      *
      * @param loginDto the login dto
      * @return the response entity
@@ -101,20 +103,19 @@ public class LoginController {
     @PostMapping
     public ResponseEntity<?> setLogin(@RequestBody LoginDto loginDto){
 
-        System.out.println(loginDto.toString());
-        UserDto userDto = this.userSvc.getUserByLogin(loginDto);
 
-        if (userDto != null) {
+        ResponseDto response = this.userSvc.getUserByLogin(loginDto);
+
+        if (response.getCode() == 200) {
 
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.SET_COOKIE, userSvc.buildJWTCookie(userDto, jwtConfig));
+            headers.add(HttpHeaders.SET_COOKIE, userSvc.buildJWTCookie((UserDto) response.getObj(), jwtConfig));
 
-            return ResponseEntity.ok().headers(headers).body(userDto);
+            return ResponseEntity.ok().headers(headers).body(response);
 
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Login non trouvé");
         }
 
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseDto.getNotFoundResponse(loginDto,"Login non trouvé"));
     }
 
 }

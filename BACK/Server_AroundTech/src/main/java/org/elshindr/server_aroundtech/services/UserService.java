@@ -6,15 +6,15 @@ import io.jsonwebtoken.security.Keys;
 import org.elshindr.server_aroundtech.configs.JWTConfig;
 import org.elshindr.server_aroundtech.configs.WebSecurity;
 import org.elshindr.server_aroundtech.dtos.LoginDto;
+import org.elshindr.server_aroundtech.dtos.ResponseDto;
 import org.elshindr.server_aroundtech.dtos.UserDto;
+
 import org.elshindr.server_aroundtech.models.Role;
 import org.elshindr.server_aroundtech.models.User;
 import org.elshindr.server_aroundtech.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.elshindr.server_aroundtech.repositories.UserRepository;
@@ -38,7 +38,6 @@ public class UserService {
     private RoleRepository roleRepo;
     @Autowired
     private PasswordEncoder pwdEncoder;
-    private User userCur;
 
 
     /**
@@ -78,16 +77,30 @@ public class UserService {
         return tokenCookie.toString();
     }
 
+
     /**
      * Find distinct couple email + pwd
      * @param loginDto LoginDto
      * @return userDto associé au login
      */
-    public UserDto getUserByLogin(LoginDto loginDto){
-        Optional<User> userOptional = this.userRepo.findDistinctByEmail(loginDto.getEmail())
-                .filter(user -> pwdEncoder.matches(loginDto.getPwd(), user.getPwd()));
+    public ResponseDto getUserByLogin(LoginDto loginDto){
 
-        return userOptional.map(user -> UserDto.parseUserToUserDto(user, this.userRepo)).orElse(null);
+        try {
+            Optional<User> userOptional = this.userRepo.findDistinctByEmail(loginDto.getEmail())
+                    .filter(user -> pwdEncoder.matches(loginDto.getPwd(), user.getPwd()));
+
+            UserDto userDto = userOptional.map(user -> UserDto.parseUserToUserDto(user, this.userRepo)).orElse(null);
+
+            if (userDto != null) {
+                return ResponseDto.getSuccessResponse(userDto);
+            }
+
+            return ResponseDto.getNotFoundResponse(null, "Login/Password non trouvé");
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+            return ResponseDto.getNotFoundResponse(null, ex.getMessage());
+        }
+
     }
 
 
@@ -95,23 +108,6 @@ public class UserService {
         return this.userRepo.findDistinctById(idUser).orElseThrow();
     }
 
-    /**
-     * Getter et Setter userCur
-     *
-     * @return the user cur
-     */
-    public User getUserCur() {
-        return userCur;
-    }
-
-    /**
-     * Sets user cur.
-     *
-     * @param userCur the user cur
-     */
-    public void setUserCur(User userCur) {
-        this.userCur = userCur;
-    }
 
     /**
      * Find distinct by id user dto.
@@ -123,6 +119,7 @@ public class UserService {
         return UserDto.parseUserToUserDto(userRepo.findDistinctById(idUser).get(), this.userRepo);
     }
 
+
     /**
      * Find lst users list.
      *
@@ -132,6 +129,7 @@ public class UserService {
         List<User> lstUser = this.userRepo.findAll();
         return lstUser.stream().map(user -> UserDto.parseUserToUserDto(user, this.userRepo)).toList();
     }
+
 
     /**
      * Get user info user dto.
@@ -156,6 +154,7 @@ public class UserService {
         }
     }
 
+
     /**
      * Find lst roles list.
      *
@@ -164,6 +163,7 @@ public class UserService {
     public List<Role> findLstRoles(){
         return this.roleRepo.findAll();
     }
+
 
     /**
      * Find lst managers list.
@@ -182,17 +182,20 @@ public class UserService {
      * @param newUserDto the new user dto
      * @return the boolean
      */
-    public Boolean createUser(UserDto newUserDto){
+    public ResponseDto createUser(UserDto newUserDto){
         try{
             User user = UserDto.parseUserDtoToUser(newUserDto, this.userRepo, this.pwdEncoder);
             this.userRepo.save(user);
-            return true;
+            return ResponseDto.getSuccessResponse(null);
         } catch (Exception ex){
-            System.out.println(ex.getMessage());
-            System.out.println(ex.toString());
-            return false;
+            System.err.println(ex.getMessage());
+            System.err.println(ex.toString());
+
+
+            return ResponseDto.getErrorResponse(null, ex.getMessage());
         }
     }
+
 
     /**
      * Update user boolean.
@@ -222,6 +225,7 @@ public class UserService {
             return false;
         }
     }
+
 
     /**
      * Delete user boolean.

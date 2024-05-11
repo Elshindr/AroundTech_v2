@@ -1,7 +1,7 @@
 package org.elshindr.server_aroundtech.controllers;
 
+import org.elshindr.server_aroundtech.dtos.ResponseDto;
 import org.elshindr.server_aroundtech.dtos.UserDto;
-import org.elshindr.server_aroundtech.models.Response;
 import org.elshindr.server_aroundtech.models.Role;
 import org.elshindr.server_aroundtech.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,11 +81,7 @@ public class UserController {
     @PostMapping
     @Secured("admin")
     public ResponseEntity<?> createUser(@RequestBody UserDto newUserDto){
-        boolean isOk = this.userSvc.createUser(newUserDto);
-        if (isOk) {
-           return ResponseEntity.ok().body(new Response("OK"));
-        }
-         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur à la création de l'utilisateur");
+         return ResponseEntity.badRequest().body(this.userSvc.createUser(newUserDto));
     }
 
 
@@ -103,10 +99,9 @@ public class UserController {
         boolean isOk = this.userSvc.updateUser(upUserDto, idUser);
 
         if (isOk) {
-            return ResponseEntity.ok().body(new Response("OK"));
-
+            return ResponseEntity.ok().body(new ResponseDto( "OK", null, 200));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur à la création de l'utilisateur");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDto( null,"Fail", 300));
 
     }
 

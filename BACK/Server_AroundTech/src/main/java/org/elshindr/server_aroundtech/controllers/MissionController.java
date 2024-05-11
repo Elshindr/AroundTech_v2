@@ -24,10 +24,12 @@ public class MissionController {
     @Autowired
     private MissionService misSvc;
 
+
     @GetMapping("byUser/{idUser}")
     public List<MissionDto> getLstMissionsByUser(@PathVariable Integer idUser) {
         return this.misSvc.getAllByUser(idUser);
     }
+
 
     @PostMapping("isMissionExist")
     public ResponseEntity<?> isMissionExist( @RequestBody Map<String, Object> jsonMap){
@@ -40,8 +42,9 @@ public class MissionController {
         return ResponseEntity.badRequest().body("");
     }
 
+
     @PostMapping
-    public ResponseEntity<?> addMission(@RequestBody MissionDto  missionDto){
+    public ResponseEntity<?> addMission(@RequestBody MissionDto missionDto){
 
         if (Boolean.TRUE.equals(this.misSvc.addMission(missionDto))){
             return ResponseEntity.ok().body("true");
@@ -50,8 +53,9 @@ public class MissionController {
         return ResponseEntity.badRequest().body("");
     }
 
+
     @PutMapping
-    public ResponseEntity<?> updateMission(@RequestBody MissionDto  missionDto){
+    public ResponseEntity<?> updateMission(@RequestBody MissionDto missionDto){
 
         if (Boolean.TRUE.equals(this.misSvc.updateMission(missionDto))){
             return ResponseEntity.ok().body("true");
@@ -59,6 +63,7 @@ public class MissionController {
 
         return ResponseEntity.badRequest().body("");
     }
+
 
     @GetMapping("{idUser}/{idMission}")
     public MissionDto getOneMissionByUserAndId(@PathVariable Integer idUser, @PathVariable Integer idMission) {

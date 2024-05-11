@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
 import java.time.temporal.TemporalAccessor;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * The type Mission dto.
@@ -32,65 +34,29 @@ public class MissionDto {
      */
     public MissionDto(){}
 
-    /**
-     * Instantiates a new Mission dto.
-     *
-     * @param id          the id
-     * @param natureCur   the nature cur
-     * @param departCity  the depart city
-     * @param arrivalCity the arrival city
-     * @param startDate   the start date
-     * @param endDate     the end date
-     * @param status      the status
-     * @param userId      the user id
-     * @param transport   the transport
-     * @param natureInit  the nature init
-     */
-    public MissionDto(Integer id, Nature natureCur, City departCity, City arrivalCity, LocalDate startDate, LocalDate endDate, Status status, Integer userId, Transport transport, Nature natureInit, BigDecimal totalExpenses) {
-        this.id = id;
-        this.natureCur = natureCur;
-        this.departCity = departCity;
-        this.arrivalCity = arrivalCity;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = status;
-        this.userId = userId;
-        this.transport = transport;
-        this.natureInit = natureInit;
+
+    public MissionDto(Mission mission, BigDecimal totalExpenses) {
+        this.id = mission.getId();
+        this.natureCur = mission.getNatureCur();
+        this.departCity = mission.getDepartCity();
+        this.arrivalCity = mission.getArrivalCity();
+        this.startDate = mission.getStartDate();
+        this.endDate = mission.getEndDate();
+        this.status = mission.getStatus();
+        this.userId = mission.getUser().getId();
+        this.transport = mission.getTransport();
+        this.natureInit = mission.getNatureInit();
 
         /* les boutons s'affichent si:
         * - date de fin < à date du jour alors
         * - status = En attente
         * */
-        System.out.println(status.getId());
+        //System.out.println(status.getId());
+
         this.editable = endDate.isBefore(LocalDate.now()) || status.getId() == 2;
         this.totalExpenses = totalExpenses;
     }
 
-    /**
-     * Instantiates a new Mission dto.
-     *
-     * @param natureCur   the nature cur
-     * @param departCity  the departure city
-     * @param arrivalCity the arrival city
-     * @param startDate   the start date
-     * @param endDate     the end date
-     * @param status      the status
-     * @param userId      the user id
-     * @param transport   the transport
-     * @param natureInit  the nature init
-     */
-    public MissionDto(Nature natureCur, City departCity, City arrivalCity, LocalDate startDate, LocalDate endDate, Status status, Integer userId, Transport transport, Nature natureInit) {
-        this.natureCur = natureCur;
-        this.departCity = departCity;
-        this.arrivalCity = arrivalCity;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = status;
-        this.userId = userId;
-        this.transport = transport;
-        this.natureInit = natureInit;
-    }
 
     /**
      * Parse mission dto to mission .
@@ -102,16 +68,16 @@ public class MissionDto {
         return new Mission();
     }
 
-    /**
-     * Parse mission to mission dto mission dto.
-     *
-     * @param mission the mission
-     * @return the mission dto
-     */
-    public static MissionDto parseMissionToMissionDto(Mission mission, BigDecimal totalExpenses){
-        return new MissionDto(mission.getId(), mission.getNatureCur(), mission.getDepartCity(), mission.getArrivalCity(), mission.getStartDate(), mission.getEndDate(), mission.getStatus(), mission.getUser().getId(), mission.getTransport(), mission.getNatureInit(), totalExpenses);
-    }
 
+    public static BigDecimal calculateTotalExpenses(Mission mission, List<Expense> lstExpenses) {
+
+
+        return lstExpenses.stream().map(expense -> {
+            //System.out.println(expense.getAmount());
+            return expense.getAmount();
+        }).reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
+
+    }
 
     /**
      * Gets id.
@@ -326,5 +292,19 @@ public class MissionDto {
                 ", totalExpenses=" + totalExpenses +
                 ", editable=" + editable +
                 '}';
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MissionDto that = (MissionDto) o;
+        return isEditable() == that.isEditable() && Objects.equals(getId(), that.getId()) && Objects.equals(getNatureCur().getId(), that.getNatureCur().getId()) && Objects.equals(getDepartCity().getId(), that.getDepartCity().getId()) && Objects.equals(getArrivalCity().getId(), that.getArrivalCity().getId()) && Objects.equals(getStartDate(), that.getStartDate()) && Objects.equals(getEndDate(), that.getEndDate()) && Objects.equals(getStatus().getId(), that.getStatus().getId()) && Objects.equals(getUserId(), that.getUserId()) && Objects.equals(getTransport().getId(), that.getTransport().getId()) && Objects.equals(getNatureInit().getId(), that.getNatureInit().getId()) && Objects.equals(getTotalExpenses(), that.getTotalExpenses());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getNatureCur(), getDepartCity(), getArrivalCity(), getStartDate(), getEndDate(), getStatus(), getUserId(), getTransport(), getNatureInit(), getTotalExpenses(), isEditable());
     }
 }

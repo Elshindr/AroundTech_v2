@@ -42,6 +42,7 @@ public class MissionService {
     @Autowired
     private NatureRepository natRepo;
 
+
     /**
      * Gets all by user.
      *
@@ -58,7 +59,7 @@ public class MissionService {
                 System.out.println(expense.getAmount());
                 return expense.getAmount();}).reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
 
-             return MissionDto.parseMissionToMissionDto(mission, totalExpenses);
+             return  new MissionDto(mission, totalExpenses);
         }).toList();
     }
 
@@ -73,13 +74,10 @@ public class MissionService {
     public MissionDto getOneMissionByUserAndId(Integer idUser, Integer idMission) {
         List<Expense> lstExpenses = this.expSvc.getLstExpensesByUserAndMission(idUser, idMission);
 
-        BigDecimal totalExpenses = lstExpenses.stream()
-                .map(expense -> {
+        BigDecimal totalExpenses = MissionDto.calculateTotalExpenses(misRepo.findDistinctById(idMission).get(), lstExpenses);
+        Mission mission = misRepo.findOneMissionByUserAndId(idUser, idMission);
 
-                    System.out.println(expense.getAmount());
-                    return expense.getAmount();})
-                .reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
-        return MissionDto.parseMissionToMissionDto(misRepo.findOneMissionByUserAndId(idUser, idMission), totalExpenses);
+        return  new MissionDto(mission, totalExpenses);
     }
 
 
@@ -94,14 +92,9 @@ public class MissionService {
 
         List<Mission> lstMissions = this.misRepo.getLstMissionsInWaitByManager(idManager).stream().toList();
 
-        return lstMissions.stream().map(mission ->{
+        return lstMissions.stream().map(mission -> {
             List<Expense> lstExpenses = this.expSvc.getLstExpensesByUserAndMission(mission.getUser().getId(), mission.getId());
-            BigDecimal totalExpenses = lstExpenses.stream().map(expense ->{
-
-                    System.out.println(expense.getAmount());
-            return expense.getAmount();}).reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
-
-            return MissionDto.parseMissionToMissionDto(mission, totalExpenses);
+             return new MissionDto(mission, MissionDto.calculateTotalExpenses(mission, lstExpenses));
         }).toList();
     }
 
@@ -308,9 +301,9 @@ public class MissionService {
         try {
             Mission uptMission = this.misRepo.findOneMissionByUserAndId(missionDto.getUserId(), missionDto.getId());
 
-            if(!uptMission.getStatus().getId().equals(5) && !uptMission.getStatus().getId().equals(6)){
+            /*if(!uptMission.getStatus().getId().equals(55) && !uptMission.getStatus().getId().equals(66)){
                 throw new Exception("Cette mission ne peut être modifiée: Status="+uptMission.getStatus().getName());
-            }
+            }*/
 
             // Gestion des villes
             Optional<City> arrivalCity = this.cityRepo.findDistinctByName(missionDto.getArrivalCity().getName());
@@ -366,7 +359,7 @@ public class MissionService {
     }
 
     /**
-     * Maj du status d'une misson
+     * Maj du status d'une mission
      * @param idMission
      * @param idStatus
      * @return boolean vrai si maj reussi
