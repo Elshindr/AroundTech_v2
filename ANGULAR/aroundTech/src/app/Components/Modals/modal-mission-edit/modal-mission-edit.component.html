@@ -8,49 +8,54 @@
 			<p style=" color: red">{{lblError}}</p>
 		</div>
 
-		<form [formGroup]="missionForm" (ngSubmit)="onSubmitAddMission($event)" #formRef="ngForm">
+		<form [formGroup]="missionForm" (ngSubmit)="onSubmitEditMission($event)" #formRef="ngForm">
 
 			<div class="mb-3 d-flex form-cont" controlId="dateStart">
-				<div class="mb-3 d-flex form-group">
+				<div class="d-flex form-group">
 					<label class="form-label col-4 d-flex" for="dateStart">Date de début</label>
 
 					<i class="fa-solid fa-circle-info button_icon info-icon py-0" placement="top"
 						ngbTooltip="La date de début doit être supérieure à la date du jour et ne pas être comprise entre les dates d'une autre mission ou d'un jour de congé">
 					</i>
 
-					<input class="form-control" type="date" name="dateStart" placeholder="Date de début"
-						formControlName="dateStart" [min]=minDateStart required />
+					<input class="form-control" type="date" name="dateStart" placeholder="Date de début" formControlName="dateStart" [min]=minDateStart required [(ngModel)]="aMission.startDate"/>
 				</div>
 
 				<div *ngIf="missionForm.get('dateStart')?.invalid && missionForm.get('dateStart')?.touched"
 					class="alert">
-					<p *ngIf="missionForm.get('dateStart')?.errors?.['required']">Date de début est requise.
+					<p *ngIf="missionForm.get('dateStart')?.errors?.['required']">
+						Date de début est requise.
 					</p>
-					<p *ngIf="missionForm.get('dateStart')?.errors?.['invalidDateType']">Date invalide.</p>
-					<p *ngIf="missionForm.get('dateStart')?.errors?.['invalidDateToday']">Date inférieure à la
-						date du
-						jour.</p>
+					<p *ngIf="missionForm.get('dateStart')?.errors?.['invalidDateType']">
+						Date invalide.
+					</p>
+					<p *ngIf="missionForm.get('dateStart')?.errors?.['invalidDateToday']">
+						Date inférieure à la
+						date du jour.
+					</p>
 					<p *ngIf="missionForm.get('dateStart')?.errors?.['invalidDateHolid']">Date sur un jour non
 						travaillé.</p>
 					<p *ngIf="missionForm.get('dateStart')?.errors?.['invalidDateFull']">Date déjà prise par
 						une
-						mission.</p>
+						mission.
+					</p>
 					<p *ngIf="missionForm.get('dateStart')?.errors?.['invalidDateOrder']">Date de fin
 						supérieure à la
-						Date de début</p>
+						Date de début
+					</p>
 				</div>
 
 			</div>
 
 
 			<div class="mb-3 d-flex form-cont" controlId="dateEnd">
-				<div class="mb-3 d-flex form-group">
+				<div class="d-flex form-group">
 					<label class="form-label col-4 d-flex" for="dateEnd">Date de fin</label>
 					<i class="fa-solid fa-circle-info button_icon info-icon py-0" placement="top"
 						ngbTooltip="La date de findoit être supérieure à la date de début et ne pas être comprise entre les dates d'une autre mission ou d'un jour de congé">
 					</i>
 					<input class="form-control" type="date" name="dateEnd" placeholder="Date de fin"
-						[min]=minDateStart formControlName="dateEnd" required />
+						[min]=minDateStart formControlName="dateEnd" required [(ngModel)]="aMission.endDate" />
 				</div>
 
 				<div *ngIf="missionForm.get('dateEnd')?.invalid && missionForm.get('dateEnd')?.touched"
@@ -72,16 +77,19 @@
 
 
 			<div class="mb-3 d-flex form-cont" controlId="natureCur">
-				<div class="mb-3 d-flex form-group">
+				<div class="d-flex form-group">
 					<label class="form-label col-4 d-flex" for="natureCur">Nature</label>
 
 					<i class="fa-solid fa-circle-info button_icon info-icon py-0" placement="top"
 						ngbTooltip="Sélectionner une date de départ pour connaître les natures disponibles"></i>
 
 					<select class="form-select form-control" aria-label="Nature de la mission"
-						formControlName="natureCur" name="natureCur" required>
+						formControlName="natureCur" name="natureCur" required
+						[(ngModel)]="aMission.natureCur.id"
+						
+						>
 						<option value="-1"></option>
-						<option *ngFor="let nature of lstNatures " [value]="nature.id">
+						<option *ngFor="let nature of lstNatures " [value]="nature.id" >
 							{{nature.name| titlecase}}
 						</option>
 					</select>
@@ -95,13 +103,13 @@
 
 
 			<div class="mb-3 d-flex form-cont" controlId="departCity">
-				<div class="mb-3 d-flex form-group">
+				<div class="d-flex form-group">
 					<label class="form-label col-4 d-flex" for="departCity">Ville de départ</label>
 					<input class="form-control" type="text" name="departCity" placeholder="Ville de départ"
 						(input)="onChangeCity($event)" required list="lstSuggestions"
-						formControlName="departCity" />
+						formControlName="departCity"  [(ngModel)]="aMission.departCity.name"/>
 					<datalist id="lstSuggestions">
-						<option *ngFor="let suggestion of lstSuggestions " [value]="suggestion">
+						<option *ngFor="let suggestion of lstSuggestions" [value]="suggestion">
 							{{suggestion| titlecase}}
 						</option>
 					</datalist>
@@ -116,15 +124,15 @@
 
 
 			<div class="mb-3 d-flex form-cont" controlId="arrivalCity">
-				<div class="mb-3 d-flex form-group">
+				<div class="d-flex form-group">
 					<label class="form-label col-4 d-flex" for="arrivalCity">Ville d'arrivée</label>
 
 					<input class="form-control" type="text" name="arrivalCity" placeholder="Ville d'arrivée"
 						(input)="onChangeCity($event)" list="lstSuggestions" formControlName="arrivalCity"
-						required />
+						required   [(ngModel)]="aMission.arrivalCity.name"/>
 
 					<datalist id="lstSuggestions">
-						<option *ngFor="let suggestion of lstSuggestions " [value]="suggestion">
+						<option *ngFor="let suggestion of lstSuggestions " [value]="suggestion" >
 							{{suggestion| titlecase}}
 						</option>
 					</datalist>
@@ -139,16 +147,15 @@
 
 
 			<div class="mb-3 d-flex form-cont" controlId="transport">
-				<div class="mb-3 d-flex form-group">
+				<div class="d-flex form-group">
 					<label class="form-label col-4 d-flex" for="transport">Transport</label>
-					<i class="fa-solid fa-circle-info button_icon info-icon py-0" placement="top"
+					<i class="fa-solid fa-circle-info button_icon info-icon py-0" placement="top" 
 						ngbTooltip=""></i>
 
 					<select class="form-select form-control" aria-label="Type de transport"
-						formControlName="transport" name="natureCur" required>
+						formControlName="transport" name="natureCur"  [(ngModel)]="aMission.transport.id" required>
 						<option value="-1"></option>
-						<option *ngFor="let transport of lstTransports " [value]="transport.id"
-							[ngValue]="transport.id">
+						<option *ngFor="let transport of lstTransports " [value]="transport.id" [ngValue]="transport.id" >
 							{{transport.name| titlecase}}
 						</option>
 					</select>
@@ -178,5 +185,5 @@
 <div class="modal-footer">
 	<button type="ngForm" class="btn btn-modal-add" (click)="formRef.onSubmit($event)" [disabled]="!formRef.form.valid"
 		form="ngForm">Ajouter</button>
-	<button type="button" class="btn btn-modal-cancel" (click)="modalService.dismissAll()">Fermer</button>
+	<button type="button" class="btn btn-modal-cancel" (click)="onCloseModal()">Fermer</button>
 </div>

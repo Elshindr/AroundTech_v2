@@ -86,4 +86,71 @@ export class MissionService {
 				});
 		});
 	}
+
+
+	public dltDeleteMission(aMission :MissionInterface): Promise<ResponseInterface>{
+		this._idUserCur = 1; // TODO: Suppr
+		aMission.userId = this._idUserCur ;
+		//console.log(`deleteission:::::::::::`, aMission.id)
+		return new Promise((resolve, reject) => {
+			const headers = new HttpHeaders({
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			});
+
+			this._http.delete<MissionInterface[]>(this._baseUrl+"/"+aMission.id,  { headers, withCredentials: true })
+				.subscribe({
+					next: (resp: any) => {
+						if (resp === null || resp === undefined) {
+							console.log("non trouvé :: ", resp);
+
+							resolve({ obj: null, message: "Erreur : mission non trouvé", status: 333 });
+						} else {
+							console.log("deletion ok", resp);
+							//this.lstMissions$.next(lstMissions);
+
+							resolve({ obj: resp, message: "ok", status: 200 });
+						}
+					},
+					error: (error) => {
+						console.error("Erreur lors de la requête", error);
+						resolve({ obj: error, message: "Erreur lors de la requete", status: 400 });
+					}
+				});
+		});
+	}
+
+
+	public putUpdateMission(editMission :MissionInterface): Promise<ResponseInterface>{
+		this._idUserCur = 1; // TODO: Suppr
+		//editMission.userId = this._idUserCur ;
+		console.log(`editMission:::::::::::`, editMission)
+		return new Promise((resolve, reject) => {
+			const headers = new HttpHeaders({
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			});
+
+			this._http.put<MissionInterface[]>(this._baseUrl, editMission, { headers, withCredentials: true })
+				.subscribe({
+					next: (resp: any) => {
+						if (resp === null || resp === undefined) {
+							console.log("non trouvé :: ", resp);
+
+							resolve({ obj: null, message: "Erreur : utilisateur non trouvé", status: 333 });
+						} else {
+							console.log("edit ok", resp);
+							//this.lstMissions$.next(lstMissions);
+
+							resolve({ obj: resp, message: "ok", status: 200 });
+						}
+					},
+					error: (error) => {
+						console.error("Erreur lors de la requête", error);
+						resolve({ obj: error, message: "Erreur lors de la requete", status: 400 });
+					}
+				});
+		});
+	}
+
 }

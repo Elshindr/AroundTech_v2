@@ -1,1 +1,65 @@
-<p>modal-mission-delete works!</p>
+<div class="modal-header">
+    <h4 class="modal-title modal-header-title" id="modal-basic-title">Supprimer une Mission</h4>
+</div>
+
+<div class="modal-body">
+    <div className="d-flex justify-content-center col-10 flex-column m-auto" *ngIf="aMission != undefined"  >
+
+        <div>
+
+            <div class="mb-3 d-flex form-cont" controlId="dateStart">
+                <div class="d-flex form-group">
+                    <label class="form-label col-4 d-flex" for="dateStart">Date de début</label>
+                    <p className="data-info-group"> {{aMission.startDate | date : 'Y/MM/dd'}}</p>
+                </div>
+            </div>
+
+
+            <div class="mb-3 d-flex form-cont" controlId="dateEnd">
+                <div class="d-flex form-group">
+                    <label class="form-label col-4 d-flex" for="dateEnd">Date de fin</label>
+                    <p className="data-info-group"> {{aMission.endDate | date : 'Y/MM/dd'}}</p>
+                </div>
+            </div>
+
+
+            <div class="mb-3 d-flex form-cont" controlId="natureCur">
+                <div class="d-flex form-group">
+                    <label class="form-label col-4 d-flex" for="natureCur">Nature</label>
+                    <p className="data-info-group"> {{aMission.natureCur.name | titlecase}}</p>
+                </div>
+            </div>
+
+
+            <div class="mb-3 d-flex form-cont" controlId="departCity">
+                <div class="d-flex form-group">
+                    <label class="form-label col-4 d-flex" for="departCity">Ville de départ</label>
+                    <p className="data-info-group"> {{aMission.departCity.name | titlecase}}</p>
+                </div>
+            </div>
+
+
+            <div class="mb-3 d-flex form-cont" controlId="arrivalCity">
+                <div class="d-flex form-group">
+                    <label class="form-label col-4 d-flex" for="arrivalCity">Ville d'arrivée</label>
+                    <p className="data-info-group"> {{aMission.arrivalCity.name | titlecase}}</p>
+                </div>
+            </div>
+
+
+            <div class="mb-3 d-flex form-cont" controlId="transport">
+                <div class="d-flex form-group">
+                    <label class="form-label col-4 d-flex" for="transport">Transport</label>
+<!--                         <p className="label-info-group">{e.label}</p> -->
+                    <p className="data-info-group"> {{aMission.transport.name | titlecase}}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="ngForm" class="btn btn-modal-add" (click)="onSubmitDeleteMission()" [disabled]="aMission == undefined">Supprimer</button>
+    <button type="button" class="btn btn-modal-cancel" (click)="onCloseModal()">Fermer</button>
+</div>

@@ -16,7 +16,7 @@ import { FooterComponent } from './Components/footer/footer.component';
 import { MissionComponent } from './Pages/mission/mission.component';
 import { ExpenseGestionComponent } from './Pages/expense-gestion/expense-gestion.component';
 import { ModalWindowComponent } from './Components/Modals/modal-window/modal-window.component';
-import { ModalMissionNewComponent } from './Components/Modals/modal-mission-new/modal-mission-new.component';
+import { ModalMissionEditComponent } from './Components/Modals/modal-mission-edit/modal-mission-edit.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalMissionDeleteComponent } from './Components/Modals/modal-mission-delete/modal-mission-delete.component';
 //import { MatIconModule } from '@angular/material/icon';
@@ -32,7 +32,7 @@ import { ModalMissionDeleteComponent } from './Components/Modals/modal-mission-d
     MissionComponent,
     ExpenseGestionComponent,
     ModalWindowComponent,
-    ModalMissionNewComponent,
+    ModalMissionEditComponent,
     ModalMissionDeleteComponent,
   ],
   imports: [

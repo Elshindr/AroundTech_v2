@@ -1,7 +1,7 @@
 import { isWeekend, addDays } from "date-fns";
 import Holidays from "date-holidays";
 import { NatureInterface } from "../Interfaces/nature.interface";
-import {MissionInterface} from "../Interfaces/mission.interface";
+import { MissionInterface } from "../Interfaces/mission.interface";
 
 
 export default class Utils {
@@ -26,14 +26,14 @@ export default class Utils {
      * @param {string} inputDate
      * @returns {date timestamp}
      */
-    static formatDateStrToTimestamp(inputDate:Date) {
+    static formatDateStrToTimestamp(inputDate: Date) {
         return new Date(inputDate).toISOString().slice(0, 19).replace("T", " ");
     }
 
     /**
      * Comparer les dates au format ISO
      */
-    static compareDateStr(inputDate:string) {
+    static compareDateStr(inputDate: string) {
 
         const inputDateArr = inputDate.split("-");
         const year = parseInt(inputDateArr[0]);
@@ -50,13 +50,16 @@ export default class Utils {
         return true;
     }
 
-    /**
-     * Formater les dates au format ISO ou 
-     * yyyy-mm-dd
-     */
-    static formatDateToISO(inputDate: Date|null) {
 
-        if(inputDate !== null){
+    /**
+     * Formater les dates au format ISO yyyy-mm-dd
+     * ou Renvoi new Date()
+     * @param inputDate 
+     * @returns 
+     */
+    static formatDateToISO(inputDate: string | Date | null): string | Date {
+
+        if (inputDate !== null) {
             const date = new Date(inputDate);
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -72,24 +75,24 @@ export default class Utils {
      * @param {float} inputAmount
      * @returns {string}
      */
-    static formatAmount(inputAmount: number) {
+    static formatAmount(inputAmount: number): string {
         return inputAmount.toFixed(2);
     }
 
     /**
      * Modifier la première lettre du nom en majuscule
-     * @param {string} - chaine de caractère à modifier
+     * @param {string} string - chaine de caractère à modifier
      * @returns {string} - chaine de caractère avec la première lettre en majuscule
      */
-    static capitalizeFirstLetter(string: string) {
+    static capitalizeFirstLetter(string: string): string {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     /**
      * Calcul de la prime selon le nombre de jour travaillés et la nature de mission
-     * @returns {string}
+     * @returns {number}
      */
-    static getPrime(mission:MissionInterface, nature:NatureInterface) {
+    static getPrime(mission: MissionInterface, nature: NatureInterface){
         const nbWorkingDays = Utils.getNbWorkingDate(mission);
         let prime = Utils.setPrime(nbWorkingDays, nature);
 
@@ -101,7 +104,7 @@ export default class Utils {
      * @param {*} mission
      * @returns {int}
      */
-    static getNbWorkingDate(mission:MissionInterface) {
+    static getNbWorkingDate(mission: MissionInterface) {
         let nbWorkingDays = 0;
         let curDate = new Date(mission.startDate);
         let endDate = new Date(mission.endDate);
@@ -133,7 +136,7 @@ export default class Utils {
      * Check si le jour donné est un jour férié en france
      * @returns {boolean}
      */
-    static isHoliday(date:Date) {
+    static isHoliday(date: Date) {
         const year = date.getFullYear();
         const holidays = new Holidays("FR");
         const lstHolidaysFr = holidays.getHolidays(year);
@@ -155,7 +158,7 @@ export default class Utils {
      * List oh holidays in France
      * @returns {array}
      */
-    static listOfHoliday(date:Date) {
+    static listOfHoliday(date: Date): Array<any> {
         const year = date.getFullYear();
         const holidays = new Holidays("FR");
         const lstHolidaysFr = holidays.getHolidays(year);
@@ -169,10 +172,10 @@ export default class Utils {
      * @param {Nature} nature
      * @returns {number}
      */
-    static setPrime(nbWorkDays:number, nature:NatureInterface) {
+    static setPrime(nbWorkDays: number, nature: NatureInterface) {
 
         if (nature.bonus && nature.charge) {
-          //  return parseFloat(nbWorkDays * nature.tjm * nature.percentage / 100).toFixed(2);
+            //  return parseFloat(nbWorkDays * nature.tjm * nature.percentage / 100).toFixed(2);
             return (nbWorkDays * nature.tjm * nature.percentage / 100).toFixed(2);
         }
 
