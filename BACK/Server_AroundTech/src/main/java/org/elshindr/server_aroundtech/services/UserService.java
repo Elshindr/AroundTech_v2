@@ -89,13 +89,14 @@ public class UserService {
             Optional<User> userOptional = this.userRepo.findDistinctByEmail(loginDto.getEmail())
                     .filter(user -> pwdEncoder.matches(loginDto.getPwd(), user.getPwd()));
 
-            UserDto userDto = userOptional.map(user -> UserDto.parseUserToUserDto(user, this.userRepo)).orElse(null);
 
-            if (userDto != null) {
+            if (userOptional.isPresent()) {
+                UserDto userDto = userOptional.map(user -> UserDto.parseUserToUserDto(user, this.userRepo)).orElse(null);
                 return ResponseDto.getSuccessResponse(userDto);
             }
 
             return ResponseDto.getNotFoundResponse(null, "Login/Password non trouvé");
+
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
             return ResponseDto.getNotFoundResponse(null, ex.getMessage());
